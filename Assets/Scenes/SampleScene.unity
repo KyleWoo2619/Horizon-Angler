@@ -3388,7 +3388,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 764208574}
-  - component: {fileID: 764208573}
+  - component: {fileID: 764208575}
   m_Layer: 0
   m_Name: Microgame Manager
   m_TagString: Untagged
@@ -3396,7 +3396,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &764208573
+--- !u!4 &764208574
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764208572}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &764208575
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3405,7 +3420,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 764208572}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d44fb94b329e2f744ac7e9849329526e, type: 3}
+  m_Script: {fileID: 11500000, guid: 2049cf8abe4bba245b76520c70d73665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   RS_h: RS_h
@@ -3465,21 +3480,6 @@ MonoBehaviour:
   combo2: 0
   combo3: 0
   comboNum: 0
---- !u!4 &764208574
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 764208572}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &786265303
 GameObject:
   m_ObjectHideFlags: 0
