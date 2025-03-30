@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = System.Random;
 
 public class Test2Script : MonoBehaviour
@@ -9,23 +12,23 @@ public class Test2Script : MonoBehaviour
     static Random rnd = new Random();
 
     // Inputs
-    [HideInInspector] public string RS_h = "RS_h";   // Also handles horizontal mouse movement
-    [HideInInspector] public string RS_v = "RS_v";   // Also handles vertical mouse movement
-    [HideInInspector] public string LS_h = "LS_h";  // Also handles A and D
-    [HideInInspector] public string LS_v = "LS_v";   // Also handles W and S
-    [HideInInspector] public string LS_b = "LS_b";   // Also handles Space
-    [HideInInspector] public string RS_b = "RS_b";   // Also handles Space
-    [HideInInspector] public string DPad_h = "DPad_h"; // Also handles J and L
-    [HideInInspector] public string DPad_v = "DPad_v"; // Also handles I and K
+    [HideInInspector] public string RS_h    = "RS_h";   // Also handles horizontal mouse movement
+    [HideInInspector] public string RS_v    = "RS_v";   // Also handles vertical mouse movement
+    [HideInInspector] public string LS_h    = "LS_h";   // Also handles A and D
+    [HideInInspector] public string LS_v    = "LS_v";   // Also handles W and S
+    [HideInInspector] public string LS_b    = "LS_b";   // Also handles Space
+    [HideInInspector] public string RS_b    = "RS_b";   // Also handles Space
+    [HideInInspector] public string DPad_h  = "DPad_h"; // Also handles J and L
+    [HideInInspector] public string DPad_v  = "DPad_v"; // Also handles I and K
     [HideInInspector] public string AButton = "A";      // Also handles Down Arrow
     [HideInInspector] public string BButton = "B";      // Also handles Right Arrow
     [HideInInspector] public string XButton = "X";      // Also handles Left Arrow
     [HideInInspector] public string YButton = "Y";      // Also handles Up Arrow
-    [HideInInspector] public string LT = "LT";     // Also handles LMB
-    [HideInInspector] public string RT = "RT";     // Also handles RMB
-    [HideInInspector] public string LB = "LB";     // Also handles Q
-    [HideInInspector] public string RB = "RB";     // Also handles E
-    [HideInInspector] public string Escape = "Escape"; // Also handles Start Button (controller)
+    [HideInInspector] public string LT      = "LT";     // Also handles LMB
+    [HideInInspector] public string RT      = "RT";     // Also handles RMB
+    [HideInInspector] public string LB      = "LB";     // Also handles Q
+    [HideInInspector] public string RB      = "RB";     // Also handles E
+    [HideInInspector] public string Escape  = "Escape"; // Also handles Start Button (controller)
 
     // Input Variables
     [HideInInspector] public float inputRAxisX = 0f;    // range -1f to +1f // Use GetAxis
@@ -34,17 +37,17 @@ public class Test2Script : MonoBehaviour
     [HideInInspector] public float inputLAxisY = 0f;    // range -1f to +1f // Use GetAxisRaw
     [HideInInspector] public float inputDAxisX = 0f;    // range -1f to +1f // Use GetAxisRaw
     [HideInInspector] public float inputDAxisY = 0f;    // range -1f to +1f // Use GetAxisRaw
-    [HideInInspector] public bool inputA = false; // is key Pressed
-    [HideInInspector] public bool inputB = false; // is key Pressed
-    [HideInInspector] public bool inputX = false; // is key Pressed
-    [HideInInspector] public bool inputY = false; // is key Pressed
-    [HideInInspector] public bool inputLB = false; // is key Pressed
-    [HideInInspector] public bool inputRB = false; // is key Pressed
-    [HideInInspector] public bool inputLT = false; // is key Pressed
-    [HideInInspector] public bool inputRT = false; // is key Pressed // May have to tweak this + LT in Input Manager, is currently set to Key or Mouse Button, but may need to be Axis
-    [HideInInspector] public bool inputLS_b = false; // is key Pressed
-    [HideInInspector] public bool inputRS_b = false; // is key Pressed
-    [HideInInspector] public bool inputEscape = false; // is key Pressed
+    [HideInInspector] public bool inputA       = false; // is key Pressed
+    [HideInInspector] public bool inputB       = false; // is key Pressed
+    [HideInInspector] public bool inputX       = false; // is key Pressed
+    [HideInInspector] public bool inputY       = false; // is key Pressed
+    [HideInInspector] public bool inputLB      = false; // is key Pressed
+    [HideInInspector] public bool inputRB      = false; // is key Pressed
+    [HideInInspector] public bool inputLT      = false; // is key Pressed
+    [HideInInspector] public bool inputRT      = false; // is key Pressed // May have to tweak this + LT in Input Manager, is currently set to Key or Mouse Button, but may need to be Axis
+    [HideInInspector] public bool inputLS_b    = false; // is key Pressed
+    [HideInInspector] public bool inputRS_b    = false; // is key Pressed
+    [HideInInspector] public bool inputEscape  = false; // is key Pressed
 
     // Microgame Variables
     [HideInInspector] public bool microgamesActive = false;
@@ -60,6 +63,25 @@ public class Test2Script : MonoBehaviour
     public GameObject Set5Parent;
     public GameObject Set6Parent;
     public GameObject Set7Parent;
+
+    [Header("Timers")]
+    public GameObject Set1Timer;
+    public GameObject Set2Timer;
+    public GameObject Set3Timer;
+    public GameObject Set4Timer;
+    public GameObject Set5Timer;
+    public GameObject Set6Timer;
+    public GameObject Set7Timer;
+    [Space(5)]
+    public TextMeshProUGUI Set1TimerText;
+    public TextMeshProUGUI Set2TimerText;
+    public TextMeshProUGUI Set3TimerText;
+    public TextMeshProUGUI Set4TimerText;
+    public TextMeshProUGUI Set5TimerText;
+    public TextMeshProUGUI Set6TimerText;
+    public TextMeshProUGUI Set7TimerText;
+    List<GameObject> Timers = new List<GameObject>();
+    List<TextMeshProUGUI> TimerTexts = new List<TextMeshProUGUI>();
 
     [Header("Set 1 Variables")]
     public RectTransform heartTx;
@@ -96,30 +118,60 @@ public class Test2Script : MonoBehaviour
     }
 
     [Header("Set 3 Variables")]
-    public bool qDPadUp;
-    public bool qDPadDown;
-    public bool qDPadRight;
-    public bool qDPadLeft;
+    
     public GameObject Combo1Parent;
     public GameObject Combo2Parent;
     public GameObject Combo3Parent;
+    [HideInInspector] public bool qDPadUp;
+    [HideInInspector] public bool qDPadDown;
+    [HideInInspector] public bool qDPadRight;
+    [HideInInspector] public bool qDPadLeft;
     [HideInInspector] public Combo1 combo1;
     [HideInInspector] public Combo2 combo2;
     [HideInInspector] public Combo3 combo3;
     [HideInInspector] public int comboNum;
     List<Enum> combos = new List<Enum>();
+    List<Image> combo1Buttons = new List<Image>();
+    List<Image> combo2Buttons = new List<Image>();
+    List<Image> combo3Buttons = new List<Image>();
+    private bool Set3CompletedRunning = false;
 
     // Start is called before the first frame update
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void Initialize()
+    void Start()
     {
         AddToSetsDict();
-        InitialInactiveSets();
         MicrogamesSetup();
+    }
+
+    public void ClearAll()
+    {
+        StopAllCoroutines();
+        obstacles.Clear();
+        inactiveSets.Clear();
+        activeSets.Clear();
+        foreach (var t in Timers)
+        {
+            t.SetActive(false);
+        }
+        Sets["Set1"] = false;
+        //Sets["Set2"] = false;
+        Sets["Set3"] = false;
+        //Sets["Set4"] = false;
+        //Sets["Set5"] = false;
+        //Sets["Set6"] = false;
+        Sets["Set7"] = false;
+        Set1Parent.SetActive(false);
+        Set2Parent.SetActive(false);
+        Set3Parent.SetActive(false);
+        Set4Parent.SetActive(false);
+        Set5Parent.SetActive(false);
+        Set6Parent.SetActive(false);
+        Set7Parent.SetActive(false);
+    }
+
+    public void Initialize()
+    {
+        InitialInactiveSets();
         StartCoroutine(tick("Initial", 3));
     }
     void AddToSetsDict()
@@ -148,6 +200,26 @@ public class Test2Script : MonoBehaviour
         Set5Parent.SetActive(false);
         Set6Parent.SetActive(false);
         Set7Parent.SetActive(false);
+
+        Timers.Add(Set1Timer);
+        Timers.Add(Set2Timer);
+        Timers.Add(Set3Timer);
+        Timers.Add(Set4Timer);
+        Timers.Add(Set5Timer);
+        Timers.Add(Set6Timer);
+        Timers.Add(Set7Timer);
+        TimerTexts.Add(Set1TimerText);
+        TimerTexts.Add(Set2TimerText);
+        TimerTexts.Add(Set3TimerText);
+        TimerTexts.Add(Set4TimerText);
+        TimerTexts.Add(Set5TimerText);
+        TimerTexts.Add(Set6TimerText);
+        TimerTexts.Add(Set7TimerText);
+
+        foreach (var t in Timers)
+        {
+            t.SetActive(false);
+        }
     }
 
     void InitialSetupSet1()
@@ -164,6 +236,22 @@ public class Test2Script : MonoBehaviour
         combos.Add(combo1);
         combos.Add(combo2);
         combos.Add(combo3);
+
+        foreach (Transform child in Combo1Parent.transform)
+        {
+            combo1Buttons.Add(child.GetComponent<Image>());
+            child.GetComponent<Image>().color = Color.white;
+        }
+        foreach (Transform child in Combo2Parent.transform)
+        {
+            combo2Buttons.Add(child.GetComponent<Image>());
+            child.GetComponent<Image>().color = Color.white;
+        }
+        foreach (Transform child in Combo3Parent.transform)
+        {
+            combo3Buttons.Add(child.GetComponent<Image>());
+            child.GetComponent<Image>().color = Color.white;
+        }
     }
 
     void Set1Setup()
@@ -194,6 +282,31 @@ public class Test2Script : MonoBehaviour
         Combo1Parent.SetActive(false);
         Combo2Parent.SetActive(false);
         Combo3Parent.SetActive(false);
+
+        for (int i = 0; i < combo1Buttons.Count; i++)
+        {
+            Color color = combo1Buttons[i].color;
+            color = Color.white;
+            combo1Buttons[i].color = color;
+            color.a = 1f;
+            combo1Buttons[i].color = color;
+        }
+        for (int i = 0; i < combo2Buttons.Count; i++)
+        {
+            Color color = combo2Buttons[i].color;
+            color = Color.white;
+            combo2Buttons[i].color = color;
+            color.a = 1f;
+            combo2Buttons[i].color = color;
+        }
+        for (int i = 0; i < combo3Buttons.Count; i++)
+        {
+            Color color = combo3Buttons[i].color;
+            color = Color.white;
+            combo3Buttons[i].color = color;
+            color.a = 1f;
+            combo3Buttons[i].color = color;
+        }
 
         comboNum = rnd.Next(0, combos.Count);
         // Display the visual for the combo here
@@ -238,16 +351,16 @@ public class Test2Script : MonoBehaviour
         inputLAxisY = Input.GetAxisRaw(LS_v);
         inputDAxisX = Input.GetAxisRaw(DPad_h);
         inputDAxisY = Input.GetAxisRaw(DPad_v);
-        inputA = Input.GetButtonDown(AButton);
-        inputB = Input.GetButtonDown(BButton);
-        inputX = Input.GetButtonDown(XButton);
-        inputY = Input.GetButtonDown(YButton);
-        inputLB = Input.GetButtonDown(LB);
-        inputRB = Input.GetButtonDown(RB);
-        inputLT = Input.GetButtonDown(LT);
-        inputRT = Input.GetButtonDown(RT);
-        inputLS_b = Input.GetButtonDown(LS_b);
-        inputRS_b = Input.GetButtonDown(RS_b);
+        inputA      = Input.GetButtonDown(AButton);
+        inputB      = Input.GetButtonDown(BButton);
+        inputX      = Input.GetButtonDown(XButton);
+        inputY      = Input.GetButtonDown(YButton);
+        inputLB     = Input.GetButtonDown(LB);
+        inputRB     = Input.GetButtonDown(RB);
+        inputLT     = Input.GetButtonDown(LT);
+        inputRT     = Input.GetButtonDown(RT);
+        inputLS_b   = Input.GetButtonDown(LS_b);
+        inputRS_b   = Input.GetButtonDown(RS_b);
         inputEscape = Input.GetButtonDown(Escape);
     }
 
@@ -546,12 +659,13 @@ public class Test2Script : MonoBehaviour
                 if (qDPadUp)
                 {
                     // Highlight that the button has been pressed
-
+                    combo1Buttons[0].color = new Color32(163, 233, 181, 255);
                     combo1 = Combo1.STEP2;
                 }
                 if (qNotUp)
                 {
                     // Highlight the button in red
+                    combo1Buttons[0].color = new Color32(230, 35, 22, 255);
                     yield return new WaitForSeconds(0.5f);
                     Set3Mistake();
                 }
@@ -561,12 +675,13 @@ public class Test2Script : MonoBehaviour
                 if (qDPadDown)
                 {
                     // Highlight that the button has been pressed
-
+                    combo1Buttons[1].color = new Color32(163, 233, 181, 255);
                     combo1 = Combo1.STEP3;
                 }
                 if (qNotDown)
                 {
                     // Highlight the button in red
+                    combo1Buttons[1].color = new Color32(230, 35, 22, 255);
                     yield return new WaitForSeconds(0.5f);
                     Set3Mistake();
                 }
@@ -576,17 +691,23 @@ public class Test2Script : MonoBehaviour
                 if (qDPadLeft)
                 {
                     // Highlight that the button has been pressed
+                    combo1Buttons[2].color = new Color32(163, 233, 181, 255);
                     StartCoroutine(Set3Completed());
                 }
                 if (qNotLeft)
                 {
-                    // Highlight the button in red
-                    yield return new WaitForSeconds(0.5f);
-                    Set3Mistake();
+                    if (!Set3CompletedRunning)
+                    {
+                        // Highlight the button in red
+                        combo1Buttons[2].color = new Color32(230, 35, 22, 255);
+                        yield return new WaitForSeconds(0.5f);
+                        Set3Mistake();
+                    }
                 }
                 break;
         }
     }
+
     IEnumerator Set3Combo2(float DPX, float DPY) // --------------------------- Combo 2: RIGHT RIGHT LEFT UP
     {
         switch (combo2)
@@ -595,12 +716,13 @@ public class Test2Script : MonoBehaviour
                 if (qDPadRight)
                 {
                     // Highlight that the button has been pressed
-
+                    combo2Buttons[0].color = new Color32(163, 233, 181, 255);
                     combo2 = Combo2.STEP2;
                 }
                 if (qNotRight)
                 {
                     // Highlight the button in red
+                    combo2Buttons[0].color = new Color32(230, 35, 22, 255);
                     yield return new WaitForSeconds(0.5f);
                     Set3Mistake();
                 }
@@ -610,12 +732,13 @@ public class Test2Script : MonoBehaviour
                 if (qDPadRight)
                 {
                     // Highlight that the button has been pressed
-
+                    combo2Buttons[1].color = new Color32(163, 233, 181, 255);
                     combo2 = Combo2.STEP3;
                 }
                 if (qNotRight)
                 {
                     // Highlight the button in red
+                    combo2Buttons[1].color = new Color32(230, 35, 22, 255);
                     yield return new WaitForSeconds(0.5f);
                     Set3Mistake();
                 }
@@ -625,12 +748,13 @@ public class Test2Script : MonoBehaviour
                 if (qDPadLeft)
                 {
                     // Highlight that the button has been pressed
-
+                    combo2Buttons[2].color = new Color32(163, 233, 181, 255);
                     combo2 = Combo2.STEP4;
                 }
                 if (qNotLeft)
                 {
                     // Highlight the button in red
+                    combo2Buttons[2].color = new Color32(230, 35, 22, 255);
                     yield return new WaitForSeconds(0.5f);
                     Set3Mistake();
                 }
@@ -640,13 +764,18 @@ public class Test2Script : MonoBehaviour
                 if (qDPadUp)
                 {
                     // Highlight that the button has been pressed
+                    combo2Buttons[3].color = new Color32(163, 233, 181, 255);
                     StartCoroutine(Set3Completed());
                 }
                 if (qNotUp)
                 {
-                    // Highlight the button in red
-                    yield return new WaitForSeconds(0.5f);
-                    Set3Mistake();
+                    if (!Set3CompletedRunning)
+                    {
+                        // Highlight the button in red
+                        combo2Buttons[3].color = new Color32(230, 35, 22, 255);
+                        yield return new WaitForSeconds(0.5f);
+                        Set3Mistake();
+                    }
                 }
                 break;
         }
@@ -660,11 +789,13 @@ public class Test2Script : MonoBehaviour
                 if (qDPadDown)
                 {
                     // Highlight that the button has been pressed
+                    combo3Buttons[0].color = new Color32(163, 233, 181, 255);
                     combo3 = Combo3.STEP2;
                 }
                 if (qNotDown)
                 {
                     // Highlight the button in red
+                    combo3Buttons[0].color = new Color32(230, 35, 22, 255);
                     yield return new WaitForSeconds(0.5f);
                     Set3Mistake();
                 }
@@ -674,12 +805,13 @@ public class Test2Script : MonoBehaviour
                 if (qDPadUp)
                 {
                     // Highlight that the button has been pressed
-
+                    combo3Buttons[1].color = new Color32(163, 233, 181, 255);
                     combo3 = Combo3.STEP3;
                 }
                 if (qNotUp)
                 {
                     // Highlight the button in red
+                    combo3Buttons[1].color = new Color32(230, 35, 22, 255);
                     yield return new WaitForSeconds(0.5f);
                     Set3Mistake();
                 }
@@ -689,12 +821,13 @@ public class Test2Script : MonoBehaviour
                 if (qDPadLeft)
                 {
                     // Highlight that the button has been pressed
-
+                    combo3Buttons[2].color = new Color32(163, 233, 181, 255);
                     combo3 = Combo3.STEP4;
                 }
                 if (qNotLeft)
                 {
                     // Highlight the button in red
+                    combo3Buttons[2].color = new Color32(230, 35, 22, 255);
                     yield return new WaitForSeconds(0.5f);
                     Set3Mistake();
                 }
@@ -704,12 +837,13 @@ public class Test2Script : MonoBehaviour
                 if (qDPadUp)
                 {
                     // Highlight that the button has been pressed
-
+                    combo3Buttons[3].color = new Color32(163, 233, 181, 255);
                     combo3 = Combo3.STEP5;
                 }
                 if (qNotUp)
                 {
                     // Highlight the button in red
+                    combo3Buttons[3].color = new Color32(230, 35, 22, 255);
                     yield return new WaitForSeconds(0.5f);
                     Set3Mistake();
                 }
@@ -719,13 +853,18 @@ public class Test2Script : MonoBehaviour
                 if (qDPadRight)
                 {
                     // Highlight that the button has been pressed
+                    combo3Buttons[4].color = new Color32(163, 233, 181, 255);
                     StartCoroutine(Set3Completed());
                 }
                 if (qNotRight)
                 {
-                    // Highlight the button in red
-                    yield return new WaitForSeconds(0.5f);
-                    Set3Mistake();
+                    if (!Set3CompletedRunning)
+                    {
+                        // Highlight the button in red
+                        combo3Buttons[4].color = new Color32(230, 35, 22, 255);
+                        yield return new WaitForSeconds(0.5f);
+                        Set3Mistake();
+                    }
                 }
                 break;
         }
@@ -734,12 +873,14 @@ public class Test2Script : MonoBehaviour
     IEnumerator Set3Completed()
     {
         // Bonus to progress
+        Set3CompletedRunning = true;
         yield return new WaitForSeconds(0.5f);
         Debug.Log("Set 3 Completed!");
         Sets["Set3"] = false;
         activeSets.Remove("Set3");
         inactiveSets.Add("Set3");
         Set3Parent.SetActive(false);
+        Set3CompletedRunning = false;
     }
 
     void InitialInactiveSets()
@@ -755,13 +896,10 @@ public class Test2Script : MonoBehaviour
 
     void MicrogameStarter()
     {
-        int temp = inactiveSets.Count;
         Debug.Log("Inactive Sets Counter: " + inactiveSets.Count);
         if (inactiveSets.Count > 0)
         {
-            int microgameRnd = rnd.Next(0, temp);
-            //Debug.Log(microgameRnd);
-            //Debug.Log(inactiveSets[microgameRnd]);
+            int microgameRnd = rnd.Next(0, inactiveSets.Count);
             StartCoroutine(tick(inactiveSets[microgameRnd], 3));
             activeSets.Add(inactiveSets[microgameRnd]);
             inactiveSets.RemoveAt(microgameRnd);
@@ -781,54 +919,100 @@ public class Test2Script : MonoBehaviour
         StartCoroutine(microgameCooldown());
     }
 
+    void InitiateTimer(string timerID, int time)
+    {
+        switch (timerID)
+        {
+            case "Set7":
+                Timers[6].SetActive(true);
+                TimerTexts[6].text = time.ToString();
+                break;
+            case "Set6":
+                Timers[5].SetActive(true);
+                TimerTexts[5].text = time.ToString();
+                break;
+            case "Set5":
+                Timers[4].SetActive(true);
+                TimerTexts[4].text = time.ToString();
+                break;
+            case "Set4":
+                Timers[3].SetActive(false);
+                TimerTexts[3].text = time.ToString();
+                break;
+            case "Set3":
+                Timers[2].SetActive(true);
+                TimerTexts[2].text = time.ToString();
+                break;
+            case "Set2":
+                Timers[1].SetActive(true);
+                TimerTexts[1].text = time.ToString();
+                break;
+            case "Set1":
+                Timers[0].SetActive(true);
+                TimerTexts[0].text = time.ToString();
+                break;
+            case "Initial":
+                break;
+        }
+    }
+
     private IEnumerator tick(string timerID, int timeRemaining)
     // This IEnumerator is a timer counting down to 0 and will work with any integer length of seconds and multiple timers can be run at once
     {
         while (timeRemaining > 0)
         {
+            InitiateTimer(timerID, timeRemaining);
             Debug.Log(timerID + ": " + timeRemaining);
             yield return new WaitForSeconds(1f);
             timeRemaining--;
         }
         if (timeRemaining == 0)
         {
+            InitiateTimer(timerID, timeRemaining);
             Debug.Log(timerID + ": " + timeRemaining);
             switch (timerID)
             {
                 case "Set7":
                     // Start Set 7
                     Debug.Log("Set 7 Microgame is now ACTIVE!");
+                    Timers[6].SetActive(false);
                     Sets["Set7"] = true;
                     break;
                 case "Set6":
                     // Start Set 6
                     Debug.Log("Set 6 Microgame is now ACTIVE!");
+                    Timers[5].SetActive(false);
                     Sets["Set6"] = true;
                     break;
                 case "Set5":
                     // Start Set 5
                     Debug.Log("Set 5 Microgame is now ACTIVE!");
+                    Timers[4].SetActive(false);
                     Sets["Set5"] = true;
                     break;
                 case "Set4":
                     // Start Set 4
                     Debug.Log("Set 4 Microgame is now ACTIVE!");
+                    Timers[3].SetActive(false);
                     Sets["Set4"] = true;
                     break;
                 case "Set3":
                     // Start Set 3
                     Debug.Log("Set 3 Microgame is now ACTIVE!");
+                    Timers[2].SetActive(false);
                     Set3Setup();
                     Sets["Set3"] = true;
                     break;
                 case "Set2":
                     // Start Set 2
                     Debug.Log("Set 2 Microgame is now ACTIVE!");
+                    Timers[1].SetActive(false);
                     Sets["Set2"] = true;
                     break;
                 case "Set1":
                     // Start Set 1
                     Debug.Log("Set 1 Microgame is now ACTIVE!");
+                    Timers[0].SetActive(false);
                     Sets["Set1"] = true;
                     Set1Setup();
                     StartCoroutine(Set1Obstacles());
