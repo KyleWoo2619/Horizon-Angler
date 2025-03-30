@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class TestScript : MonoBehaviour
     [HideInInspector] public string LS_h    =  "LS_h";  // Also handles A and D
     [HideInInspector] public string LS_v    = "LS_v";   // Also handles W and S
     [HideInInspector] public string LS_b    = "LS_b";   // Also handles Space
-    [HideInInspector] public string RS_b    = "RS_b";   // Also handles Space // Space being handled by LS_b & RS_b is because on KB/M pressing Space = pressing LS_b + RS_b
+    [HideInInspector] public string RS_b    = "RS_b";   // Also handles Space
     [HideInInspector] public string DPad_h  = "DPad_h"; // Also handles J and L
     [HideInInspector] public string DPad_v  = "DPad_v"; // Also handles I and K
     [HideInInspector] public string AButton = "A";      // Also handles Down Arrow
@@ -25,7 +26,6 @@ public class TestScript : MonoBehaviour
     [HideInInspector] public string LB      = "LB";     // Also handles Q
     [HideInInspector] public string RB      = "RB";     // Also handles E
     [HideInInspector] public string Escape  = "Escape"; // Also handles Start Button (controller)
-
 
     // Input Variables
     [HideInInspector] public float inputRAxisX = 0f;    // range -1f to +1f // Use GetAxis
@@ -52,6 +52,63 @@ public class TestScript : MonoBehaviour
     List<string> inactiveSets = new List<string>();
     List<string> activeSets = new List<string>();
 
+    [Header("Sets Parents")]
+    public GameObject Set1Parent;
+    public GameObject Set2Parent;
+    public GameObject Set3Parent;
+    public GameObject Set4Parent;
+    public GameObject Set5Parent;
+    public GameObject Set6Parent;
+    public GameObject Set7Parent;
+
+    [Header("Set 1 Variables")]
+    public RectTransform heartTx;
+    public Rigidbody2D set1Controller;
+    //public Set1Obstacle Set1Obstacle;
+    public Transform obstaclesParent;
+    List<Transform> initialObstacles = new List<Transform>();
+    [SerializeField] List<Transform> obstacles = new List<Transform>();
+    List<Vector2> obstaclesPos = new List<Vector2>();
+
+    // Set 3 Combos
+    public enum Combo1
+    {
+        STEP1,
+        STEP2,
+        STEP3
+    }
+
+    public enum Combo2
+    {
+        STEP1,
+        STEP2,
+        STEP3,
+        STEP4
+    }
+
+    public enum Combo3
+    {
+        STEP1,
+        STEP2,
+        STEP3,
+        STEP4,
+        STEP5
+    }
+
+    [Header("Set 3 Variables")]
+    public bool qDPadUp;
+    public bool qDPadDown;
+    public bool qDPadRight;
+    public bool qDPadLeft;
+    public GameObject Combo1Parent;
+    public GameObject Combo2Parent;
+    public GameObject Combo3Parent;
+    [HideInInspector] public Combo1 combo1;
+    [HideInInspector] public Combo2 combo2;
+    [HideInInspector] public Combo3 combo3;
+    [HideInInspector] public int comboNum;
+    List<Enum> combos = new List<Enum>();
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -62,12 +119,13 @@ public class TestScript : MonoBehaviour
     {
         AddToSetsDict();
         InitialInactiveSets();
+        MicrogamesSetup();
         StartCoroutine(tick("Initial", 3));
     }
     void AddToSetsDict()
     {
         Sets.Add("Set1", false);  // WASD / L-Joystick Set
-        //Sets.Add("Set2", false);  // Mouse / R-Joystick Set
+        //Sets.Add("Set2", false);  // Mouse / R-Joystick Set // Mathf.Clamp
         Sets.Add("Set3", false);  // IJKL / D-Pad Set
         //Sets.Add("Set4", false);  // Arrow Keys / ABXY Set
         //Sets.Add("Set5", false);  // QE / Bumpers Set
@@ -75,7 +133,93 @@ public class TestScript : MonoBehaviour
         Sets.Add("Set7", false);  // Space // Joystick Buttons Set
     }
 
+    void MicrogamesSetup()
+    {
+        InitialSetup();
+        InitialSetupSet1();
+    }
+
+    void InitialSetup()
+    {
+        Set1Parent.SetActive(false);
+        Set2Parent.SetActive(false);
+        Set3Parent.SetActive(false);
+        Set4Parent.SetActive(false);
+        Set5Parent.SetActive(false);
+        Set6Parent.SetActive(false);
+        Set7Parent.SetActive(false);
+    }
+
+    void InitialSetupSet1()
+    {
+        foreach (Transform child in obstaclesParent)
+        {
+            initialObstacles.Add(child);
+        }
+        foreach (Transform child in initialObstacles)
+        {
+            obstaclesPos.Add(child.localPosition);
+        }
+
+        combos.Add(combo1);
+        combos.Add(combo2);
+        combos.Add(combo3);
+    }
+
+    void Set1Setup()
+    {
+        foreach (Transform child in obstaclesParent)
+        {
+            obstacles.Add(child);
+        }
+
+        foreach (Transform child in obstacles)
+        {
+            child.localPosition = new Vector2(obstaclesPos[obstacles.IndexOf(child)].x, obstaclesPos[obstacles.IndexOf(child)].y);
+            child.gameObject.SetActive(false);
+        }
+    }
+
+    void Set3Setup()
+    {
+        combo1 = Combo1.STEP1;
+        combo2 = Combo2.STEP1;
+        combo3 = Combo3.STEP1;
+
+        qDPadUp = false;
+        qDPadDown = false;
+        qDPadRight = false;
+        qDPadLeft = false;
+
+        Combo1Parent.SetActive(false);
+        Combo2Parent.SetActive(false);
+        Combo3Parent.SetActive(false);
+
+        comboNum = rnd.Next(0, combos.Count);
+        // Display the visual for the combo here
+        switch (comboNum)
+        {
+            case 2:
+                Combo3Parent.SetActive(true);
+                break;
+            case 1:
+                Combo2Parent.SetActive(true);
+                break;
+            case 0:
+                Combo1Parent.SetActive(true);
+                break;
+        }
+    }
+
     // Update is called once per frame
+    void FixedUpdate()
+    {
+        if (microgamesActive == true)
+        {
+            Set1Inputs();
+        }
+    }
+
     void Update()
     {
         if (microgamesActive == true)
@@ -115,35 +259,45 @@ public class TestScript : MonoBehaviour
             MicrogameStarter();
         }
     }
-
-    void MicrogamesInputs()
+    void Set1Inputs()
     {
         if (Sets["Set1"] == true)
         {
+            Set1Parent.SetActive(true);
             MicrogameSet1();
         }
+    }
+
+    void MicrogamesInputs()
+    {
         /*if (Sets["Set2"] == true)
         {
+            Set2Parent.SetActive(true);
             MicrogameSet2();
         }*/
         if (Sets["Set3"] == true)
         {
+            Set3Parent.SetActive(true);
             MicrogameSet3();
         }
         /*if (Sets["Set4"] == true)
         {
+            Set4Parent.SetActive(true);
             MicrogameSet4();
         }
         if (Sets["Set5"] == true)
         {
+            Set5Parent.SetActive(true);
             MicrogameSet5();
         }
         if (Sets["Set6"] == true)
         {
+            Set6Parent.SetActive(true);
             MicrogameSet6();
         }*/
         if (Sets["Set7"] == true)
         {
+            Set7Parent.SetActive(true);
             MicrogameSet7();
         }
     }
@@ -153,20 +307,16 @@ public class TestScript : MonoBehaviour
         float LHX = inputLAxisX;
         float LHY = inputLAxisY;
         // Move Undertale heart based on LHX + LHY
-        /*Vector3 calc;
-        Vector3 move;
-        move = (heartTx.right * LHX) + (heartTx.up * LHY); //(or forward instead of up?)
+        Vector2 calc;
+        Vector2 move;
+        float speed = 100f;
+        move = (heartTx.right * LHX) + (heartTx.up * LHY);
         if (move.magnitude > 1f)
         {
             move = move.normalized;
         }
-        calc = move * Time.deltaTime; // also multiply by a speed var if you want
-        controller.Move(calc);*/ // Need to set up heartTx and controller in Initialize as their GameObjects
-
-        /*
-        activeSets.Remove("Set1");
-        inactiveSets.Add("Set1");
-        */
+        calc = move * speed * Time.fixedDeltaTime;
+        set1Controller.velocity = (calc * 100);
     }
 
     void MicrogameSet2()
@@ -182,9 +332,43 @@ public class TestScript : MonoBehaviour
     void MicrogameSet3()
     {
         float DPX = inputDAxisX;
-        float DHY = inputDAxisY;
+        float DPY = inputDAxisY;
         // Pick an input combination randomly
+        
+        if (DPX == 0)
+        {
+            leftChkDown = false;
+            rightChkDown = false;
+        }
+        if (DPY == 0)
+        {
+            upChkDown = false;
+            downChkDown = false;
+        }
+        DPadUp(DPY);
+        DPadDown(DPY);
+        DPadRight(DPX);
+        DPadLeft(DPX);
+        NotUp();
+        NotDown();
+        NotRight();
+        NotLeft();
 
+        switch (comboNum)
+        {
+            case 2:
+                Debug.Log("Combo 3!");
+                StartCoroutine(Set3Combo3(DPX, DPY));
+                break;
+            case 1:
+                Debug.Log("Combo 2!");
+                StartCoroutine(Set3Combo2(DPX, DPY));
+                break;
+            case 0:
+                Debug.Log("Combo 1!");
+                StartCoroutine(Set3Combo1(DPX, DPY));
+                break;
+        }
         /*
         activeSets.Remove("Set3");
         inactiveSets.Add("Set3");
@@ -226,9 +410,336 @@ public class TestScript : MonoBehaviour
         if (inputLS_b && inputRS_b)
         {
             Debug.Log("Set 7 Completed!");
+            Sets["Set7"] = false;
             activeSets.Remove("Set7");
             inactiveSets.Add("Set7");
+            Set7Parent.SetActive(false);
         }
+    }
+
+    private bool upChkDown, downChkDown, rightChkDown, leftChkDown;
+    private bool qNotUp, qNotDown, qNotLeft, qNotRight;
+
+    void DPadUp(float DPY)
+    {
+        if (DPY == 1 && !upChkDown)
+        {
+            upChkDown = true;
+            StartCoroutine(DPadUpCo());
+            Debug.Log("DPad Up was pressed!");
+        }
+    }
+
+    IEnumerator DPadUpCo()
+    {
+        qDPadUp = true;
+        yield return new WaitForEndOfFrame();
+        qDPadUp = false;
+    }
+
+    void NotUp()
+    {
+        if (qDPadDown || qDPadLeft || qDPadRight)
+        {
+            qNotUp = true;
+        }
+        else
+        {
+            qNotUp = false;
+        }
+    }
+
+    void DPadDown(float DPY)
+    {
+        if (DPY == -1 && !downChkDown)
+        {
+            downChkDown = true;
+            StartCoroutine(DPadDownCo());
+            Debug.Log("DPad Down was pressed!");
+        }
+    }
+
+    IEnumerator DPadDownCo()
+    {
+        qDPadDown = true;
+        yield return new WaitForEndOfFrame();
+        qDPadDown = false;
+    }
+    void NotDown()
+    {
+        if (qDPadUp || qDPadLeft || qDPadRight)
+        {
+            qNotDown = true;
+        }
+        else
+        {
+            qNotDown = false;
+        }
+    }
+
+    void DPadRight(float DPX)
+    {
+        if (DPX == 1 && !rightChkDown)
+        {
+            rightChkDown = true;
+            StartCoroutine(DPadRightCo());
+            Debug.Log("DPad Right was pressed!");
+        }
+    }
+    IEnumerator DPadRightCo()
+    {
+        qDPadRight = true;
+        yield return new WaitForEndOfFrame();
+        qDPadRight = false;
+    }
+    void NotRight()
+    {
+        if (qDPadDown || qDPadLeft || qDPadUp)
+        {
+            qNotRight = true;
+        }
+        else
+        {
+            qNotRight = false;
+        }
+    }
+
+    void DPadLeft(float DPX)
+    {
+        if (DPX == -1 && !leftChkDown)
+        {
+            leftChkDown = true;
+            StartCoroutine(DPadLeftCo());
+            Debug.Log("DPad Left was pressed!");
+        }
+    }
+    IEnumerator DPadLeftCo()
+    {
+        qDPadLeft = true;
+        yield return new WaitForEndOfFrame();
+        qDPadLeft = false;
+    }
+    void NotLeft()
+    {
+        if (qDPadDown || qDPadUp || qDPadRight)
+        {
+            qNotLeft = true;
+        }
+        else
+        {
+            qNotLeft = false;
+        }
+    }
+
+    void Set3Mistake()
+    {
+        // Penalty to progress bar
+        Debug.Log("Wrong DPad Input!");
+        Set3Setup();
+    }
+
+    IEnumerator Set3Combo1(float DPX, float DPY) // --------------------------- Combo 1: UP DOWN LEFT
+    {
+        switch (combo1)
+        {
+            case (Combo1.STEP1):
+                if (qDPadUp)
+                {
+                    // Highlight that the button has been pressed
+                    
+                    combo1 = Combo1.STEP2;
+                }
+                if (qNotUp)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+            case (Combo1.STEP2):
+                yield return new WaitUntil(() => DPY == 0);
+                if (qDPadDown)
+                {
+                    // Highlight that the button has been pressed
+                    
+                    combo1 = Combo1.STEP3;
+                }
+                if (qNotDown)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+            case (Combo1.STEP3):
+                yield return new WaitUntil(() => DPY == 0);
+                if (qDPadLeft)
+                {
+                    // Highlight that the button has been pressed
+                    StartCoroutine(Set3Completed());
+                }
+                if (qNotLeft)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+        }
+    }
+    IEnumerator Set3Combo2(float DPX, float DPY) // --------------------------- Combo 2: RIGHT RIGHT LEFT UP
+    {
+        switch (combo2)
+        {
+            case (Combo2.STEP1):
+                if (qDPadRight)
+                {
+                    // Highlight that the button has been pressed
+                    
+                    combo2 = Combo2.STEP2;
+                }
+                if (qNotRight)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+            case (Combo2.STEP2):
+                yield return new WaitUntil(() => DPX == 0);
+                if (qDPadRight)
+                {
+                    // Highlight that the button has been pressed
+                    
+                    combo2 = Combo2.STEP3;
+                }
+                if (qNotRight)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+            case (Combo2.STEP3):
+                yield return new WaitUntil(() => DPX == 0);
+                if (qDPadLeft)
+                {
+                    // Highlight that the button has been pressed
+                    
+                    combo2 = Combo2.STEP4;
+                }
+                if (qNotLeft)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+            case (Combo2.STEP4):
+                yield return new WaitUntil(() => DPX == 0);
+                if (qDPadUp)
+                {
+                    // Highlight that the button has been pressed
+                    StartCoroutine(Set3Completed());
+                }
+                if (qNotUp)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+        }
+    }
+
+    IEnumerator Set3Combo3(float DPX, float DPY) // --------------------------- Combo 3: DOWN UP LEFT UP RIGHT
+    {
+        switch (combo3)
+        {
+            case (Combo3.STEP1):
+                if (qDPadDown)
+                {
+                    // Highlight that the button has been pressed
+                    combo3 = Combo3.STEP2;
+                }
+                if (qNotDown)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+            case (Combo3.STEP2):
+                yield return new WaitUntil(() => DPY == 0);
+                if (qDPadUp)
+                {
+                    // Highlight that the button has been pressed
+                    
+                    combo3 = Combo3.STEP3;
+                }
+                if (qNotUp)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+            case (Combo3.STEP3):
+                yield return new WaitUntil(() => DPY == 0);
+                if (qDPadLeft)
+                {
+                    // Highlight that the button has been pressed
+                    
+                    combo3 = Combo3.STEP4;
+                }
+                if (qNotLeft)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+            case (Combo3.STEP4):
+                yield return new WaitUntil(() => DPX == 0);
+                if (qDPadUp)
+                {
+                    // Highlight that the button has been pressed
+                    
+                    combo3 = Combo3.STEP5;
+                }
+                if (qNotUp)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+            case (Combo3.STEP5):
+                yield return new WaitUntil(() => DPY == 0);
+                if (qDPadRight)
+                {
+                    // Highlight that the button has been pressed
+                    StartCoroutine(Set3Completed());
+                }
+                if (qNotRight)
+                {
+                    // Highlight the button in red
+                    yield return new WaitForSeconds(0.5f);
+                    Set3Mistake();
+                }
+                break;
+        }
+    }
+
+    IEnumerator Set3Completed()
+    {
+        // Bonus to progress
+        yield return new WaitForSeconds(0.5f);
+        Debug.Log("Set 3 Completed!");
+        Sets["Set3"] = false;
+        activeSets.Remove("Set3");
+        inactiveSets.Add("Set3");
+        Set3Parent.SetActive(false);
     }
 
     void InitialInactiveSets()
@@ -307,6 +818,7 @@ public class TestScript : MonoBehaviour
                 case "Set3":
                     // Start Set 3
                     Debug.Log("Set 3 Microgame is now ACTIVE!");
+                    Set3Setup();
                     Sets["Set3"] = true;
                     break;
                 case "Set2":
@@ -318,6 +830,8 @@ public class TestScript : MonoBehaviour
                     // Start Set 1
                     Debug.Log("Set 1 Microgame is now ACTIVE!");
                     Sets["Set1"] = true;
+                    Set1Setup();
+                    StartCoroutine(Set1Obstacles());
                     break;
                 case "Initial":
                     // Start Microgames
@@ -327,6 +841,29 @@ public class TestScript : MonoBehaviour
                     StartCoroutine(microgameCooldown());
                     break;
             }
+        }
+    }
+
+    IEnumerator Set1Obstacles()
+    {
+        float timeRemaining = rnd.Next(1, 3);
+        yield return new WaitForSeconds(timeRemaining);
+        int nextObstacle = rnd.Next(0, obstacles.Count);
+        obstacles[nextObstacle].gameObject.SetActive(true);
+        obstacles[nextObstacle].GetComponent<Set1Obstacle>().MoveToHeart();
+        obstacles.RemoveAt(nextObstacle);
+        if (obstacles.Count > 0)
+        {
+            StartCoroutine(Set1Obstacles());
+        }
+        else
+        {
+            yield return new WaitForSeconds(2);
+            Debug.Log("Set 1 Completed!");
+            Sets["Set1"] = false;
+            activeSets.Remove("Set1");
+            inactiveSets.Add("Set1");
+            Set1Parent.SetActive(false);
         }
     }
 }
