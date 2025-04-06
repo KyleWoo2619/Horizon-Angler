@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
     [HideInInspector] public bool inputKeyDownCursor = false;
 
     [Header("Sensitivity")]
-    public float sensitivity = 100.0f;
+    public float sensitivity = 10.0f;
 
     [Header("Camera Distance")]
     public float distance = 10.0f;
@@ -65,7 +65,7 @@ public class CameraController : MonoBehaviour
     void CameraControls()
     {
         currentX += inputLookX * sensitivity * Time.deltaTime;
-        currentY += inputLookY * sensitivity * Time.deltaTime;
+        currentY += inputLookY * -1 * sensitivity * Time.deltaTime;
 
         currentY = Mathf.Clamp(currentY, YMin, YMax);
 

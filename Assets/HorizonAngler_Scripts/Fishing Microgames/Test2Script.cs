@@ -183,8 +183,8 @@ public class Test2Script : MonoBehaviour
     {
         Sets.Add("Set1", false);  // WASD / L-Joystick Set
         //Sets.Add("Set2", false);  // Mouse / R-Joystick Set // Mathf.Clamp
-        Sets.Add("Set3", false);  // IJKL / D-Pad Set
-        //Sets.Add("Set4", false);  // Arrow Keys / ABXY Set
+        Sets.Add("Set3", false);  // IJKL / D-Pad Set // Swap this to Arrow Keys
+        //Sets.Add("Set4", false);  // Arrow Keys / ABXY Set // Swap this to IJKL
         //Sets.Add("Set5", false);  // QE / Bumpers Set
         //Sets.Add("Set6", false);  // LMB/RMB / LT/RT Set
         Sets.Add("Set7", false);  // Space // Joystick Buttons Set
