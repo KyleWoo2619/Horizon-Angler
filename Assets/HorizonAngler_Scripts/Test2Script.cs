@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using Random = System.Random;
 
 public class Test2Script : MonoBehaviour
@@ -35,6 +36,7 @@ public class Test2Script : MonoBehaviour
     [HideInInspector] public float inputRAxisY = 0f;    // range -1f to +1f // Use GetAxis
     [HideInInspector] public float inputLAxisX = 0f;    // range -1f to +1f // Use GetAxisRaw
     [HideInInspector] public float inputLAxisY = 0f;    // range -1f to +1f // Use GetAxisRaw
+    [HideInInspector] public Vector2 inputSet1;
     [HideInInspector] public float inputDAxisX = 0f;    // range -1f to +1f // Use GetAxisRaw
     [HideInInspector] public float inputDAxisY = 0f;    // range -1f to +1f // Use GetAxisRaw
     [HideInInspector] public bool inputA       = false; // is key Pressed
@@ -95,26 +97,17 @@ public class Test2Script : MonoBehaviour
     // Set 3 Combos
     public enum Combo1
     {
-        STEP1,
-        STEP2,
-        STEP3
+        STEP1, STEP2, STEP3
     }
 
     public enum Combo2
     {
-        STEP1,
-        STEP2,
-        STEP3,
-        STEP4
+        STEP1, STEP2, STEP3, STEP4
     }
 
     public enum Combo3
     {
-        STEP1,
-        STEP2,
-        STEP3,
-        STEP4,
-        STEP5
+        STEP1, STEP2, STEP3, STEP4, STEP5
     }
 
     [Header("Set 3 Variables")]
@@ -135,6 +128,18 @@ public class Test2Script : MonoBehaviour
     List<Image> combo2Buttons = new List<Image>();
     List<Image> combo3Buttons = new List<Image>();
     private bool Set3CompletedRunning = false;
+
+    // Input Actions (Unity Input System)
+    InputAction set1Action;
+    InputAction set2Action;
+    InputAction set3Action;
+    InputAction set4Action;
+    InputAction set5Action;
+    InputAction set6Action;
+    InputAction set7Action;
+
+    [Header("Player Input Component")]
+    public PlayerInput playerInput;
 
     // Start is called before the first frame update
     void Start()
@@ -220,6 +225,10 @@ public class Test2Script : MonoBehaviour
         {
             t.SetActive(false);
         }
+
+
+        // Input System Controls Here
+        set1Action = playerInput.actions.FindAction("Microgames/Set1"); // isn't working
     }
 
     void InitialSetupSet1()

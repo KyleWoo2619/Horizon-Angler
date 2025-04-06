@@ -14,4 +14,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/HorizonAngler_Scenes/Minigame.unity
     guid: 407a5e90d9794c44fabde5cc8dd1e7d0
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: cd9169994617d3a448df5ad4eca81b24,
+      type: 2}
