@@ -1,0 +1,983 @@
+fileFormatVersion: 2
+guid: 0ea2835b41b6e984cb8448ac989dcd4f
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: "\nClip 'Nico_Root|Nico_Root|HA_FishermanOneTake_FBX|Base
+      Layer.001' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Nico_Ab'
+      has translation animation that will be discarded.\n\t'Nico_Chest' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Nico_Neck'
+      has translation animation that will be discarded.\n\t'Nico_Head' has translation
+      animation that will be discarded.\n"
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: MC_IdleAnim
+      takeName: Nico_Root|Nico_Root|HA_FishermanOneTake_FBX|Base Layer.001
+      internalID: -2589373681117318236
+      firstFrame: 65
+      lastFrame: 246
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: MC_WalkAnim
+      takeName: Nico_Root|Nico_Root|HA_FishermanOneTake_FBX|Base Layer.001
+      internalID: -5237306241055219366
+      firstFrame: 290
+      lastFrame: 380
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: MC_FishingIdleAnim
+      takeName: Nico_Root|Nico_Root|HA_FishermanOneTake_FBX|Base Layer.001
+      internalID: -554734640399560130
+      firstFrame: 950
+      lastFrame: 1145
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: MC_CastingAnim
+      takeName: Nico_Root|Nico_Root|HA_FishermanOneTake_FBX|Base Layer.001
+      internalID: 8183089591039644921
+      firstFrame: 1145
+      lastFrame: 1300
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 0
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 1
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: MC_BaitTook
+      takeName: Nico_Root|Nico_Root|HA_FishermanOneTake_FBX|Base Layer.001
+      internalID: -2555087355246258093
+      firstFrame: 1387
+      lastFrame: 1420
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: MC_FightingFish
+      takeName: Nico_Root|Nico_Root|HA_FishermanOneTake_FBX|Base Layer.001
+      internalID: -5286030376675372682
+      firstFrame: 1420
+      lastFrame: 1752
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: MC_CatchAnim
+      takeName: Nico_Root|Nico_Root|HA_FishermanOneTake_FBX|Base Layer.001
+      internalID: -86580820072105478
+      firstFrame: 1814
+      lastFrame: 1923
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human:
+    - boneName: Nico_Nico
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LThigh
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RThigh
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LShin
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RShin
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LFoot
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RFoot
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_Ab
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_Neck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_Head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LShoulder
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RShoulder
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LUArm
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RUArm
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LFArm
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RFArm
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LHand
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RHand
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LToe
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RToe
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LThumb1
+      humanName: Left Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LThumb2
+      humanName: Left Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LThumb3
+      humanName: Left Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LIndex1
+      humanName: Left Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LIndex2
+      humanName: Left Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LIndex3
+      humanName: Left Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LMiddle1
+      humanName: Left Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LMiddle2
+      humanName: Left Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LMiddle3
+      humanName: Left Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LRing1
+      humanName: Left Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LRing2
+      humanName: Left Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LRing3
+      humanName: Left Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LPinky1
+      humanName: Left Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LPinky2
+      humanName: Left Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_LPinky3
+      humanName: Left Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RThumb1
+      humanName: Right Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RThumb2
+      humanName: Right Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RThumb3
+      humanName: Right Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RIndex1
+      humanName: Right Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RIndex2
+      humanName: Right Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RIndex3
+      humanName: Right Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RMiddle1
+      humanName: Right Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RMiddle2
+      humanName: Right Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RMiddle3
+      humanName: Right Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RRing1
+      humanName: Right Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RRing2
+      humanName: Right Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RRing3
+      humanName: Right Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RPinky1
+      humanName: Right Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RPinky2
+      humanName: Right Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Nico_RPinky3
+      humanName: Right Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: FihsermanOneTakeTrimmed(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Nico_Root
+      parentName: FihsermanOneTakeTrimmed(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.000000037748947, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Nico_Nico
+      parentName: Nico_Root
+      position: {x: -0.0000000037252903, y: 0.98171544, z: -0.07797518}
+      rotation: {x: -0.0109634055, y: -0.09273231, z: -0.0014653943, w: 0.99562967}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Nico_Ab
+      parentName: Nico_Nico
+      position: {x: 0.00000000834465, y: 0.07456968, z: 0.000000002980232}
+      rotation: {x: 0.0020414877, y: 0.0034159834, z: 0.0029903091, w: 0.9999876}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Nico_Chest
+      parentName: Nico_Ab
+      position: {x: -0.0000000017881393, y: 0.19948289, z: -0.0000000035762786}
+      rotation: {x: -0.063120745, y: 0.0035095871, z: 0.0012750324, w: 0.99799895}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Nico_Neck
+      parentName: Nico_Chest
+      position: {x: -0.00000000834465, y: 0.2239684, z: -0.000000032782555}
+      rotation: {x: 0.1483573, y: 0.032333262, z: -0.011739479, w: 0.98833543}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Nico_Head
+      parentName: Nico_Neck
+      position: {x: 0.0000000023841857, y: 0.15389654, z: 0.019172048}
+      rotation: {x: 0.10656108, y: 0.03066728, z: -0.002338645, w: 0.9938304}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Nico_LShoulder
+      parentName: Nico_Chest
+      position: {x: -0.038242996, y: 0.18567221, z: -0.0009337847}
+      rotation: {x: -0.63804656, y: 0.75943196, z: -0.08177226, w: 0.09732916}
+      scale: {x: 0.9999999, y: 1, z: 1}
+    - name: Nico_LUArm
+      parentName: Nico_LShoulder
+      position: {x: -0.000000023841856, y: 0.10776304, z: 0.000000011920928}
+      rotation: {x: -0.14140677, y: 0.18359968, z: -0.11523637, w: 0.9659275}
+      scale: {x: 1.0000001, y: 0.99999994, z: 1.0000001}
+    - name: Nico_LFArm
+      parentName: Nico_LUArm
+      position: {x: 0.000000075399875, y: 0.3111799, z: 0.000000002980232}
+      rotation: {x: 0.001047924, y: -0.3962156, z: 0.0117468275, w: 0.91808176}
+      scale: {x: 1.0000001, y: 0.99999994, z: 1}
+    - name: Nico_LHand
+      parentName: Nico_LFArm
+      position: {x: 0.00000022411346, y: 0.245044, z: -0.000000009536743}
+      rotation: {x: 0.10837723, y: 0.22294845, z: 0.049133725, w: 0.96754026}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: Nico_LThumb1
+      parentName: Nico_LHand
+      position: {x: 0.02618625, y: 0.02304396, z: -0.03666068}
+      rotation: {x: -0.38371217, y: -0.32867482, z: 0.24633232, w: 0.8270781}
+      scale: {x: 1, y: 1.0000002, z: 1.0000002}
+    - name: Nico_LThumb2
+      parentName: Nico_LThumb1
+      position: {x: -0.000000029802322, y: 0.030259546, z: 0.00000019550323}
+      rotation: {x: 0.032708943, y: -0.050999254, z: 0.006895408, w: 0.99813914}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    - name: Nico_LThumb3
+      parentName: Nico_LThumb2
+      position: {x: -0.000000057220458, y: 0.02586285, z: 0.000000052452087}
+      rotation: {x: -0.0000003534369, y: -0.0000005728798, z: 0.0000003636815, w: 1}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Nico_LIndex1
+      parentName: Nico_LHand
+      position: {x: -0.000000044107438, y: 0.09427052, z: -0.036660705}
+      rotation: {x: -0.072260186, y: -0.026321426, z: -0.061412696, w: 0.9951453}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Nico_LIndex2
+      parentName: Nico_LIndex1
+      position: {x: 0.000000067949294, y: 0.04553352, z: 0.000000019073486}
+      rotation: {x: 0.0000004991889, y: -0.00000008940697, z: -0.033508137, w: 0.9994385}
+      scale: {x: 0.99999994, y: 0.99999994, z: 1}
+    - name: Nico_LIndex3
+      parentName: Nico_LIndex2
+      position: {x: 0.00000007271767, y: 0.022766778, z: 0.000000019073486}
+      rotation: {x: -0.000000019955259, y: -0.000000012353255, z: -0.19859633, w: 0.9800814}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Nico_LMiddle1
+      parentName: Nico_LHand
+      position: {x: -0.000000114440915, y: 0.09427052, z: -0.01215042}
+      rotation: {x: -0.058012616, y: -0.028353583, z: -0.06424244, w: 0.9958431}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Nico_LMiddle2
+      parentName: Nico_LMiddle1
+      position: {x: -0.000000166893, y: 0.05008705, z: 0.000000020861625}
+      rotation: {x: 0.0000002942979, y: -0.000000035390254, z: -0.033502724, w: 0.9994387}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Nico_LMiddle3
+      parentName: Nico_LMiddle2
+      position: {x: 0.00000014781952, y: 0.027319962, z: -0.000000034570693}
+      rotation: {x: -0.0000000063547985, y: 2.3756258e-10, z: -0.19859633, w: 0.9800814}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Nico_LRing1
+      parentName: Nico_LHand
+      position: {x: 0.00000015735625, y: 0.08903326, z: 0.012150417}
+      rotation: {x: -0.055961013, y: 0.09361919, z: -0.07330482, w: 0.9913275}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Nico_LRing2
+      parentName: Nico_LRing1
+      position: {x: -0.00000017166137, y: 0.04553342, z: 0.000000038146972}
+      rotation: {x: 0.0000019855797, y: 0.00000015646219, z: -0.03350117, w: 0.9994387}
+      scale: {x: 0.99999994, y: 0.99999994, z: 1}
+    - name: Nico_LRing3
+      parentName: Nico_LRing2
+      position: {x: 0.000000076293944, y: 0.022766907, z: -0.00000007152557}
+      rotation: {x: 0.000000005701502, y: -0.000000021855758, z: -0.19859633, w: 0.9800814}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Nico_LPinky1
+      parentName: Nico_LHand
+      position: {x: 0.000000102519984, y: 0.08379601, z: 0.03666072}
+      rotation: {x: -0.048027962, y: 0.14177002, z: -0.07540667, w: 0.98585415}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    - name: Nico_LPinky2
+      parentName: Nico_LPinky1
+      position: {x: -0.00000011920929, y: 0.03642683, z: -0.00000004053116}
+      rotation: {x: -0.0000027157366, y: -0.00000017881393, z: -0.033499215, w: 0.9994388}
+      scale: {x: 0.99999994, y: 0.99999976, z: 0.9999999}
+    - name: Nico_LPinky3
+      parentName: Nico_LPinky2
+      position: {x: 0.00000007152557, y: 0.018213226, z: 0.000000015497207}
+      rotation: {x: -0.000000024944068, y: -0.000000021618192, z: -0.19859628, w: 0.9800814}
+      scale: {x: 0.9999998, y: 0.9999999, z: 1}
+    - name: Nico_RShoulder
+      parentName: Nico_Chest
+      position: {x: 0.03824299, y: 0.18567215, z: -0.0009337866}
+      rotation: {x: -0.07495783, y: 0.088508755, z: -0.64191115, w: 0.7579562}
+      scale: {x: 0.9999999, y: 0.99999994, z: 1.0000001}
+    - name: Nico_RUArm
+      parentName: Nico_RShoulder
+      position: {x: -0.00000009775162, y: 0.10776305, z: -0.00000002503395}
+      rotation: {x: 0.14337394, y: -0.16045961, z: -0.10049218, w: 0.9713898}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Nico_RFArm
+      parentName: Nico_RUArm
+      position: {x: -0.00000024437904, y: 0.3111799, z: -0.000000022649765}
+      rotation: {x: 0.0009164957, y: 0.4111732, z: 0.0040906696, w: 0.9115476}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: Nico_RHand
+      parentName: Nico_RFArm
+      position: {x: 0.0000000667572, y: 0.24504398, z: -0.000000047683713}
+      rotation: {x: -0.10001569, y: -0.13871533, z: 0.05152401, w: 0.9839208}
+      scale: {x: 1, y: 0.99999994, z: 0.9999999}
+    - name: Nico_RThumb1
+      parentName: Nico_RHand
+      position: {x: 0.026186228, y: 0.02304393, z: 0.03666073}
+      rotation: {x: 0.43473217, y: 0.27753887, z: 0.2704673, w: 0.812913}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Nico_RThumb2
+      parentName: Nico_RThumb1
+      position: {x: -0.000000019073486, y: 0.030259533, z: -0.000000104904174}
+      rotation: {x: -0.031046864, y: 0.028354596, z: -0.010647952, w: 0.99905896}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    - name: Nico_RThumb3
+      parentName: Nico_RThumb2
+      position: {x: 0.000000052452087, y: 0.02586303, z: 0.000000114440915}
+      rotation: {x: 0.00000037334394, y: 0.0000005783513, z: 0.00000036368147, w: 1}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Nico_RIndex1
+      parentName: Nico_RHand
+      position: {x: -0.000000009536743, y: 0.09427045, z: 0.036660705}
+      rotation: {x: 0.0629338, y: 0.10558105, z: -0.064587444, w: 0.9903133}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Nico_RIndex2
+      parentName: Nico_RIndex1
+      position: {x: 0.00000014781952, y: 0.045533493, z: -0.000000019073486}
+      rotation: {x: 0.000001322478, y: 0.0000003427267, z: -0.033513818, w: 0.99943835}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Nico_RIndex3
+      parentName: Nico_RIndex2
+      position: {x: -0.00000015258789, y: 0.0227667, z: -0.000000038146972}
+      rotation: {x: 0.000000001900501, y: 0.000000014253755, z: -0.19859633, w: 0.9800814}
+      scale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
+    - name: Nico_RMiddle1
+      parentName: Nico_RHand
+      position: {x: -0.0000001168251, y: 0.09427043, z: 0.012150413}
+      rotation: {x: 0.04696058, y: 0.05991236, z: -0.06245539, w: 0.9951405}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Nico_RMiddle2
+      parentName: Nico_RMiddle1
+      position: {x: 0.000000076293944, y: 0.05008699, z: -0.000000009536743}
+      rotation: {x: -0.00000036880357, y: -0.00000007450577, z: -0.033511426, w: 0.9994384}
+      scale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
+    - name: Nico_RMiddle3
+      parentName: Nico_RMiddle2
+      position: {x: -0.00000019550323, y: 0.027319955, z: 0.0000000047683715}
+      rotation: {x: -0.000000004751251, y: 0.0000000057015015, z: -0.19859628, w: 0.9800814}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: Nico_RRing1
+      parentName: Nico_RHand
+      position: {x: 0.000000023841856, y: 0.08903314, z: -0.012150375}
+      rotation: {x: 0.04917921, y: -0.075362414, z: -0.07042169, w: 0.99345}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    - name: Nico_RRing2
+      parentName: Nico_RRing1
+      position: {x: -0.00000007867813, y: 0.045533434, z: 0.000000009536743}
+      rotation: {x: 0.00000033155072, y: 0.000000014901156, z: -0.03350862, w: 0.99943846}
+      scale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
+    - name: Nico_RRing3
+      parentName: Nico_RRing2
+      position: {x: -0.00000010311604, y: 0.022766737, z: 0}
+      rotation: {x: 0.000000006651753, y: 9.502501e-10, z: -0.19859633, w: 0.9800814}
+      scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    - name: Nico_RPinky1
+      parentName: Nico_RHand
+      position: {x: -0, y: 0.083795965, z: -0.03666068}
+      rotation: {x: 0.048155837, y: -0.12813881, z: -0.07170718, w: 0.98798764}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Nico_RPinky2
+      parentName: Nico_RPinky1
+      position: {x: 0.000000088214875, y: 0.03642697, z: -0.000000019073486}
+      rotation: {x: 0.00000037997955, y: -0.000000029802319, z: -0.033513084, w: 0.9994383}
+      scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    - name: Nico_RPinky3
+      parentName: Nico_RPinky2
+      position: {x: -0.0000002813339, y: 0.0182133, z: -0.000000009536743}
+      rotation: {x: 0.000000007602002, y: -0.000000004751251, z: -0.19859633, w: 0.9800814}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Nico_LThigh
+      parentName: Nico_Nico
+      position: {x: -0.09586011, y: -0.00000006308779, z: 0.0000000077486035}
+      rotation: {x: 0.99965495, y: -0.025304927, z: -0.005456991, w: -0.004466545}
+      scale: {x: 1, y: 0.9999999, z: 0.9999999}
+    - name: Nico_LShin
+      parentName: Nico_LThigh
+      position: {x: -0.00000000834465, y: 0.52492, z: -0.0000000023841857}
+      rotation: {x: 0.096715, y: 0.000000044080675, z: 0.0000000017398337, w: 0.9953121}
+      scale: {x: 1, y: 0.9999999, z: 0.99999994}
+    - name: Nico_LFoot
+      parentName: Nico_LShin
+      position: {x: -0.000000001490116, y: 0.36745396, z: 0.000000009536743}
+      rotation: {x: -0.7622377, y: -0.011766765, z: -0.013783198, w: 0.64704347}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Nico_LToe
+      parentName: Nico_LFoot
+      position: {x: 0.000000012814998, y: 0.1437902, z: 0.062309068}
+      rotation: {x: -0.023619838, y: 0.0000000029111964, z: 0.0000000034060996, w: 0.99972105}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Nico_RThigh
+      parentName: Nico_Nico
+      position: {x: 0.095860116, y: -0.000000099539754, z: 0.0000000047683715}
+      rotation: {x: 0.9997897, y: 0.016596997, z: -0.007849254, w: -0.009137154}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Nico_RShin
+      parentName: Nico_RThigh
+      position: {x: -0.0000000017881393, y: 0.52492, z: -0.0000000019371509}
+      rotation: {x: 0.1115768, y: 0.000000040770747, z: -0.0000000065309345, w: 0.9937558}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Nico_RFoot
+      parentName: Nico_RShin
+      position: {x: 0.0000000080466265, y: 0.36745396, z: 0}
+      rotation: {x: -0.7751146, y: -0.07431659, z: -0.0773999, w: 0.6226425}
+      scale: {x: 0.99999994, y: 1, z: 1.0000001}
+    - name: Nico_RToe
+      parentName: Nico_RFoot
+      position: {x: 0.0000000012293457, y: 0.14379017, z: 0.062309068}
+      rotation: {x: -0.061658133, y: -0.0000000018880657, z: 5.831862e-10, w: 0.99809736}
+      scale: {x: 1, y: 0.99999994, z: 0.9999999}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 3
+  humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
