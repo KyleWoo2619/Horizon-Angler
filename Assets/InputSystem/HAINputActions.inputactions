@@ -60,9 +60,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Exit Fishing",
+                    "name": "ExitFishing",
                     "type": "Button",
                     "id": "8020f146-78e4-4efb-a135-04be500b525a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PlayCutscene",
+                    "type": "Button",
+                    "id": "e3f3d713-1bbf-4a4a-9bda-bc22aa3c6699",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -308,7 +317,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Exit Fishing",
+                    "action": "ExitFishing",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -319,7 +328,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Exit Fishing",
+                    "action": "ExitFishing",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5a98657c-7641-4c35-9d1f-d87fb33fe90f",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PlayCutscene",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

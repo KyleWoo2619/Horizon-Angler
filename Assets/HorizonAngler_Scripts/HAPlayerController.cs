@@ -1,139 +1,120 @@
-﻿ using UnityEngine;
-#if ENABLE_INPUT_SYSTEM 
+﻿using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
-
-/* Note: animations are called via the controller for both the character and capsule using animator null checks
- */
 
 namespace StarterAssets
 {
     [RequireComponent(typeof(CharacterController))]
-#if ENABLE_INPUT_SYSTEM 
+#if ENABLE_INPUT_SYSTEM
     [RequireComponent(typeof(PlayerInput))]
 #endif
     public class HAPlayerController : MonoBehaviour
     {
-        [Header("Player")]
+        [Header("Player Settings")]
         public float MoveSpeed = 2.0f;
         public float SprintSpeed = 5.335f;
-        [Range(0.0f, 0.3f)]
-        public float RotationSmoothTime = 0.12f;
+        [Range(0.0f, 0.3f)] public float RotationSmoothTime = 0.12f;
         public float SpeedChangeRate = 10.0f;
-
-        public AudioClip LandingAudioClip;
         public AudioClip[] FootstepAudioClips;
         [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
 
-        [Space(10)]
-        public float JumpTimeout = 0.50f;
-        public float FallTimeout = 0.15f;
-
-        [Header("Player Grounded")]
+        [Header("Ground Check Settings")]
         public bool Grounded = true;
         public float GroundedOffset = -0.14f;
         public float GroundedRadius = 0.28f;
         public LayerMask GroundLayers;
 
-        [Header("Fishing")]
-        public GameObject fishingPromptUI; // drag your "Press E" UI here
-        public Transform FishingCameraTarget; // Drag your FishingCameraTarget object into this in Inspector
+        [Header("Fishing Settings")]
+        public GameObject fishingPromptUI;
         public GameObject fishingMinigameUI;
+        public Transform FishingCameraTarget;
         private bool canFish = false;
         private bool isFishing = false;
+        private Vector3 fishingLookTarget;
 
-        private Vector3 _originalCameraPosition;
-        private Quaternion _originalCameraRotation;
-
-        [Header("Cinemachine")]
+        [Header("Camera Settings")]
         public GameObject CinemachineCameraTarget;
         public float TopClamp = 70.0f;
         public float BottomClamp = -30.0f;
         public float CameraAngleOverride = 0.0f;
         public bool LockCameraPosition = false;
 
-        // cinemachine
+        private Vector3 _originalCameraPosition;
+        private Quaternion _originalCameraRotation;
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
-
-        // player
+        private Vector2 _moveInput;
+        private Vector2 _lookInput;
         private float _speed;
         private float _animationBlend;
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
+        private bool _hasAnimator;
+        private bool inFishZone = false;
 
-        // animation IDs
+        // Animator Parameters
         private int _animIDSpeed;
         private int _animIDGrounded;
         private int _animIDMotionSpeed;
 
-        private bool inFishZone = false;
-        private Vector3 fishingLookTarget;
-
-#if ENABLE_INPUT_SYSTEM 
-        private PlayerInput _playerInput;
-#endif
         private Animator _animator;
         private CharacterController _controller;
-        private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
-        private const float _threshold = 0.01f;
+#if ENABLE_INPUT_SYSTEM
+        private PlayerInput _playerInput;
+#endif
 
-        private bool _hasAnimator;
+        private const float _threshold = 0.01f;
 
         private bool IsCurrentDeviceMouse
         {
             get
             {
 #if ENABLE_INPUT_SYSTEM
-                return _playerInput.currentControlScheme == "KeyboardMouse";
+                return _playerInput != null && _playerInput.currentControlScheme == "KeyboardMouse";
 #else
-				return false;
+                return false;
 #endif
             }
         }
 
-
         private void Awake()
         {
-            // get a reference to our main camera
-            if (_mainCamera == null)
-            {
-                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-            }
+            _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
 
         private void Start()
         {
-            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
-            _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
-            _input = GetComponent<StarterAssetsInputs>();
-#if ENABLE_INPUT_SYSTEM 
+            _hasAnimator = TryGetComponent(out _animator);
+#if ENABLE_INPUT_SYSTEM
             _playerInput = GetComponent<PlayerInput>();
-#else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+            _playerInput.actions["Interact"].performed += ctx => { if (canFish && !isFishing) StartFishing(); };
+            _playerInput.actions["ExitFishing"].performed += ctx => { if (isFishing) EndFishing(); };
 #endif
+            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
-            AssignAnimationIDs();
+            AssignAnimationIDs(); // 💡 Make sure you call this ONCE here
         }
 
         private void Update()
         {
-            _hasAnimator = TryGetComponent(out _animator);
+#if ENABLE_INPUT_SYSTEM
+            if (_playerInput != null)
+            {
+                _moveInput = _playerInput.actions["Move"].ReadValue<Vector2>();
+                _lookInput = _playerInput.actions["Look"].ReadValue<Vector2>();
 
+                if (_moveInput.magnitude > 1f) _moveInput.Normalize();
+            }
+#endif
             GroundedCheck();
             ApplyGravity();
             Move();
-
-            if (canFish && !isFishing && Input.GetKeyDown(KeyCode.E))
-            {
-                StartFishing();
-            }
         }
 
         private void LateUpdate()
@@ -150,13 +131,9 @@ namespace StarterAssets
 
         private void GroundedCheck()
         {
-            // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-                transform.position.z);
-            Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-                QueryTriggerInteraction.Ignore);
+            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
+            Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 
-            // update animator if using character
             if (_hasAnimator)
             {
                 _animator.SetBool(_animIDGrounded, Grounded);
@@ -165,55 +142,41 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
-            // if there is an input and camera position is not fixed
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
+            if (_lookInput.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
-                //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                _cinemachineTargetYaw += _lookInput.x * deltaTimeMultiplier;
+                _cinemachineTargetPitch += _lookInput.y * deltaTimeMultiplier;
             }
 
-            // clamp our rotations so our values are limited 360 degrees
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-            // Cinemachine will follow this target
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(
+                _cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
         }
 
         private void Move()
         {
-            if (isFishing)
-            return; // Disable movement while fishing
-            
-            // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            if (isFishing) return;
 
-            // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
+            float targetSpeed = MoveSpeed;
+#if ENABLE_INPUT_SYSTEM
+            if (_playerInput != null && _playerInput.actions["Sprint"].IsPressed())
+            {
+                targetSpeed = SprintSpeed;
+            }
+#endif
+            if (_moveInput == Vector2.zero) targetSpeed = 0.0f;
 
-            // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-            // if there is no input, set the target speed to 0
-            if (_input.move == Vector2.zero) targetSpeed = 0.0f;
-
-            // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+            float inputMagnitude = _moveInput.magnitude;
 
-            // accelerate or decelerate to target speed
-            if (currentHorizontalSpeed < targetSpeed - speedOffset ||
-                currentHorizontalSpeed > targetSpeed + speedOffset)
+            if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
             {
-                // creates curved result rather than a linear one giving a more organic speed change
-                // note T in Lerp is clamped, so we don't need to clamp our speed
-                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
-                    Time.deltaTime * SpeedChangeRate);
-
-                // round speed to 3 decimal places
+                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
                 _speed = Mathf.Round(_speed * 1000f) / 1000f;
             }
             else
@@ -224,77 +187,85 @@ namespace StarterAssets
             _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
-            // normalise input direction
-            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            Vector3 inputDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
 
-            // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-            // if there is a move input rotate player when the player is moving
             if (inFishZone)
             {
                 Vector3 directionToLook = fishingLookTarget - transform.position;
-                directionToLook.y = 0f; // ignore height difference
+                directionToLook.y = 0f;
                 if (directionToLook != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(directionToLook);
-                    transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 5f); // 5 = smoothness
+                    transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
                 }
             }
-            else if (_input.move != Vector2.zero)
+            else if (_moveInput != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                _mainCamera.transform.eulerAngles.y;
-                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
-                    RotationSmoothTime);
-
+                                  _mainCamera.transform.eulerAngles.y;
+                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
-            
+
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
-            // move the player
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
-            // update animator if using character
             if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }
-        private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
+
+        private void StartFishing()
         {
-            if (lfAngle < -360f) lfAngle += 360f;
-            if (lfAngle > 360f) lfAngle -= 360f;
-            return Mathf.Clamp(lfAngle, lfMin, lfMax);
-        }
+            isFishing = true;
+            fishingPromptUI.SetActive(false);
+            fishingMinigameUI.SetActive(true);
 
-        private void OnDrawGizmosSelected()
-        {
-            Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
-            Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
-
-            if (Grounded) Gizmos.color = transparentGreen;
-            else Gizmos.color = transparentRed;
-
-            // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
-            Gizmos.DrawSphere(
-                new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
-                GroundedRadius);
-        }
-
-        private void OnFootstep(AnimationEvent animationEvent)
-        {
-            if (animationEvent.animatorClipInfo.weight > 0.5f)
+            if (_hasAnimator)
             {
-                if (FootstepAudioClips.Length > 0)
-                {
-                    var index = Random.Range(0, FootstepAudioClips.Length);
-                    AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume);
-                }
+                _animator.SetBool("Fishing", true);
+                _animator.SetFloat(_animIDSpeed, 0f);
+                
+                // Force play Fishing Idle immediately
+                _animator.Play("FishingIdle", 0, 0f); 
             }
+
+            _originalCameraPosition = CinemachineCameraTarget.transform.position;
+            _originalCameraRotation = CinemachineCameraTarget.transform.rotation;
+
+            CinemachineCameraTarget.transform.position = FishingCameraTarget.position;
+            CinemachineCameraTarget.transform.rotation = FishingCameraTarget.rotation;
+
+            _cinemachineTargetYaw = FishingCameraTarget.eulerAngles.y;
+            _cinemachineTargetPitch = FishingCameraTarget.eulerAngles.x;
+
+            LockCameraPosition = true;
         }
 
+        private void EndFishing()
+        {
+            isFishing = false;
+            fishingPromptUI.SetActive(true);
+            fishingMinigameUI.SetActive(false);
+
+            if (_hasAnimator)
+            {
+                _animator.SetBool("Fishing", false);
+                _animator.SetFloat(_animIDSpeed, 0f);
+                
+                //  Force play back Idle immediately
+                _animator.Play("Idle Walk Blend", 0, 0f); 
+            }
+
+            CinemachineCameraTarget.transform.position = _originalCameraPosition;
+            CinemachineCameraTarget.transform.rotation = _originalCameraRotation;
+
+            LockCameraPosition = false;
+        }
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("FishZone"))
@@ -310,7 +281,7 @@ namespace StarterAssets
             {
                 inFishZone = true;
                 canFish = true;
-                fishingPromptUI.SetActive(true); // Show the "Press E" prompt
+                fishingPromptUI.SetActive(true);
             }
         }
 
@@ -320,50 +291,20 @@ namespace StarterAssets
             {
                 inFishZone = false;
                 canFish = false;
-                fishingPromptUI.SetActive(false); // Hide the prompt
+                fishingPromptUI.SetActive(false);
             }
         }
-        private void StartFishing()
+
+        private void OnFootstep(AnimationEvent animationEvent)
         {
-            isFishing = true;
-            fishingPromptUI.SetActive(false);
-            fishingMinigameUI.SetActive(true); // Show the fishing minigame UI
-
-            if (_hasAnimator)
+            if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
-                _animator.SetBool("Fishing", true);
+                if (FootstepAudioClips.Length > 0)
+                {
+                    var index = Random.Range(0, FootstepAudioClips.Length);
+                    AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume);
+                }
             }
-
-            // Save the original camera position and rotation
-            _originalCameraPosition = CinemachineCameraTarget.transform.position;
-            _originalCameraRotation = CinemachineCameraTarget.transform.rotation;
-
-            // Move the camera target to FishingCameraTarget
-            CinemachineCameraTarget.transform.position = FishingCameraTarget.position;
-            CinemachineCameraTarget.transform.rotation = FishingCameraTarget.rotation;
-
-            _cinemachineTargetYaw = FishingCameraTarget.eulerAngles.y;
-            _cinemachineTargetPitch = FishingCameraTarget.eulerAngles.x;
-
-            LockCameraPosition = true;
-        }
-
-        private void EndFishing()
-        {
-            isFishing = false;
-            fishingPromptUI.SetActive(true); // Show the "Press E" prompt again
-            fishingMinigameUI.SetActive(false); // Hide the fishing minigame UI
-
-            if (_hasAnimator)
-            {
-                _animator.SetBool("Fishing", false);
-            }
-
-            // Move the camera target back to original position and rotation
-            CinemachineCameraTarget.transform.position = _originalCameraPosition;
-            CinemachineCameraTarget.transform.rotation = _originalCameraRotation;
-
-            LockCameraPosition = false;
         }
 
         private void ApplyGravity()
@@ -372,18 +313,24 @@ namespace StarterAssets
             {
                 if (_verticalVelocity < 0.0f)
                 {
-                    _verticalVelocity = -2f; // Small downward force to keep grounded
+                    _verticalVelocity = -2f;
                 }
             }
             else
             {
                 _verticalVelocity += Physics.gravity.y * Time.deltaTime;
-                // Limit the fall speed
                 if (_verticalVelocity < -_terminalVelocity)
                 {
                     _verticalVelocity = -_terminalVelocity;
                 }
             }
+        }
+
+        private static float ClampAngle(float angle, float min, float max)
+        {
+            if (angle < -360f) angle += 360f;
+            if (angle > 360f) angle -= 360f;
+            return Mathf.Clamp(angle, min, max);
         }
     }
 }
