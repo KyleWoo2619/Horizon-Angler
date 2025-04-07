@@ -29,6 +29,7 @@ namespace StarterAssets
         public GameObject fishingPromptUI;
         public GameObject fishingMinigameUI;
         public Transform FishingCameraTarget;
+        public GameObject fishingrod;
         private bool canFish = false;
         private bool isFishing = false;
         private Vector3 fishingLookTarget;
@@ -224,6 +225,7 @@ namespace StarterAssets
             isFishing = true;
             fishingPromptUI.SetActive(false);
             fishingMinigameUI.SetActive(true);
+            fishingrod.SetActive(true);
 
             if (_hasAnimator)
             {
@@ -251,6 +253,7 @@ namespace StarterAssets
             isFishing = false;
             fishingPromptUI.SetActive(true);
             fishingMinigameUI.SetActive(false);
+            fishingrod.SetActive(false);
 
             if (_hasAnimator)
             {
