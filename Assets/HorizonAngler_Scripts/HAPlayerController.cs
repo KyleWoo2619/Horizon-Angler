@@ -120,6 +120,7 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
+            if (Time.timeScale == 0f) return;
             CameraRotation();
         }
 
@@ -251,9 +252,17 @@ namespace StarterAssets
         private void EndFishing()
         {
             isFishing = false;
-            fishingPromptUI.SetActive(true);
             fishingMinigameUI.SetActive(false);
             fishingrod.SetActive(false);
+
+            if (inFishZone) // Only show if still inside fish zone
+            {
+                fishingPromptUI.SetActive(true);
+            }
+            else
+            {
+                fishingPromptUI.SetActive(false);
+            }
 
             if (_hasAnimator)
             {
@@ -269,22 +278,21 @@ namespace StarterAssets
 
             LockCameraPosition = false;
         }
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("FishZone"))
-            {
-                Transform lookAt = other.transform.GetChild(0);
-                fishingLookTarget = lookAt.position;
-            }
-        }
-
         private void OnTriggerStay(Collider other)
         {
             if (other.CompareTag("FishZone"))
             {
                 inFishZone = true;
                 canFish = true;
-                fishingPromptUI.SetActive(true);
+
+                if (!isFishing) // Only show prompt if not fishing
+                {
+                    fishingPromptUI.SetActive(true);
+                }
+                else
+                {
+                    fishingPromptUI.SetActive(false);
+                }
             }
         }
 
@@ -294,7 +302,7 @@ namespace StarterAssets
             {
                 inFishZone = false;
                 canFish = false;
-                fishingPromptUI.SetActive(false);
+                fishingPromptUI.SetActive(false); // Always hide when leaving
             }
         }
 
