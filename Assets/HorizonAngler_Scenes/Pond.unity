@@ -1434,6 +1434,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 251368608}
   m_CullTransparentMesh: 1
+--- !u!1 &284281218 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2029958550257129033, guid: c54f203b250873843a8adca15123f5e3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1478352489}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &295532752
 GameObject:
   m_ObjectHideFlags: 0
@@ -8563,6 +8569,129 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450381006}
   m_CullTransparentMesh: 1
+--- !u!1001 &1478352489
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 815599826302776951, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061502376790249204, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061502376790249204, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061502376790249204, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2029958550257129033, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_Name
+      value: PondMInigame
+      objectReference: {fileID: 0}
+    - target: {fileID: 2029958550257129033, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2750260846143287400, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023480419134554832, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5307080034937556123, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7872356415783228038, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 8335546901433017641, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8335546901433017641, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8913369646684201009, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 240.3191
+      objectReference: {fileID: 0}
+    - target: {fileID: 8913369646684201009, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 359.44266
+      objectReference: {fileID: 0}
+    - target: {fileID: 8913369646684201009, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -310.4528
+      objectReference: {fileID: 0}
+    - target: {fileID: 8913369646684201009, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8913369646684201009, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8913369646684201009, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8913369646684201009, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8913369646684201009, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8913369646684201009, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8913369646684201009, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c54f203b250873843a8adca15123f5e3, type: 3}
 --- !u!1 &1488855773
 GameObject:
   m_ObjectHideFlags: 0
@@ -9665,12 +9794,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1647145360}
   m_CullTransparentMesh: 1
---- !u!1 &1670478479 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6379667648000531452, guid: 725742ebc01954c4e97698b4236caf1a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1117988686}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1782502446
 GameObject:
   m_ObjectHideFlags: 0
@@ -10288,7 +10411,7 @@ PrefabInstance:
         type: 3}
       propertyPath: fishingMinigameUI
       value: 
-      objectReference: {fileID: 1670478479}
+      objectReference: {fileID: 284281218}
     - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
         type: 3}
       propertyPath: shopInteractPromptUI
@@ -21816,3 +21939,4 @@ SceneRoots:
   - {fileID: 388478089}
   - {fileID: 2005961490}
   - {fileID: 167200264}
+  - {fileID: 1478352489}
