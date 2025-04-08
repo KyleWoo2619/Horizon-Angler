@@ -35,12 +35,14 @@ namespace StarterAssets
         private Vector3 fishingLookTarget;
 
         [Header("Shop Settings")]
+        public GameObject shopInteractPromptUI;
+        public GameObject shopUI;
+        public Transform shopCameraTarget;
+        public GameObject playerVisual;
+        private bool canInteractWithShop = false;
         private bool isInShop = false;
-        private Vector3 savedCameraPosition;
-        private Quaternion savedCameraRotation;
-        public GameObject playerVisual; // Drag your player model here
-        private float _savedYaw;
-        private float _savedPitch;
+        private Vector3 _originalShopCameraPosition;
+        private Quaternion _originalShopCameraRotation;
 
         [Header("Camera Settings")]
         public GameObject CinemachineCameraTarget;
@@ -69,6 +71,7 @@ namespace StarterAssets
         private int _animIDSpeed;
         private int _animIDGrounded;
         private int _animIDMotionSpeed;
+        private int _animIDFishing;
 
         private Animator _animator;
         private CharacterController _controller;
@@ -101,15 +104,32 @@ namespace StarterAssets
         {
             _controller = GetComponent<CharacterController>();
             _hasAnimator = TryGetComponent(out _animator);
+
 #if ENABLE_INPUT_SYSTEM
             _playerInput = GetComponent<PlayerInput>();
-            _playerInput.actions["Interact"].performed += ctx => { if (canFish && !isFishing) StartFishing(); };
-            _playerInput.actions["ExitFishing"].performed += ctx => { if (isFishing) EndFishing(); };
+            _playerInput.actions["Interact"].performed += ctx => 
+            { 
+                if (canFish && !isFishing) StartFishing();
+                else if (canInteractWithShop && !isInShop) EnterShop();
+            };
+            _playerInput.actions["ExitFishing"].performed += ctx => 
+            { 
+                if (isFishing) EndFishing(); 
+            };
+            _playerInput.actions["Cancel"].performed += ctx => 
+            { 
+                if (isInShop) ExitShop(); 
+            };
 #endif
+
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
-            AssignAnimationIDs(); // 💡 Make sure you call this ONCE here
+            if (_hasAnimator)
+            {
+                AssignAnimationIDs();   // <-- IMPORTANT!
+            }
         }
+
 
         private void Update()
         {
@@ -137,10 +157,12 @@ namespace StarterAssets
 
         private void AssignAnimationIDs()
         {
-            _animIDSpeed = Animator.StringToHash("Speed");
-            _animIDGrounded = Animator.StringToHash("Grounded");
-            _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+            _animIDSpeed = Animator.StringToHash("Speed");       // Must match "Speed" in animator
+            _animIDGrounded = Animator.StringToHash("Grounded"); // Must match "Grounded" in animator
+            _animIDMotionSpeed = Animator.StringToHash("MotionSpeed"); // Must match "MotionSpeed" in animator
+            _animIDFishing = Animator.StringToHash("Fishing");   // Must match "Fishing" in animator
         }
+
 
         private void GroundedCheck()
         {
@@ -305,6 +327,19 @@ namespace StarterAssets
                     fishingPromptUI.SetActive(false);
                 }
             }
+            else if (other.CompareTag("ShopZone"))
+            {
+                canInteractWithShop = true;
+                
+                if (!isInShop) // Only show prompt if not in shop
+                {
+                    shopInteractPromptUI.SetActive(true);
+                }
+                else
+                {
+                    shopInteractPromptUI.SetActive(false);
+                }
+            }
         }
 
         private void OnTriggerExit(Collider other)
@@ -314,6 +349,11 @@ namespace StarterAssets
                 inFishZone = false;
                 canFish = false;
                 fishingPromptUI.SetActive(false); // Always hide when leaving
+            }
+            else if (other.CompareTag("ShopZone"))
+            {
+                canInteractWithShop = false;
+                shopInteractPromptUI.SetActive(false); // Always hide when leaving
             }
         }
 
@@ -355,63 +395,60 @@ namespace StarterAssets
             return Mathf.Clamp(angle, min, max);
         }
 
-        public void SaveCameraState()
-        {
-            savedCameraPosition = CinemachineCameraTarget.transform.position;
-            savedCameraRotation = CinemachineCameraTarget.transform.rotation;
-
-            // ALSO save yaw and pitch
-            _savedYaw = _cinemachineTargetYaw;
-            _savedPitch = _cinemachineTargetPitch;
-        }
-
-        public void RestoreCameraState()
-        {
-            CinemachineCameraTarget.transform.position = savedCameraPosition;
-            CinemachineCameraTarget.transform.rotation = savedCameraRotation;
-
-            // ALSO restore yaw and pitch
-            _cinemachineTargetYaw = _savedYaw;
-            _cinemachineTargetPitch = _savedPitch;
-        }
-
-        public void SetCameraPosition(Vector3 position, Quaternion rotation)
-        {
-            CinemachineCameraTarget.transform.position = position;
-            CinemachineCameraTarget.transform.rotation = rotation;
-        }
-
         public void EnterShop()
         {
             isInShop = true;
+            shopUI.SetActive(true);
+            shopInteractPromptUI.SetActive(false);
+            
             if (playerVisual != null)
                 playerVisual.SetActive(false); // Hide player
+            
+            // Save original camera state
+            _originalShopCameraPosition = CinemachineCameraTarget.transform.position;
+            _originalShopCameraRotation = CinemachineCameraTarget.transform.rotation;
+            
+            // Move camera to shop view
+            CinemachineCameraTarget.transform.position = shopCameraTarget.position;
+            CinemachineCameraTarget.transform.rotation = shopCameraTarget.rotation;
+            
+            // Update the internal camera values to match new rotation
+            _cinemachineTargetYaw = shopCameraTarget.eulerAngles.y;
+            _cinemachineTargetPitch = shopCameraTarget.eulerAngles.x;
+            
+            // Lock camera while in shop
+            LockCameraPosition = true;
+            
+            // Unlock mouse cursor for UI interaction
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
         public void ExitShop()
         {
             isInShop = false;
-
+            shopUI.SetActive(false);
+            
             // Show player
             if (playerVisual != null)
                 playerVisual.SetActive(true);
-
-            // Restore Camera
-            CinemachineCameraTarget.transform.position = _originalCameraPosition;
-            CinemachineCameraTarget.transform.rotation = _originalCameraRotation;
-
+            
+            // Restore camera to original position
+            CinemachineCameraTarget.transform.position = _originalShopCameraPosition;
+            CinemachineCameraTarget.transform.rotation = _originalShopCameraRotation;
+            
+            // Unlock camera
             LockCameraPosition = false;
+            
+            // Lock mouse cursor again for gameplay
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            
+            // Show interact prompt if still in shop zone
+            if (canInteractWithShop)
+            {
+                shopInteractPromptUI.SetActive(true);
+            }
         }
-
-        public void SetPitch(float pitch)
-        {
-            _cinemachineTargetPitch = pitch;
-        }
-
-        public void SetYaw(float yaw)
-        {
-            _cinemachineTargetYaw = yaw;
-        }
-
     }
 }

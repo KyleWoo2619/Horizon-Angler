@@ -5745,30 +5745,13 @@ GameObject:
   - component: {fileID: 989612556}
   - component: {fileID: 989612555}
   - component: {fileID: 989612554}
-  - component: {fileID: 989612553}
   m_Layer: 0
   m_Name: ShopDialogueSystem
-  m_TagString: Untagged
+  m_TagString: ShopZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &989612553
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 989612552}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a8fb6d9331591a45bc9506cc90161cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactPromptUI: {fileID: 934851121}
-  shopCanvas: {fileID: 1287373718}
-  shopCameraTarget: {fileID: 1043498102}
-  playerController: {fileID: 1020858929}
 --- !u!65 &989612554
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5813,18 +5796,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2005961490}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1020858929 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1857351363}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cb520463f16bdc438d24b779fece87f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1041709922
 GameObject:
   m_ObjectHideFlags: 0
@@ -10091,6 +10062,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5245583865376190818, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 303fef098b0db354e844b859669212cb, type: 2}
     - target: {fileID: 7496645146458579450, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
         type: 3}
       propertyPath: m_IsActive
@@ -10179,6 +10155,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
         type: 3}
+      propertyPath: shopUI
+      value: 
+      objectReference: {fileID: 1287373718}
+    - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
       propertyPath: fishingrod
       value: 
       objectReference: {fileID: 1240077774}
@@ -10194,9 +10175,19 @@ PrefabInstance:
       objectReference: {fileID: 1488855773}
     - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
         type: 3}
+      propertyPath: shopCameraTarget
+      value: 
+      objectReference: {fileID: 1043498102}
+    - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
       propertyPath: fishingMinigameUI
       value: 
       objectReference: {fileID: 1670478479}
+    - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: shopInteractPromptUI
+      value: 
+      objectReference: {fileID: 934851121}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 70389430324121737, guid: 751bbb8b0f0d2e54aba8402dba32da1e, type: 3}
