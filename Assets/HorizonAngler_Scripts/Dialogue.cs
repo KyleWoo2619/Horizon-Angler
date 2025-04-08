@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public class Dialogue : MonoBehaviour
 {
@@ -10,8 +9,7 @@ public class Dialogue : MonoBehaviour
     public string[] lines;
     public float textSpeed;
 
-    public AudioSource endDialogueSound; // 🎵 sound played when dialogue ends
-    public string nextSceneName;         // 🧭 name of the next scene to load
+    public AudioSource endDialogueSound; // Sound played when dialogue ends
 
     private int index;
 
@@ -40,6 +38,7 @@ public class Dialogue : MonoBehaviour
     void StartDialogue()
     {
         index = 0;
+        textComponent.text = string.Empty;
         StartCoroutine(TypeLine());
     }
 
@@ -63,7 +62,6 @@ public class Dialogue : MonoBehaviour
         else
         {
             StartCoroutine(HandleDialogueEnd());
-            
         }
     }
 
@@ -74,11 +72,11 @@ public class Dialogue : MonoBehaviour
             endDialogueSound.Play(); // Play sound
         }
 
-        yield return new WaitForSeconds(5f); // Wait 5 seconds
+        yield return new WaitForSeconds(1f); // Shorter delay (you can adjust this)
 
-        if (!string.IsNullOrEmpty(nextSceneName))
-        {
-            SceneManager.LoadScene(nextSceneName); // Load new scene
-        }
+        // Hide dialogue and reset for next time
+        gameObject.SetActive(false);    // <-- Hide the Dialogue UI
+        index = 0;                      // <-- Reset dialogue
+        textComponent.text = string.Empty; 
     }
 }

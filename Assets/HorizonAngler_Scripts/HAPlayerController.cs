@@ -34,6 +34,14 @@ namespace StarterAssets
         private bool isFishing = false;
         private Vector3 fishingLookTarget;
 
+        [Header("Shop Settings")]
+        private bool isInShop = false;
+        private Vector3 savedCameraPosition;
+        private Quaternion savedCameraRotation;
+        public GameObject playerVisual; // Drag your player model here
+        private float _savedYaw;
+        private float _savedPitch;
+
         [Header("Camera Settings")]
         public GameObject CinemachineCameraTarget;
         public float TopClamp = 70.0f;
@@ -55,7 +63,8 @@ namespace StarterAssets
         private float _terminalVelocity = 53.0f;
         private bool _hasAnimator;
         private bool inFishZone = false;
-
+        
+    
         // Animator Parameters
         private int _animIDSpeed;
         private int _animIDGrounded;
@@ -104,6 +113,8 @@ namespace StarterAssets
 
         private void Update()
         {
+            if (isInShop) return; // Stop player movement if in shop
+
 #if ENABLE_INPUT_SYSTEM
             if (_playerInput != null)
             {
@@ -343,5 +354,64 @@ namespace StarterAssets
             if (angle > 360f) angle -= 360f;
             return Mathf.Clamp(angle, min, max);
         }
+
+        public void SaveCameraState()
+        {
+            savedCameraPosition = CinemachineCameraTarget.transform.position;
+            savedCameraRotation = CinemachineCameraTarget.transform.rotation;
+
+            // ALSO save yaw and pitch
+            _savedYaw = _cinemachineTargetYaw;
+            _savedPitch = _cinemachineTargetPitch;
+        }
+
+        public void RestoreCameraState()
+        {
+            CinemachineCameraTarget.transform.position = savedCameraPosition;
+            CinemachineCameraTarget.transform.rotation = savedCameraRotation;
+
+            // ALSO restore yaw and pitch
+            _cinemachineTargetYaw = _savedYaw;
+            _cinemachineTargetPitch = _savedPitch;
+        }
+
+        public void SetCameraPosition(Vector3 position, Quaternion rotation)
+        {
+            CinemachineCameraTarget.transform.position = position;
+            CinemachineCameraTarget.transform.rotation = rotation;
+        }
+
+        public void EnterShop()
+        {
+            isInShop = true;
+            if (playerVisual != null)
+                playerVisual.SetActive(false); // Hide player
+        }
+
+        public void ExitShop()
+        {
+            isInShop = false;
+
+            // Show player
+            if (playerVisual != null)
+                playerVisual.SetActive(true);
+
+            // Restore Camera
+            CinemachineCameraTarget.transform.position = _originalCameraPosition;
+            CinemachineCameraTarget.transform.rotation = _originalCameraRotation;
+
+            LockCameraPosition = false;
+        }
+
+        public void SetPitch(float pitch)
+        {
+            _cinemachineTargetPitch = pitch;
+        }
+
+        public void SetYaw(float yaw)
+        {
+            _cinemachineTargetYaw = yaw;
+        }
+
     }
 }
