@@ -160,6 +160,9 @@ public class Test2Script : MonoBehaviour
         Set5Parent.SetActive(false);
         Set6Parent.SetActive(false);
         Set7Parent.SetActive(false);
+
+        memoryInputActive = false;
+        memorySetupDone = false;
     }
 
     public void Initialize()
@@ -612,33 +615,61 @@ public class Test2Script : MonoBehaviour
     IEnumerator ShowMemoryCombo()
     {
         memoryText.text = "Ready?";
-        yield return StartCoroutine(FadeText(memoryText, 0f, 1f, 0.3f)); // Fade in
-        yield return new WaitForSeconds(0.8f);                           // Stay longer
-        yield return StartCoroutine(FadeText(memoryText, 1f, 0f, 0.3f)); // Fade out
-        yield return new WaitForSeconds(0.2f);                           // Pause after fade
+        yield return StartCoroutine(FadeText(memoryText, 0f, 1f, 0.3f));
+        yield return new WaitForSeconds(0.8f);
+        yield return StartCoroutine(FadeText(memoryText, 1f, 0f, 0.3f));
+        yield return new WaitForSeconds(0.2f);
 
         memoryText.text = "Memorize!";
-        yield return StartCoroutine(FadeText(memoryText, 0f, 1f, 0.3f)); // Fade in
-        yield return new WaitForSeconds(0.8f);                           // Stay longer
-        yield return StartCoroutine(FadeText(memoryText, 1f, 0f, 0.3f)); // Fade out
-        yield return new WaitForSeconds(0.2f);                           // Pause after fade
+        yield return StartCoroutine(FadeText(memoryText, 0f, 1f, 0.3f));
+        yield return new WaitForSeconds(0.8f);
+        yield return StartCoroutine(FadeText(memoryText, 1f, 0f, 0.3f));
+        yield return new WaitForSeconds(0.2f);
 
         memoryText.text = "Go!";
-        yield return StartCoroutine(FadeText(memoryText, 0f, 1f, 0.3f)); // Fade in only (no fade out)
+        yield return StartCoroutine(FadeText(memoryText, 0f, 1f, 0.3f));
 
-        // Now start showing the combo
         List<string> comboCopy = new List<string>(memoryCombo);
 
         foreach (string btn in comboCopy)
         {
             Button flashBtn = GetButtonFromName(btn);
-            flashBtn.image.color = Color.yellow;
-            yield return new WaitForSeconds(0.3f);                       // Flash yellow
-            flashBtn.image.color = Color.white;
-            yield return new WaitForSeconds(0.2f);                       // Pause
+            Color originalColor = flashBtn.image.color;
+            Vector3 originalScale = flashBtn.transform.localScale;
+
+            // Pick color based on button
+            Color flashColor = Color.white;
+            switch (btn)
+            {
+                case "A":
+                    flashColor = new Color32(0, 255, 0, 255); // Green
+                    break;
+                case "B":
+                    flashColor = new Color32(255, 0, 0, 255); // Red
+                    break;
+                case "X":
+                    flashColor = new Color32(0, 128, 255, 255); // Blue
+                    break;
+                case "Y":
+                    flashColor = new Color32(255, 255, 0, 255); // Yellow
+                    break;
+            }
+
+            // Flash color and slightly grow the button
+            flashBtn.image.color = flashColor;
+            flashBtn.transform.localScale = originalScale * 1.2f; // Grow by 20%
+
+            yield return new WaitForSeconds(0.3f);
+
+            // Reset color and size
+            flashBtn.image.color = originalColor;
+            flashBtn.transform.localScale = originalScale;
+
+            yield return new WaitForSeconds(0.2f);
         }
 
         memoryInputActive = true;
+        memorySetupDone = true;
     }
 
     Button GetButtonFromName(string btnName)

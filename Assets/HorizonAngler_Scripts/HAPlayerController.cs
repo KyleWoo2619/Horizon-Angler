@@ -35,6 +35,7 @@ namespace StarterAssets
         public Transform FishingCameraTarget;
         public GameObject fishingrod;
         private bool canFish = false;
+        private bool canFishBoss = false;
         private bool isFishing = false;
         private Vector3 fishingLookTarget;
 
@@ -68,7 +69,9 @@ namespace StarterAssets
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
         private bool _hasAnimator;
-        private bool inFishZone = false;
+        public bool inFishZone = false;
+        public InitiateMicrogames.FishZoneType currentZoneType;
+        public bool inBossFishZone = false;
 
         // Animator Parameters
         private int _animIDSpeed;
@@ -366,12 +369,14 @@ namespace StarterAssets
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.CompareTag("FishZone"))
+            FishingZone fishingZone = other.GetComponent<FishingZone>();
+            if (fishingZone != null)
             {
                 inFishZone = true;
                 canFish = true;
+                currentZoneType = fishingZone.zoneType; // New: store zone type!
 
-                if (!isFishing) // Only show prompt if not fishing
+                if (!isFishing)
                 {
                     fishingPromptUI.SetActive(true);
                 }
@@ -384,7 +389,7 @@ namespace StarterAssets
             {
                 canInteractWithShop = true;
 
-                if (!isInShop) // Only show prompt if not in shop
+                if (!isInShop)
                 {
                     shopInteractPromptUI.SetActive(true);
                 }
@@ -397,18 +402,20 @@ namespace StarterAssets
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("FishZone"))
+            FishingZone fishingZone = other.GetComponent<FishingZone>();
+            if (fishingZone != null)
             {
                 inFishZone = false;
                 canFish = false;
-                fishingPromptUI.SetActive(false); // Always hide when leaving
+                fishingPromptUI.SetActive(false);
             }
             else if (other.CompareTag("ShopZone"))
             {
                 canInteractWithShop = false;
-                shopInteractPromptUI.SetActive(false); // Always hide when leaving
+                shopInteractPromptUI.SetActive(false);
             }
         }
+
 
         private void OnFootstep(AnimationEvent animationEvent)
         {
