@@ -38,7 +38,7 @@ public class CutsceneManager : MonoBehaviour
         }
     }
 
-    private void PlayCutscene()
+    public void PlayCutscene()
     {
         if (isCutscenePlaying) return;
 

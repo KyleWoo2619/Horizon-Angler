@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -42,6 +43,8 @@ namespace StarterAssets
         private bool shownLockedZoneNotification = false;
         private bool isFishing = false;
         private Vector3 fishingLookTarget;
+        public bool caughtPondBoss = false;
+        public Transform FishingLookAt; // Target to look at when fishing starts
 
         [Header("Shop Settings")]
         public GameObject shopInteractPromptUI;
@@ -52,6 +55,8 @@ namespace StarterAssets
         private bool isInShop = false;
         private Vector3 _originalShopCameraPosition;
         private Quaternion _originalShopCameraRotation;
+        public GameObject foundScrollButton;
+        public bool hasTurnedInScroll = false;
 
         [Header("Camera Settings")]
         public GameObject CinemachineCameraTarget;
@@ -270,21 +275,7 @@ namespace StarterAssets
 
             Vector3 inputDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
 
-            if (inFishZone)
-            {
-                Vector3 directionToLook = fishingLookTarget - transform.position;
-                directionToLook.y = 0f;
-                if (directionToLook != Vector3.zero)
-                {
-                    Quaternion targetRotation = Quaternion.LookRotation(directionToLook);
-                    transform.rotation = Quaternion.Lerp(
-                        transform.rotation,
-                        targetRotation,
-                        Time.deltaTime * 5f
-                    );
-                }
-            }
-            else if (_moveInput != Vector2.zero)
+            if (_moveInput != Vector2.zero)
             {
                 _targetRotation =
                     Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg
@@ -339,9 +330,21 @@ namespace StarterAssets
             _cinemachineTargetPitch = FishingCameraTarget.eulerAngles.x;
 
             LockCameraPosition = true;
+
+            if (FishingLookAt != null)
+            {
+                Vector3 directionToLook = FishingLookAt.position - transform.position;
+                directionToLook.y = 0f; // Keep the y-axis level
+                if (directionToLook != Vector3.zero)
+                {
+
+                    Quaternion targetrotation = Quaternion.LookRotation(directionToLook);
+                    transform.rotation = targetrotation;
+                }
+            }
         }
 
-        private void EndFishing()
+        public void EndFishing()
         {
             isFishing = false;
             fishingMinigameUI.SetActive(false);
@@ -373,6 +376,12 @@ namespace StarterAssets
 
         private void OnTriggerEnter(Collider other)
         {
+            if (other.CompareTag("ShopZone"))
+                {
+                    canInteractWithShop = true;
+                    shopInteractPromptUI.SetActive(true);
+                }
+
             FishingZone fishingZone = other.GetComponent<FishingZone>();
             if (fishingZone != null)
             {
@@ -444,7 +453,7 @@ namespace StarterAssets
             {
                 if (FootstepAudioClips.Length > 0)
                 {
-                    var index = Random.Range(0, FootstepAudioClips.Length);
+                    var index = UnityEngine.Random.Range(0, FootstepAudioClips.Length);
                     AudioSource.PlayClipAtPoint(
                         FootstepAudioClips[index],
                         transform.TransformPoint(_controller.center),
@@ -509,6 +518,18 @@ namespace StarterAssets
             // Unlock mouse cursor for UI interaction
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+
+            if (foundScrollButton != null)
+            {
+                if (caughtPondBoss && !hasTurnedInScroll)
+                {
+                    foundScrollButton.SetActive(true);
+                }
+                else
+                {
+                    foundScrollButton.SetActive(false);
+                }
+            }
         }
 
         public void ExitShop()

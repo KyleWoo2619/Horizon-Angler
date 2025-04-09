@@ -8,12 +8,13 @@ using StarterAssets;
 
 public class FishingProgress : MonoBehaviour
 {
+    public GameObject BossfishLocation;
     public float progress;
     public Slider progressSlider;
     [HideInInspector] public Test2Script T2S;
 
     // Decay variables
-    [HideInInspector] public float baseDecayRate = 3f;
+    [HideInInspector] public float baseDecayRate = 1f;
     public float minDecayMultiplier = 1f;
     public float maxDecayMultiplier = 2f;
 
@@ -158,6 +159,11 @@ public class FishingProgress : MonoBehaviour
         }
     }
 
+        private bool IsBossFish(string fishName)
+        {
+            // Just check if it's Froggy or other boss fish names
+            return fishName == "Froggy" || fishName == "OtherBossName"; // add more boss fish names here
+        }
 
 
 
@@ -172,6 +178,34 @@ public class FishingProgress : MonoBehaviour
             InitiateMicrogames.Instance.MGCanvas.SetActive(false);
             InitiateMicrogames.Instance.CCanvas.SetActive(true); // Show Cast Prompt Canvas
             InitiateMicrogames.Instance.StartCastLockout();
+        }
+
+        if (currentCaughtFish != null && IsBossFish(currentCaughtFish.fishName))
+        {
+            Debug.Log("Caught a boss fish! Playing cutscene...");
+            BossfishLocation.SetActive(false);
+
+            HAPlayerController player = FindObjectOfType<HAPlayerController>();
+            if (player != null);
+            {
+                player.EndFishing();
+                player.caughtPondBoss = true;
+                player.inFishZone = false;
+
+                if (player.fishingPromptUI != null)
+                {
+                    player.fishingPromptUI.SetActive(false);
+                }
+            }
+            CutsceneManager cutsceneManager = FindObjectOfType<CutsceneManager>();
+            if (cutsceneManager != null)
+            {
+                cutsceneManager.PlayCutscene();
+            }
+            else
+            {
+                Debug.LogWarning("CutsceneManager not found in scene!");
+            }
         }
     }
 
@@ -437,43 +471,43 @@ public class FishingProgress : MonoBehaviour
 
 
     public void ShowNotification(string message)
-        {
-            Debug.Log($"Trying to show notification: {message}");
+    {
+        Debug.Log($"Trying to show notification: {message}");
 
-            if (notificationCanvas != null && notificationText != null)
-            {
-                Debug.Log("Notification references are good! Showing message.");
-                notificationText.text = message;
-                StopAllCoroutines();  // Stop previous notification fades if any
-                StartCoroutine(NotificationRoutine());
-            }
-            else
-            {
-                Debug.LogWarning("NotificationCanvas or NotificationText is missing!");
-            }
+        if (notificationCanvas != null && notificationText != null)
+        {
+            Debug.Log("Notification references are good! Showing message.");
+            notificationText.text = message;
+            StopAllCoroutines();  // Stop previous notification fades if any
+            StartCoroutine(NotificationRoutine());
+        }
+        else
+        {
+            Debug.LogWarning("NotificationCanvas or NotificationText is missing!");
+        }
+    }
+
+public IEnumerator NotificationRoutine()
+    {
+        Debug.Log("Starting NotificationRoutine...");
+
+        notificationCanvas.SetActive(true);
+
+        if (notificationGroup != null)
+        {
+            yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 0f, 1f, 0.5f));
+
+            yield return new WaitForSeconds(2f);
+
+            yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 1f, 0f, 0.5f));
+        }
+        else
+        {
+            Debug.LogWarning("NotificationGroup is missing!");
         }
 
-    public IEnumerator NotificationRoutine()
-        {
-            Debug.Log("Starting NotificationRoutine...");
-
-            notificationCanvas.SetActive(true);
-
-            if (notificationGroup != null)
-            {
-                yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 0f, 1f, 0.5f));
-
-                yield return new WaitForSeconds(2f);
-
-                yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 1f, 0f, 0.5f));
-            }
-            else
-            {
-                Debug.LogWarning("NotificationGroup is missing!");
-            }
-
-            notificationCanvas.SetActive(false);
-        }
+        notificationCanvas.SetActive(false);
+    }
 
     private IEnumerator FadeCanvasGroup(CanvasGroup canvasGroup, float start, float end, float duration)
     {

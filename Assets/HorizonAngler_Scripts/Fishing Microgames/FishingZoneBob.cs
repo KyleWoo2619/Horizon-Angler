@@ -10,7 +10,7 @@ public class FishingZoneBob : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        floatStrength = 0.75f;
+        floatStrength = 0.5f;
         originalY = transform.position.y;
     }
 
