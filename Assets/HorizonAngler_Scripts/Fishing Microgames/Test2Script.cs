@@ -132,6 +132,13 @@ public class Test2Script : MonoBehaviour
     public Image rightMashButtonImage;
     public Image mashSliderFillImage;
 
+    [Header("Set 5 Button Sprites")]
+    public Sprite QNotPressed;
+    public Sprite QPressed;
+    public Sprite ENotPressed;
+    public Sprite EPressed;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -470,11 +477,22 @@ public class Test2Script : MonoBehaviour
         if (!mashActive)
             return;
 
-        if (inputLB)
-            Debug.Log("Q Press Detected");
-        if (inputRB)
-            Debug.Log("E Press Detected");
+        bool qPressed = Input.GetKey(KeyCode.Q); // You can also use inputLB if you prefer
+        bool ePressed = Input.GetKey(KeyCode.E); // Or inputRB
 
+        // Update Q button sprite
+        if (leftMashButtonImage != null)
+        {
+            leftMashButtonImage.sprite = qPressed ? QPressed : QNotPressed;
+        }
+
+        // Update E button sprite
+        if (rightMashButtonImage != null)
+        {
+            rightMashButtonImage.sprite = ePressed ? EPressed : ENotPressed;
+        }
+
+        // Register Mash normally
         if (inputLB && lastInput != "Q")
         {
             RegisterMash("Q");
@@ -484,6 +502,7 @@ public class Test2Script : MonoBehaviour
             RegisterMash("E");
         }
     }
+
 
     void DecayMashSlider()
     {
