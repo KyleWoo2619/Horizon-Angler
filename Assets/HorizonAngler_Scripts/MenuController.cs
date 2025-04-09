@@ -221,13 +221,13 @@ public class MenuController : MonoBehaviour
         confirmationPrompt.SetActive(true);
         confirmationGroup.alpha = 1;
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSecondsRealtime(1.5f);
 
         float t = 0f;
         while (t < fadeTime)
         {
             confirmationGroup.alpha = Mathf.Lerp(1f, 0f, t / fadeTime);
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             yield return null;
         }
 

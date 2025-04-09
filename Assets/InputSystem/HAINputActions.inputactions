@@ -71,7 +71,7 @@
                 {
                     "name": "PlayCutscene",
                     "type": "Button",
-                    "id": "e3f3d713-1bbf-4a4a-9bda-bc22aa3c6699",
+                    "id": "b5406990-855d-42e3-9be8-1edb3897614f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -334,8 +334,8 @@
                 },
                 {
                     "name": "",
-                    "id": "5a98657c-7641-4c35-9d1f-d87fb33fe90f",
-                    "path": "<Keyboard>/g",
+                    "id": "a6608e4b-0602-4bef-b7b6-a78c7458023c",
+                    "path": "",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

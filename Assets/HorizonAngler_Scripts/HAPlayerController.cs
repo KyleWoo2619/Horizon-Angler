@@ -1,5 +1,8 @@
-﻿using Unity.Mathematics;
+﻿using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AI;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -36,12 +39,12 @@ namespace StarterAssets
         public GameObject fishingMinigameUI;
         public Transform FishingCameraTarget;
         public GameObject fishingrod;
-        private bool canFish = false;
+        public bool canFish = false;
         public bool canFishPondBoss = false;
         public bool canFishRiverBoss = false;
         public bool canFishOceanBoss = false;
         private bool shownLockedZoneNotification = false;
-        private bool isFishing = false;
+        public bool isFishing = false;
         private Vector3 fishingLookTarget;
         public bool caughtPondBoss = false;
         public Transform FishingLookAt; // Target to look at when fishing starts
@@ -52,7 +55,7 @@ namespace StarterAssets
         public Transform shopCameraTarget;
         public GameObject playerVisual;
         private bool canInteractWithShop = false;
-        private bool isInShop = false;
+        public bool isInShop = false;
         private Vector3 _originalShopCameraPosition;
         private Quaternion _originalShopCameraRotation;
         public GameObject foundScrollButton;
@@ -144,6 +147,12 @@ namespace StarterAssets
 
         private void Update()
         {
+            _hasAnimator = TryGetComponent(out _animator);
+
+            GroundedCheck();
+            ApplyGravity();
+            Move();
+
             if (isInShop)
                 return; // Stop player movement if in shop
 #if ENABLE_INPUT_SYSTEM
@@ -156,9 +165,7 @@ namespace StarterAssets
                     _moveInput.Normalize();
             }
 #endif
-            GroundedCheck();
-            ApplyGravity();
-            Move();
+            // Always update animation parameters, even if we didn't move
         }
 
         private void LateUpdate()
@@ -174,11 +181,6 @@ namespace StarterAssets
             _animIDGrounded = Animator.StringToHash("Grounded");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
             _animIDFishing = Animator.StringToHash("Fishing");
-
-            Debug.Log($"Speed Hash: {_animIDSpeed}");
-            Debug.Log($"Grounded Hash: {_animIDGrounded}");
-            Debug.Log($"MotionSpeed Hash: {_animIDMotionSpeed}");
-            Debug.Log($"Fishing Hash: {_animIDFishing}");
         }
 
         private void GroundedCheck()
@@ -237,7 +239,7 @@ namespace StarterAssets
             }
 #endif
             if (_moveInput == Vector2.zero)
-                targetSpeed = 0.0f;
+                targetSpeed = 0f;
 
             float currentHorizontalSpeed = new Vector3(
                 _controller.velocity.x,
@@ -301,6 +303,45 @@ namespace StarterAssets
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+            }
+        }
+
+        private static float ClampAngle(float angle, float min, float max)
+        {
+            if (angle < -360f)
+                angle += 360f;
+            if (angle > 360f)
+                angle -= 360f;
+            return Mathf.Clamp(angle, min, max);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
+            Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
+
+            if (Grounded) Gizmos.color = transparentGreen;
+            else Gizmos.color = transparentRed;
+
+            // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
+            Gizmos.DrawSphere(
+                new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
+                GroundedRadius);
+        }
+
+        private void OnFootstep(AnimationEvent animationEvent)
+        {
+            if (animationEvent.animatorClipInfo.weight > 0.5f)
+            {
+                if (FootstepAudioClips.Length > 0)
+                {
+                    var index = UnityEngine.Random.Range(0, FootstepAudioClips.Length);
+                    AudioSource.PlayClipAtPoint(
+                        FootstepAudioClips[index],
+                        transform.TransformPoint(_controller.center),
+                        FootstepAudioVolume
+                    );
+                }
             }
         }
 
@@ -463,23 +504,6 @@ namespace StarterAssets
             }
         }
 
-
-        private void OnFootstep(AnimationEvent animationEvent)
-        {
-            if (animationEvent.animatorClipInfo.weight > 0.5f)
-            {
-                if (FootstepAudioClips.Length > 0)
-                {
-                    var index = UnityEngine.Random.Range(0, FootstepAudioClips.Length);
-                    AudioSource.PlayClipAtPoint(
-                        FootstepAudioClips[index],
-                        transform.TransformPoint(_controller.center),
-                        FootstepAudioVolume
-                    );
-                }
-            }
-        }
-
         private void ApplyGravity()
         {
             if (Grounded)
@@ -497,15 +521,6 @@ namespace StarterAssets
                     _verticalVelocity = -_terminalVelocity;
                 }
             }
-        }
-
-        private static float ClampAngle(float angle, float min, float max)
-        {
-            if (angle < -360f)
-                angle += 360f;
-            if (angle > 360f)
-                angle -= 360f;
-            return Mathf.Clamp(angle, min, max);
         }
 
         public void EnterShop()
@@ -573,6 +588,46 @@ namespace StarterAssets
             if (canInteractWithShop)
             {
                 shopInteractPromptUI.SetActive(true);
+            }
+        }
+        
+        public void PlayFishingIdle()
+        {
+            if (_animator)
+                _animator.Play("FishingIdle", 0, 0f);
+        }
+
+        public void PlayCasting()
+        {
+            if (_animator)
+                _animator.Play("CastingAnim", 0, 0f);
+        }
+
+        public void PlayBaitTook()
+        {
+            if (_animator)
+                _animator.Play("BaitTookAnim", 0, 0f);
+        }
+
+        public void PlayFighting()
+        {
+            if (_animator)
+                _animator.Play("FightingAnim", 0, 0f);
+        }
+
+        public void PlayCatch()
+        {
+            if (_animator)
+                _animator.Play("CatchAnim", 0, 0f);
+        }
+
+        private void UpdateAnimationParameters()
+        {
+            if (_hasAnimator && !isFishing)
+            {
+                // Always update these parameters regardless of movement
+                _animator.SetFloat(_animIDSpeed, _animationBlend);
+                _animator.SetFloat(_animIDMotionSpeed, _moveInput.magnitude);
             }
         }
     }

@@ -94,6 +94,10 @@ public class InitiateMicrogames : MonoBehaviour
         }
     }
 
+    public void StartCastLockout()
+    {
+        castLockoutTimer = 0.25f; // 0.25 seconds lockout
+    }
 
     void ProcessInputs()
     {
@@ -104,8 +108,12 @@ public class InitiateMicrogames : MonoBehaviour
 
     void Cast()
     {
-        // Display "Click to cast!"
-        CTC.SetActive(true);
+        // Play FishingIdle at the start
+        // if (playerController != null)
+            // playerController.PlayFishingIdle();
+
+        CTC.SetActive(true);  // Optional: You can delete if you don't want text anymore
+
         if (inputA || inputSpace || inputLMB)
         {
             casted = true;
@@ -115,31 +123,41 @@ public class InitiateMicrogames : MonoBehaviour
 
     IEnumerator Bait()
     {
-        // Display "Waiting for a bite..."
         CTC.SetActive(false);
+
+        // Play Casting Animation after clicking
+        if (playerController != null)
+            playerController.PlayCasting();
+
         WFB.SetActive(true);
-        yield return new WaitForSeconds(rnd.Next(1, 3)); // Tweak this for how long you want the "Waiting for bite..." phase to last.
+        yield return new WaitForSeconds(5f);
         StartCoroutine(TookBait());
     }
 
-    public bool IsCasted() { return casted; }
-
     IEnumerator TookBait()
     {
-        // Display "A fish took the bait!"
         WFB.SetActive(false);
+
+        // Play Bait Took Animation after waiting
+        if (playerController != null)
+            playerController.PlayBaitTook();
+
         FTB.SetActive(true);
-        yield return new WaitForSeconds(1);
-        CCanvas.SetActive(false);
+        yield return new WaitForSeconds(1f);
+
         FTB.SetActive(false);
+        
+        if (playerController != null);
+            playerController.PlayFighting();
+
+        CCanvas.SetActive(false);
         MGCanvas.SetActive(true);
+
         FProgress.Initialize();
         T2S.Initialize();
         yield return new WaitForSeconds(4);
+
         casted = false;
     }
-    public void StartCastLockout()
-    {
-        castLockoutTimer = 0.25f; // 0.25 seconds lockout
-    }
+
 }

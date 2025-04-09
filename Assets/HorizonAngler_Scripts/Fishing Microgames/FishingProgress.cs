@@ -1,20 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using StarterAssets;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using static InitiateMicrogames;
-using StarterAssets;
 
 public class FishingProgress : MonoBehaviour
 {
+    private HAPlayerController playerController;
     public GameObject BossfishLocation;
     public float progress;
     public Slider progressSlider;
-    [HideInInspector] public Test2Script T2S;
+
+    [HideInInspector]
+    public Test2Script T2S;
 
     // Decay variables
-    [HideInInspector] public float baseDecayRate = 1f;
+    [HideInInspector]
+    public float baseDecayRate = 1f;
     public float minDecayMultiplier = 1f;
     public float maxDecayMultiplier = 2f;
 
@@ -25,7 +29,7 @@ public class FishingProgress : MonoBehaviour
         { "Set3", 1.3f },
         { "Set4", 0.5f },
         { "Set5", 1f },
-        { "Set7", 1.8f }
+        { "Set7", 1.8f },
     };
 
     public static FishingProgress Instance;
@@ -45,9 +49,9 @@ public class FishingProgress : MonoBehaviour
         public Sprite fishSprite;
     }
 
-    public List<Fish> pondFishPool = new List<Fish>();    
-    public List<Fish> riverFishPool = new List<Fish>();   
-    public List<Fish> oceanFishPool = new List<Fish>();   
+    public List<Fish> pondFishPool = new List<Fish>();
+    public List<Fish> riverFishPool = new List<Fish>();
+    public List<Fish> oceanFishPool = new List<Fish>();
     public List<Fish> bossPondFishPool = new List<Fish>();
     public List<Fish> bossRiverFishPool = new List<Fish>();
     public List<Fish> bossOceanFishPool = new List<Fish>();
@@ -66,7 +70,13 @@ public class FishingProgress : MonoBehaviour
         public string timeCaught;
         public InitiateMicrogames.FishZoneType zoneCaught;
 
-        public FishingLogEntry(string name, Sprite sprite, string date, string time, InitiateMicrogames.FishZoneType zone)
+        public FishingLogEntry(
+            string name,
+            Sprite sprite,
+            string date,
+            string time,
+            InitiateMicrogames.FishZoneType zone
+        )
         {
             fishName = name;
             fishSprite = sprite;
@@ -75,7 +85,6 @@ public class FishingProgress : MonoBehaviour
             zoneCaught = zone;
         }
     }
-
 
     [Header("Fishing Log")]
     public List<FishingLogEntry> fishingLog = new List<FishingLogEntry>();
@@ -86,8 +95,9 @@ public class FishingProgress : MonoBehaviour
     private float fishCaughtTimer = 0f;
 
     [Header("Notifications")]
-    public GameObject notificationCanvas;         // The whole canvas (to turn on/off)
-    public TextMeshProUGUI notificationText;       // The text inside it
+    public GameObject notificationCanvas; // The whole canvas (to turn on/off)
+    public TextMeshProUGUI notificationText; // The text inside it
+    public TextMeshProUGUI notificationTextShadow; // The shadow text inside it
     public CanvasGroup notificationGroup;
 
     [HideInInspector]
@@ -159,13 +169,11 @@ public class FishingProgress : MonoBehaviour
         }
     }
 
-        private bool IsBossFish(string fishName)
-        {
-            // Just check if it's Froggy or other boss fish names
-            return fishName == "Froggy" || fishName == "OtherBossName"; // add more boss fish names here
-        }
-
-
+    private bool IsBossFish(string fishName)
+    {
+        // Just check if it's Froggy or other boss fish names
+        return fishName == "Sun-Infused Croakmaw" || fishName == "OtherBossName"; // add more boss fish names here
+    }
 
     void HideFishCaughtScreen()
     {
@@ -186,11 +194,12 @@ public class FishingProgress : MonoBehaviour
             BossfishLocation.SetActive(false);
 
             HAPlayerController player = FindObjectOfType<HAPlayerController>();
-            if (player != null);
+            if (player != null)
             {
                 player.EndFishing();
                 player.caughtPondBoss = true;
                 player.inFishZone = false;
+                player.canFish = false;
 
                 if (player.fishingPromptUI != null)
                 {
@@ -284,7 +293,11 @@ public class FishingProgress : MonoBehaviour
         }
 
         float activeCount = T2S.activeSets.Count;
-        float normalizedMultiplier = Mathf.Lerp(minDecayMultiplier, maxDecayMultiplier, activeCount / 5f);
+        float normalizedMultiplier = Mathf.Lerp(
+            minDecayMultiplier,
+            maxDecayMultiplier,
+            activeCount / 5f
+        );
 
         progress -= totalDecay * baseDecayRate * Time.deltaTime * normalizedMultiplier;
     }
@@ -301,7 +314,7 @@ public class FishingProgress : MonoBehaviour
 
         float sliderFill = mashSlider.value; // 0 to 1
 
-        // As the mash slider fills, we want less decay. 
+        // As the mash slider fills, we want less decay.
         // We'll lerp between max decay and minimal decay.
         float maxDecay = 1.5f; // Decay when mash slider is empty
         float minDecay = 0.3f; // Decay when mash slider is full
@@ -328,6 +341,12 @@ public class FishingProgress : MonoBehaviour
         Debug.Log("Player failed to catch the fish...");
         T2S.microgamesActive = false;
         T2S.ClearAll();
+
+        HAPlayerController player = FindObjectOfType<HAPlayerController>();
+        if (player != null)
+        {
+            player.PlayFishingIdle();
+        }
     }
 
     void PickRandomFish()
@@ -384,15 +403,22 @@ public class FishingProgress : MonoBehaviour
             string caughtDate = System.DateTime.Now.ToString("MM/dd/yyyy");
 
             HAPlayerController player = FindObjectOfType<HAPlayerController>();
-            fishingLog.Add(new FishingLogEntry(
-                currentCaughtFish.fishName,
-                currentCaughtFish.fishSprite,
-                caughtDate,
-                caughtTime,
-                activeZoneType
-));
+            fishingLog.Add(
+                new FishingLogEntry(
+                    currentCaughtFish.fishName,
+                    currentCaughtFish.fishSprite,
+                    caughtDate,
+                    caughtTime,
+                    activeZoneType
+                )
+            );
 
             Debug.Log($"Caught {currentCaughtFish.fishName} at {caughtTime} on {caughtDate}");
+
+            if (player != null)
+            {
+                player.PlayFishingIdle();
+            }
         }
 
         CheckUnlockBossFishing();
@@ -457,18 +483,21 @@ public class FishingProgress : MonoBehaviour
 
             switch (fishZone)
             {
-                case InitiateMicrogames.FishZoneType.Pond: zoneName = "Pond Boss"; break;
-                case InitiateMicrogames.FishZoneType.River: zoneName = "River Boss"; break;
-                case InitiateMicrogames.FishZoneType.Ocean: zoneName = "Ocean Boss"; break;
+                case InitiateMicrogames.FishZoneType.Pond:
+                    zoneName = "You feel a sudden stir in the water. A new fishing spot appeared.";
+                    break;
+                case InitiateMicrogames.FishZoneType.River:
+                    zoneName = "River Boss";
+                    break;
+                case InitiateMicrogames.FishZoneType.Ocean:
+                    zoneName = "Ocean Boss";
+                    break;
             }
 
             Debug.Log($"{zoneName} fishing is now UNLOCKED!");
-            ShowNotification($"{zoneName} Unlocked!");
+            ShowNotification(zoneName);
         }
     }
-
-
-
 
     public void ShowNotification(string message)
     {
@@ -478,7 +507,8 @@ public class FishingProgress : MonoBehaviour
         {
             Debug.Log("Notification references are good! Showing message.");
             notificationText.text = message;
-            StopAllCoroutines();  // Stop previous notification fades if any
+            notificationTextShadow.text = message;
+            StopAllCoroutines(); // Stop previous notification fades if any
             StartCoroutine(NotificationRoutine());
         }
         else
@@ -487,7 +517,7 @@ public class FishingProgress : MonoBehaviour
         }
     }
 
-public IEnumerator NotificationRoutine()
+    public IEnumerator NotificationRoutine()
     {
         Debug.Log("Starting NotificationRoutine...");
 
@@ -509,7 +539,12 @@ public IEnumerator NotificationRoutine()
         notificationCanvas.SetActive(false);
     }
 
-    private IEnumerator FadeCanvasGroup(CanvasGroup canvasGroup, float start, float end, float duration)
+    private IEnumerator FadeCanvasGroup(
+        CanvasGroup canvasGroup,
+        float start,
+        float end,
+        float duration
+    )
     {
         float elapsed = 0f;
         while (elapsed < duration)
