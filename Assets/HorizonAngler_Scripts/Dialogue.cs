@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Dialogue : MonoBehaviour
+public class DialogueMangager : MonoBehaviour
 {
     public TextMeshProUGUI textComponent;
+    public GameObject dialogueButton;
+    public GameObject upgradeButton;
+    public GameObject ShopBaseDialogue;
     public string[] lines;
     public float textSpeed;
-
-    public AudioSource endDialogueSound; // Sound played when dialogue ends
-
     private int index;
 
     void Start()
     {
         textComponent.text = string.Empty;
+    }
+
+    void OnEnable()
+    {
         StartDialogue();
     }
 
@@ -61,22 +65,10 @@ public class Dialogue : MonoBehaviour
         }
         else
         {
-            StartCoroutine(HandleDialogueEnd());
+            ShopBaseDialogue.SetActive(true); // Show the dialogue UI
+            dialogueButton.SetActive(true); // Show the button to exit dialogue
+            upgradeButton.SetActive(true);
+            gameObject.SetActive(false); // Hide the Dialogue UI
         }
-    }
-
-    IEnumerator HandleDialogueEnd()
-    {
-        if (endDialogueSound != null)
-        {
-            endDialogueSound.Play(); // Play sound
-        }
-
-        yield return new WaitForSeconds(1f); // Shorter delay (you can adjust this)
-
-        // Hide dialogue and reset for next time
-        gameObject.SetActive(false);    // <-- Hide the Dialogue UI
-        index = 0;                      // <-- Reset dialogue
-        textComponent.text = string.Empty; 
     }
 }
