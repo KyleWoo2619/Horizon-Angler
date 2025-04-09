@@ -66,6 +66,7 @@ public class Test2Script : MonoBehaviour
     public GameObject Set7Parent;
 
     [Header("Timers")]
+    public GameObject InitialTimer;
     public GameObject Set1Timer;
     public GameObject Set2Timer;
     public GameObject Set3Timer;
@@ -74,6 +75,7 @@ public class Test2Script : MonoBehaviour
     public GameObject Set6Timer;
     public GameObject Set7Timer;
     [Space(5)]
+    public TextMeshProUGUI InitialTimerText;
     public TextMeshProUGUI Set1TimerText;
     public TextMeshProUGUI Set2TimerText;
     public TextMeshProUGUI Set3TimerText;
@@ -199,6 +201,7 @@ public class Test2Script : MonoBehaviour
         Set6Parent.SetActive(false);
         Set7Parent.SetActive(false);
 
+        Timers.Add(InitialTimer);
         Timers.Add(Set1Timer);
         Timers.Add(Set2Timer);
         Timers.Add(Set3Timer);
@@ -206,6 +209,7 @@ public class Test2Script : MonoBehaviour
         Timers.Add(Set5Timer);
         Timers.Add(Set6Timer);
         Timers.Add(Set7Timer);
+        TimerTexts.Add(InitialTimerText);
         TimerTexts.Add(Set1TimerText);
         TimerTexts.Add(Set2TimerText);
         TimerTexts.Add(Set3TimerText);
@@ -953,34 +957,36 @@ public class Test2Script : MonoBehaviour
         switch (timerID)
         {
             case "Set7":
+                Timers[7].SetActive(true);
+                TimerTexts[7].text = time.ToString();
+                break;
+            case "Set6":
                 Timers[6].SetActive(true);
                 TimerTexts[6].text = time.ToString();
                 break;
-            case "Set6":
+            case "Set5":
                 Timers[5].SetActive(true);
                 TimerTexts[5].text = time.ToString();
                 break;
-            case "Set5":
+            case "Set4":
                 Timers[4].SetActive(true);
                 TimerTexts[4].text = time.ToString();
                 break;
-            case "Set4":
+            case "Set3":
                 Timers[3].SetActive(true);
                 TimerTexts[3].text = time.ToString();
                 break;
-            case "Set3":
+            case "Set2":
                 Timers[2].SetActive(true);
                 TimerTexts[2].text = time.ToString();
                 break;
-            case "Set2":
+            case "Set1":
                 Timers[1].SetActive(true);
                 TimerTexts[1].text = time.ToString();
                 break;
-            case "Set1":
+            case "Initial":
                 Timers[0].SetActive(true);
                 TimerTexts[0].text = time.ToString();
-                break;
-            case "Initial":
                 break;
         }
     }
@@ -1004,51 +1010,52 @@ public class Test2Script : MonoBehaviour
                 case "Set7":
                     // Start Set 7
                     Debug.Log("Set 7 Microgame is now ACTIVE!");
-                    Timers[6].SetActive(false);
+                    Timers[7].SetActive(false);
                     Sets["Set7"] = true;
                     break;
                 case "Set6":
                     // Start Set 6
                     Debug.Log("Set 6 Microgame is now ACTIVE!");
-                    Timers[5].SetActive(false);
+                    Timers[6].SetActive(false);
                     Sets["Set6"] = true;
                     break;
                 case "Set5":
                     // Start Set 5
                     Debug.Log("Set 5 Microgame is now ACTIVE!");
-                    Timers[4].SetActive(false);
+                    Timers[5].SetActive(false);
                     Set5Setup();
                     Sets["Set5"] = true;
                     break;
                 case "Set4":
                     // Start Set 4
                     Debug.Log("Set 4 Microgame is now ACTIVE!");
-                    Timers[3].SetActive(false);
+                    Timers[4].SetActive(false);
                     Sets["Set4"] = true;
                     break;
                 case "Set3":
                     // Start Set 3
                     Debug.Log("Set 3 Microgame is now ACTIVE!");
-                    Timers[2].SetActive(false);
+                    Timers[3].SetActive(false);
                     Set3Setup();
                     Sets["Set3"] = true;
                     break;
                 case "Set2":
                     // Start Set 2
                     Debug.Log("Set 2 Microgame is now ACTIVE!");
-                    Timers[1].SetActive(false);
+                    Timers[2].SetActive(false);
                     Sets["Set2"] = true;
                     break;
                 case "Set1":
                     // Start Set 1
                     Debug.Log("Set 1 Microgame is now ACTIVE!");
-                    Timers[0].SetActive(false);
+                    Timers[1].SetActive(false);
                     Sets["Set1"] = true;
                     Set1Setup();
                     StartCoroutine(Set1Obstacles());
                     break;
                 case "Initial":
                     Debug.Log("Microgames are now ACTIVE!");
+                    Timers[0].SetActive(false);
                     microgamesActive = true;
                     MicrogameStarter();
                     StartCoroutine(microgameCooldown());  // <-- This is fine, once.
