@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using static InitiateMicrogames;
+using StarterAssets;
 
 public class FishingProgress : MonoBehaviour
 {
@@ -62,15 +63,18 @@ public class FishingProgress : MonoBehaviour
         public Sprite fishSprite;
         public string dateCaught;
         public string timeCaught;
+        public InitiateMicrogames.FishZoneType zoneCaught;
 
-        public FishingLogEntry(string name, Sprite sprite, string date, string time)
+        public FishingLogEntry(string name, Sprite sprite, string date, string time, InitiateMicrogames.FishZoneType zone)
         {
             fishName = name;
             fishSprite = sprite;
             dateCaught = date;
             timeCaught = time;
+            zoneCaught = zone;
         }
     }
+
 
     [Header("Fishing Log")]
     public List<FishingLogEntry> fishingLog = new List<FishingLogEntry>();
@@ -79,6 +83,14 @@ public class FishingProgress : MonoBehaviour
 
     private float fishCaughtInputDelay = 0.5f; // Half second delay
     private float fishCaughtTimer = 0f;
+
+    [Header("Notifications")]
+    public GameObject notificationCanvas;         // The whole canvas (to turn on/off)
+    public TextMeshProUGUI notificationText;       // The text inside it
+    public CanvasGroup notificationGroup;
+
+    [HideInInspector]
+    public FishZoneType activeZoneType;
 
     private void Awake()
     {
@@ -90,6 +102,12 @@ public class FishingProgress : MonoBehaviour
         T2S = GetComponent<Test2Script>();
         Initialize();
         fishCaughtCanvas.SetActive(false);
+
+        if (notificationCanvas != null)
+        {
+            notificationCanvas.SetActive(false);
+            notificationGroup.alpha = 0f;
+        }
     }
 
     public void Initialize()
@@ -100,19 +118,34 @@ public class FishingProgress : MonoBehaviour
 
     void Update()
     {
+        if (InitiateMicrogames.Instance == null || !InitiateMicrogames.Instance.MGCanvas.activeSelf)
+        {
+            // Player hasn't casted yet
+            return;
+        }
+
         ProgressSliderVisual();
         ProgressTracker();
 
-        if (T2S.microgamesActive && IsAnyMicrogameTrulyActive())
+        if (T2S.microgamesActive)
         {
-            ProgressDecay();
+            if (IsAnyMicrogameTrulyActive())
+            {
+                Debug.Log("Microgame ACTIVE: Decaying progress...");
+                ProgressDecay();
+            }
+            else
+            {
+                Debug.Log("Microgame TIMER only: Passive progress...");
+                PassiveProgress();
+            }
         }
         else
         {
+            Debug.Log("No microgames: Passive progress...");
             PassiveProgress();
         }
 
-        // Always clamp progress to 0-100
         progress = Mathf.Clamp(progress, 0f, 100f);
 
         if (fishCaughtScreenActive)
@@ -124,6 +157,9 @@ public class FishingProgress : MonoBehaviour
             }
         }
     }
+
+
+
 
     void HideFishCaughtScreen()
     {
@@ -146,10 +182,14 @@ public class FishingProgress : MonoBehaviour
 
     void PassiveProgress()
     {
-        if (!T2S.microgamesActive) // Only gain passive progress when microgames are inactive
+        float passiveMultiplier = 1f;
+
+        if (T2S.microgamesActive && !IsAnyMicrogameTrulyActive())
         {
-            progress += passiveProgressRate * Time.deltaTime;
+            passiveMultiplier = 0.7f; // Slow down passive gain while timer is up
         }
+
+        progress += passiveProgressRate * passiveMultiplier * Time.deltaTime;
     }
 
     bool IsAnyMicrogameTrulyActive()
@@ -194,7 +234,11 @@ public class FishingProgress : MonoBehaviour
         {
             if (T2S.Sets.ContainsKey(setName) && T2S.Sets[setName])
             {
-                if (setDecayWeights.ContainsKey(setName))
+                if (setName == "Set5") // Special rule for Set5 (button masher)
+                {
+                    totalDecay += GetSet5DynamicDecay();
+                }
+                else if (setDecayWeights.ContainsKey(setName))
                 {
                     totalDecay += setDecayWeights[setName];
                 }
@@ -209,6 +253,27 @@ public class FishingProgress : MonoBehaviour
         float normalizedMultiplier = Mathf.Lerp(minDecayMultiplier, maxDecayMultiplier, activeCount / 5f);
 
         progress -= totalDecay * baseDecayRate * Time.deltaTime * normalizedMultiplier;
+    }
+
+    private float GetSet5DynamicDecay()
+    {
+        var mashSlider = T2S.mashSlider;
+
+        if (mashSlider == null)
+        {
+            Debug.LogWarning("Mash slider reference missing!");
+            return setDecayWeights["Set5"]; // Fallback to normal Set5 decay
+        }
+
+        float sliderFill = mashSlider.value; // 0 to 1
+
+        // As the mash slider fills, we want less decay. 
+        // We'll lerp between max decay and minimal decay.
+        float maxDecay = 1.5f; // Decay when mash slider is empty
+        float minDecay = 0.3f; // Decay when mash slider is full
+
+        float dynamicDecay = Mathf.Lerp(maxDecay, minDecay, Mathf.SmoothStep(0f, 1f, sliderFill));
+        return dynamicDecay;
     }
 
     void OnProgressMax()
@@ -284,14 +349,128 @@ public class FishingProgress : MonoBehaviour
             string caughtTime = System.DateTime.Now.ToString("HH:mm:ss");
             string caughtDate = System.DateTime.Now.ToString("MM/dd/yyyy");
 
+            HAPlayerController player = FindObjectOfType<HAPlayerController>();
             fishingLog.Add(new FishingLogEntry(
                 currentCaughtFish.fishName,
                 currentCaughtFish.fishSprite,
                 caughtDate,
-                caughtTime
-            ));
+                caughtTime,
+                activeZoneType
+));
 
             Debug.Log($"Caught {currentCaughtFish.fishName} at {caughtTime} on {caughtDate}");
         }
+
+        CheckUnlockBossFishing();
+    }
+
+    public int GetNormalFishCaughtCount(InitiateMicrogames.FishZoneType zoneType)
+    {
+        int count = 0;
+        foreach (var entry in fishingLog)
+        {
+            if (entry.zoneCaught == zoneType)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    void CheckUnlockBossFishing()
+    {
+        HAPlayerController player = FindObjectOfType<HAPlayerController>();
+
+        if (fishingLog.Count == 0)
+            return;
+
+        // Use the zone of the fish you just caught
+        InitiateMicrogames.FishZoneType fishZone = fishingLog[fishingLog.Count - 1].zoneCaught;
+
+        bool bossUnlocked = false;
+
+        if (player != null)
+        {
+            switch (fishZone)
+            {
+                case InitiateMicrogames.FishZoneType.Pond:
+                    if (!player.canFishPondBoss && GetNormalFishCaughtCount(fishZone) >= 3)
+                    {
+                        player.canFishPondBoss = true;
+                        bossUnlocked = true;
+                    }
+                    break;
+                case InitiateMicrogames.FishZoneType.River:
+                    if (!player.canFishRiverBoss && GetNormalFishCaughtCount(fishZone) >= 3)
+                    {
+                        player.canFishRiverBoss = true;
+                        bossUnlocked = true;
+                    }
+                    break;
+                case InitiateMicrogames.FishZoneType.Ocean:
+                    if (!player.canFishOceanBoss && GetNormalFishCaughtCount(fishZone) >= 3)
+                    {
+                        player.canFishOceanBoss = true;
+                        bossUnlocked = true;
+                    }
+                    break;
+            }
+        }
+
+        if (bossUnlocked)
+        {
+            string zoneName = "";
+
+            switch (fishZone)
+            {
+                case InitiateMicrogames.FishZoneType.Pond: zoneName = "Pond Boss"; break;
+                case InitiateMicrogames.FishZoneType.River: zoneName = "River Boss"; break;
+                case InitiateMicrogames.FishZoneType.Ocean: zoneName = "Ocean Boss"; break;
+            }
+
+            Debug.Log($"{zoneName} fishing is now UNLOCKED!");
+            ShowNotification($"{zoneName} Unlocked!");
+        }
+    }
+
+
+
+
+    public void ShowNotification(string message)
+    {
+        if (notificationCanvas != null && notificationText != null)
+        {
+            notificationText.text = message;
+            StopAllCoroutines();  // Stop previous notification fades if any
+            StartCoroutine(NotificationRoutine());
+        }
+    }
+
+    private IEnumerator NotificationRoutine()
+    {
+        notificationCanvas.SetActive(true);
+
+        // Fade In
+        yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 0f, 1f, 0.5f));
+
+        // Wait while fully visible
+        yield return new WaitForSeconds(2f);
+
+        // Fade Out
+        yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 1f, 0f, 0.5f));
+
+        notificationCanvas.SetActive(false);
+    }
+
+    private IEnumerator FadeCanvasGroup(CanvasGroup canvasGroup, float start, float end, float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(start, end, elapsed / duration);
+            yield return null;
+        }
+        canvasGroup.alpha = end;
     }
 }

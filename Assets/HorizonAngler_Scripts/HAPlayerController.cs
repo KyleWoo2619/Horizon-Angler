@@ -35,7 +35,10 @@ namespace StarterAssets
         public Transform FishingCameraTarget;
         public GameObject fishingrod;
         private bool canFish = false;
-        private bool canFishBoss = false;
+        public bool canFishPondBoss = false;
+        public bool canFishRiverBoss = false;
+        public bool canFishOceanBoss = false;
+        private bool shownLockedZoneNotification = false;
         private bool isFishing = false;
         private Vector3 fishingLookTarget;
 
@@ -373,29 +376,43 @@ namespace StarterAssets
             if (fishingZone != null)
             {
                 inFishZone = true;
-                canFish = true;
-                currentZoneType = fishingZone.zoneType; // New: store zone type!
+                currentZoneType = fishingZone.zoneType;
+
+                bool allowedToFish = false;
+
+                switch (currentZoneType)
+                {
+                    case InitiateMicrogames.FishZoneType.Pond:
+                    case InitiateMicrogames.FishZoneType.River:
+                    case InitiateMicrogames.FishZoneType.Ocean:
+                        allowedToFish = true;
+                        break;
+                    case InitiateMicrogames.FishZoneType.BossPond:
+                        allowedToFish = canFishPondBoss;
+                        break;
+                    case InitiateMicrogames.FishZoneType.BossRiver:
+                        allowedToFish = canFishRiverBoss;
+                        break;
+                    case InitiateMicrogames.FishZoneType.BossOcean:
+                        allowedToFish = canFishOceanBoss;
+                        break;
+                }
+
+                canFish = allowedToFish;
+
+                if (!allowedToFish)
+                {
+                    // Only show notification ONCE when entering
+                    if (!shownLockedZoneNotification && FishingProgress.Instance != null)
+                    {
+                        FishingProgress.Instance.ShowNotification("You haven't unlocked this fishing zone yet!");
+                        shownLockedZoneNotification = true;  // prevent repeats
+                    }
+                }
 
                 if (!isFishing)
                 {
-                    fishingPromptUI.SetActive(true);
-                }
-                else
-                {
-                    fishingPromptUI.SetActive(false);
-                }
-            }
-            else if (other.CompareTag("ShopZone"))
-            {
-                canInteractWithShop = true;
-
-                if (!isInShop)
-                {
-                    shopInteractPromptUI.SetActive(true);
-                }
-                else
-                {
-                    shopInteractPromptUI.SetActive(false);
+                    fishingPromptUI.SetActive(allowedToFish);
                 }
             }
         }
