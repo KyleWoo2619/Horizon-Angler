@@ -437,30 +437,43 @@ public class FishingProgress : MonoBehaviour
 
 
     public void ShowNotification(string message)
-    {
-        if (notificationCanvas != null && notificationText != null)
         {
-            notificationText.text = message;
-            StopAllCoroutines();  // Stop previous notification fades if any
-            StartCoroutine(NotificationRoutine());
+            Debug.Log($"Trying to show notification: {message}");
+
+            if (notificationCanvas != null && notificationText != null)
+            {
+                Debug.Log("Notification references are good! Showing message.");
+                notificationText.text = message;
+                StopAllCoroutines();  // Stop previous notification fades if any
+                StartCoroutine(NotificationRoutine());
+            }
+            else
+            {
+                Debug.LogWarning("NotificationCanvas or NotificationText is missing!");
+            }
         }
-    }
 
-    private IEnumerator NotificationRoutine()
-    {
-        notificationCanvas.SetActive(true);
+    public IEnumerator NotificationRoutine()
+        {
+            Debug.Log("Starting NotificationRoutine...");
 
-        // Fade In
-        yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 0f, 1f, 0.5f));
+            notificationCanvas.SetActive(true);
 
-        // Wait while fully visible
-        yield return new WaitForSeconds(2f);
+            if (notificationGroup != null)
+            {
+                yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 0f, 1f, 0.5f));
 
-        // Fade Out
-        yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 1f, 0f, 0.5f));
+                yield return new WaitForSeconds(2f);
 
-        notificationCanvas.SetActive(false);
-    }
+                yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 1f, 0f, 0.5f));
+            }
+            else
+            {
+                Debug.LogWarning("NotificationGroup is missing!");
+            }
+
+            notificationCanvas.SetActive(false);
+        }
 
     private IEnumerator FadeCanvasGroup(CanvasGroup canvasGroup, float start, float end, float duration)
     {

@@ -31,6 +31,7 @@ namespace StarterAssets
 
         [Header("Fishing Settings")]
         public GameObject fishingPromptUI;
+        public GameObject BossfishingPrompt;
         public GameObject fishingMinigameUI;
         public Transform FishingCameraTarget;
         public GameObject fishingrod;
@@ -370,7 +371,7 @@ namespace StarterAssets
             LockCameraPosition = false;
         }
 
-        private void OnTriggerStay(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
             FishingZone fishingZone = other.GetComponent<FishingZone>();
             if (fishingZone != null)
@@ -403,10 +404,11 @@ namespace StarterAssets
                 if (!allowedToFish)
                 {
                     // Only show notification ONCE when entering
-                    if (!shownLockedZoneNotification && FishingProgress.Instance != null)
+                    if (!shownLockedZoneNotification)
                     {
-                        FishingProgress.Instance.ShowNotification("You haven't unlocked this fishing zone yet!");
-                        shownLockedZoneNotification = true;  // prevent repeats
+                        BossfishingPrompt.SetActive(true);
+                        //FishingProgress.Instance.ShowNotification("You haven't unlocked this fishing zone yet!");
+                        shownLockedZoneNotification = true;  // prevent repeat
                     }
                 }
 
@@ -424,7 +426,9 @@ namespace StarterAssets
             {
                 inFishZone = false;
                 canFish = false;
+                BossfishingPrompt.SetActive(false);
                 fishingPromptUI.SetActive(false);
+                shownLockedZoneNotification = false; // Reset notification flag
             }
             else if (other.CompareTag("ShopZone"))
             {
