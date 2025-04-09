@@ -128,6 +128,7 @@ public class Test2Script : MonoBehaviour
     public Slider mashSlider;
     public Image leftMashButtonImage;
     public Image rightMashButtonImage;
+    public Image mashSliderFillImage;
 
     // Start is called before the first frame update
     void Start()
@@ -313,6 +314,11 @@ public class Test2Script : MonoBehaviour
         lastInput = "";
         mashSlider.value = 0f;
         mashSlider.maxValue = 1f;
+        // Set the initial color to RED
+        if (mashSliderFillImage != null)
+        {
+            mashSliderFillImage.color = new Color(1f, 0.3f, 0.3f); // light red
+        }
     }
 
 
@@ -849,25 +855,45 @@ public class Test2Script : MonoBehaviour
 
     void UpdateMashButtonsVisuals()
     {
+        if (mashSlider == null || mashSliderFillImage == null)
+            return;
+
+        float fill = mashSlider.value;
+
+        // Define the color stages
+        Color redColor = new Color(1f, 0.3f, 0.3f);     // Light red
+        Color yellowColor = new Color(1f, 1f, 0.4f);    // Soft yellow
+        Color greenColor = new Color(0.6f, 1f, 0.6f);   // Light green
+
+        Color dynamicColor;
+
+        if (fill < 0.5f)
+        {
+            // Blend from Red to Yellow (0% to 50%)
+            dynamicColor = Color.Lerp(redColor, yellowColor, fill / 0.5f);
+        }
+        else
+        {
+            // Blend from Yellow to Green (50% to 100%)
+            dynamicColor = Color.Lerp(yellowColor, greenColor, (fill - 0.5f) / 0.5f);
+        }
+
+        // Apply to the slider's fill image
+        mashSliderFillImage.color = dynamicColor;
+
+        // (keep button scaling based on last input)
         if (lastInput == "Q")
         {
-            // After pressing Q, E should be highlighted
-            leftMashButtonImage.color = Color.gray;
-            leftMashButtonImage.transform.localScale = Vector3.one * 1f; // Normal size
-
-            rightMashButtonImage.color = Color.white;
-            rightMashButtonImage.transform.localScale = Vector3.one * 1.2f; // Bigger
+            leftMashButtonImage.transform.localScale = Vector3.one * 1f;
+            rightMashButtonImage.transform.localScale = Vector3.one * 1.2f;
         }
         else if (lastInput == "E")
         {
-            // After pressing E, Q should be highlighted
-            rightMashButtonImage.color = Color.gray;
-            rightMashButtonImage.transform.localScale = Vector3.one * 1f; // Normal size
-
-            leftMashButtonImage.color = Color.white;
-            leftMashButtonImage.transform.localScale = Vector3.one * 1.2f; // Bigger
+            rightMashButtonImage.transform.localScale = Vector3.one * 1f;
+            leftMashButtonImage.transform.localScale = Vector3.one * 1.2f;
         }
     }
+
 
     IEnumerator VibrateMashUI()
     {
@@ -939,7 +965,7 @@ public class Test2Script : MonoBehaviour
                 TimerTexts[4].text = time.ToString();
                 break;
             case "Set4":
-                Timers[3].SetActive(false);
+                Timers[3].SetActive(true);
                 TimerTexts[3].text = time.ToString();
                 break;
             case "Set3":

@@ -76,10 +76,14 @@ public class InitiateMicrogames : MonoBehaviour
 
                     // Set Fish Pool based on Zone Type
                     if (playerController != null)
+                    {
                         FProgress.SetActiveFishPool(playerController.currentZoneType);
+                        FProgress.activeZoneType = playerController.currentZoneType;
+                    }
                     else
+                    {
                         FProgress.SetActiveFishPool(InitiateMicrogames.FishZoneType.Pond); // Default to Pond for SampleScene
-
+                    }
                     Cast();
                 }
             }
@@ -117,6 +121,8 @@ public class InitiateMicrogames : MonoBehaviour
         yield return new WaitForSeconds(rnd.Next(1, 3)); // Tweak this for how long you want the "Waiting for bite..." phase to last.
         StartCoroutine(TookBait());
     }
+
+    public bool IsCasted() { return casted; }
 
     IEnumerator TookBait()
     {
