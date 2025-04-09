@@ -337,9 +337,17 @@ namespace StarterAssets
                 directionToLook.y = 0f; // Keep the y-axis level
                 if (directionToLook != Vector3.zero)
                 {
-
                     Quaternion targetrotation = Quaternion.LookRotation(directionToLook);
                     transform.rotation = targetrotation;
+
+                    //Also update the Cinemachine Camera
+                    _cinemachineTargetYaw = transform.eulerAngles.y;
+                    _cinemachineTargetPitch = 0f; // (Optional) Set to 0 so camera doesn't tilt up/down weirdly
+                    CinemachineCameraTarget.transform.rotation = Quaternion.Euler(
+                        _cinemachineTargetPitch + CameraAngleOverride,
+                        _cinemachineTargetYaw,
+                        0.0f
+                    );
                 }
             }
         }
@@ -377,10 +385,10 @@ namespace StarterAssets
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("ShopZone"))
-                {
-                    canInteractWithShop = true;
-                    shopInteractPromptUI.SetActive(true);
-                }
+            {
+                canInteractWithShop = true;
+                shopInteractPromptUI.SetActive(true);
+            }
 
             FishingZone fishingZone = other.GetComponent<FishingZone>();
             if (fishingZone != null)
@@ -410,14 +418,23 @@ namespace StarterAssets
 
                 canFish = allowedToFish;
 
+                // Find the FishingLookAt inside the FishingZone
+                Transform lookAt = other.transform.Find("FishingLookAt");
+                if (lookAt != null)
+                {
+                    FishingLookAt = lookAt;
+                }
+                else
+                {
+                    Debug.LogWarning("FishingLookAt not found in fishing zone: " + other.gameObject.name);
+                }
+
                 if (!allowedToFish)
                 {
-                    // Only show notification ONCE when entering
                     if (!shownLockedZoneNotification)
                     {
                         BossfishingPrompt.SetActive(true);
-                        //FishingProgress.Instance.ShowNotification("You haven't unlocked this fishing zone yet!");
-                        shownLockedZoneNotification = true;  // prevent repeat
+                        shownLockedZoneNotification = true;
                     }
                 }
 
