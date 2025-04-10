@@ -26,10 +26,14 @@ public class MenuController : MonoBehaviour
     [SerializeField] private Slider brightnessSlider = null;
     [SerializeField] private TMP_Text brightnessTextValue = null;
     [SerializeField] private float defaultBrightness = 1;
+    [SerializeField] private Image brightnessOverlay;
 
     [Space(10)]
     [SerializeField] private TMP_Dropdown qualityDropdown;
     [SerializeField] private Toggle fullScreenToggle;
+    [SerializeField] private CanvasGroup confirmationGroup;
+    [SerializeField] private float fadeTime = 0.5f;
+
 
     private int _qualityLevel;
     private bool _isFullScreen;
@@ -139,7 +143,16 @@ public class MenuController : MonoBehaviour
     {
         _brightnessLevel = brightness;
         brightnessTextValue.text = brightness.ToString("0.0");
+
+        if (brightnessOverlay != null)
+        {
+            float alpha = Mathf.Clamp01(1 - brightness); // Brightness 1 = no overlay
+            Color c = brightnessOverlay.color;
+            c.a = alpha;
+            brightnessOverlay.color = c;
+        }
     }
+
 
     public void SetFullScreen(bool isFullscreen)
     {
@@ -206,7 +219,20 @@ public class MenuController : MonoBehaviour
     public IEnumerator ConfirmationBox()
     {
         confirmationPrompt.SetActive(true);
-        yield return new WaitForSeconds(2);
+        confirmationGroup.alpha = 1;
+
+        yield return new WaitForSeconds(1.5f);
+
+        float t = 0f;
+        while (t < fadeTime)
+        {
+            confirmationGroup.alpha = Mathf.Lerp(1f, 0f, t / fadeTime);
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        confirmationGroup.alpha = 0;
         confirmationPrompt.SetActive(false);
     }
+
 }
