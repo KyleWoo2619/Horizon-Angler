@@ -38,17 +38,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FoamAmount: 0.4
+    - _Alpha: 0.5
+    - _FoamAmount: 2
     - _FoamCutoff: 1.07
     - _FoamScale: 75
-    - _FoamSpeed: 0.05
+    - _FoamSpeed: 0.03
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _RippleDensity: 32.73
+    - _RippleDensity: 52.31
     - _RippleSlim: 9.2
     - _RippleSpeed: 3
-    - _WaveScale: 1.75
-    - _WaveSpeed: 0.011
+    - _WaveScale: 6.84
+    - _WaveSpeed: 0.1
     m_Colors:
     - _BaseColor: {r: 0.32549018, g: 0.83137256, b: 0.49422833, a: 0}
     - _FoamColor: {r: 1.113386, g: 1.351432, b: 1.698113, a: 1}
