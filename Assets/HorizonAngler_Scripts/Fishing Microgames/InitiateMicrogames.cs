@@ -14,6 +14,7 @@ public class InitiateMicrogames : MonoBehaviour
 
     public GameObject MGCanvas, CCanvas;
     public GameObject CTC, WFB, FTB;
+    public GameObject TookBaitAnim;
 
 
     // Inputs
@@ -143,8 +144,10 @@ public class InitiateMicrogames : MonoBehaviour
             playerController.PlayBaitTook();
 
         FTB.SetActive(true);
+        TookBaitAnim.SetActive(true);
         yield return new WaitForSeconds(1f);
-
+        
+        TookBaitAnim.SetActive(false);
         FTB.SetActive(false);
         
         if (playerController != null);
