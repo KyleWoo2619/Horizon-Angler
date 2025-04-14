@@ -2447,12 +2447,12 @@
     },
     "m_Name": "Time",
     "m_DrawState": {
-        "m_Expanded": false,
+        "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -568.0,
+            "x": -569.0,
             "y": 570.0,
-            "width": 124.0,
+            "width": 123.99996948242188,
             "height": 173.0
         }
     },
