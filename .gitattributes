@@ -144,6 +144,7 @@ Assets/**/*.terrain.asset filter=lfs diff=lfs merge=lfs -text
 Assets/**/*.TerrainData filter=lfs diff=lfs merge=lfs -text
 # Keep normal .asset files as text/yaml for most Unity assets
 *.asset                  unity-yaml
+*.terrain.asset binary
 # But EXCLUDE terrain files from being treated as text
 Assets/**/*.terrainlayer filter=lfs diff=lfs merge=lfs -text
 *.TerrainData filter=lfs diff=lfs merge=lfs -text
