@@ -7,7 +7,6 @@ public class Set1Obstacle : MonoBehaviour
     public RectTransform heartTx;
     private Rigidbody2D rb;
     private Vector2 heartPos, dest;
-    private bool touched = false; // To prevent double bonus/penalty
 
     private void Awake()
     {
@@ -16,6 +15,7 @@ public class Set1Obstacle : MonoBehaviour
 
     public void MoveToHeart()
     {
+        //Debug.Log("MoveToHeart called by " + this.gameObject);
         heartPos = heartTx.position;
         dest = rb.position;
         StartCoroutine(UntouchedTimer());
@@ -30,15 +30,7 @@ public class Set1Obstacle : MonoBehaviour
     IEnumerator UntouchedTimer()
     {
         yield return new WaitForSeconds(1.5f);
-        if (!touched)
-        {
-            Untouched();
-        }
-    }
-
-    void Untouched()
-    {
-        Disable();
+        Untouched();
     }
 
     void Disable()
@@ -47,13 +39,19 @@ public class Set1Obstacle : MonoBehaviour
         rb.velocity = Vector2.zero;
     }
 
+    void Untouched()
+    {
+        Disable();
+        // Bonus to progress bar
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!touched)
-        {
-            touched = true;
+        // Penalty to progress bar
+        //if (collision.tag == "Player")
+        //{
+            //Debug.Log(this.gameObject.name + " got hit");
             Disable();
-            FishingProgress.Instance.Set1ObstaclePenalty(); // Call penalty on collision
-        }
+        //}
     }
 }
