@@ -26,11 +26,11 @@ public class FishingProgress : MonoBehaviour
     Dictionary<string, float> setDecayWeights = new Dictionary<string, float>()
     {
         { "Set1", -0.5f },    // Undertale
-        { "Set2", 0.1f },     // Whirlpool // Placeholder until Set2 is implemented
+        { "Set2", 1.5f },     // Whirlpool 
         { "Set3", 1.3f },     // Button Combo
         { "Set4", 0.3f },     // Memory
         { "Set5", 1f },       // Mashing
-        { "Set6", 0.1f },     // Rod Alignment // Placeholder until Set6 is implemented
+        { "Set6", 0.1f },     // Rod Alignment 
         { "Set7", 1.8f },     // Reaction  
     };
 
@@ -38,7 +38,7 @@ public class FishingProgress : MonoBehaviour
     public Dictionary<string, float> microgameBonusValues = new Dictionary<string, float>()
 {
     { "Set1", 15f },
-    { "Set2", 15f },
+    { "Set2", 22f },
     { "Set3", 15f },
     { "Set4", 15f },
     { "Set5", 15f },
