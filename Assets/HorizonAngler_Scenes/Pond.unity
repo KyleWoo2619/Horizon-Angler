@@ -15624,6 +15624,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
+      propertyPath: enableSet2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
       propertyPath: TookBaitAnim
       value: 
       objectReference: {fileID: 1600919256}

@@ -41,6 +41,19 @@ public class InitiateMicrogames : MonoBehaviour
         BossOcean
     }
     public static InitiateMicrogames Instance { get; private set; }
+    [Header("Inspector Microgame Set Overrides")]
+    public bool useInspectorOverrides = false;
+    [Header("Microgame Set Checkboxes")]
+    public bool enableSet1 = true;
+    public bool enableSet2 = true;
+    public bool enableSet3 = true;
+    public bool enableSet4 = true;
+    public bool enableSet5 = true;
+    public bool enableSet6 = true;
+    public bool enableSet7 = true;
+
+
+
     public List<string> ActiveMicrogameSets { get; private set; } = new List<string>();
 
 
@@ -113,13 +126,27 @@ public class InitiateMicrogames : MonoBehaviour
     {
         ActiveMicrogameSets.Clear();
 
-        // Always-active sets
+        if (useInspectorOverrides)
+        {
+            if (enableSet1) ActiveMicrogameSets.Add("Set1");
+            if (enableSet2) ActiveMicrogameSets.Add("Set2");
+            if (enableSet3) ActiveMicrogameSets.Add("Set3");
+            if (enableSet4) ActiveMicrogameSets.Add("Set4");
+            if (enableSet5) ActiveMicrogameSets.Add("Set5");
+            if (enableSet6) ActiveMicrogameSets.Add("Set6");
+            if (enableSet7) ActiveMicrogameSets.Add("Set7");
+
+            Debug.Log("[Inspector Override] Active Microgame Sets: " + string.Join(", ", ActiveMicrogameSets));
+            return;
+        }
+
+
+        // Default behavior (based on zone)
         ActiveMicrogameSets.Add("Set3");
         ActiveMicrogameSets.Add("Set4");
         ActiveMicrogameSets.Add("Set5");
         ActiveMicrogameSets.Add("Set7");
 
-        // Zone-specific sets
         switch (zoneType)
         {
             case FishZoneType.Pond:
@@ -138,6 +165,7 @@ public class InitiateMicrogames : MonoBehaviour
 
         Debug.Log($"[FishingZone: {zoneType}] Active Microgame Sets: {string.Join(", ", ActiveMicrogameSets)}");
     }
+
 
 
     void ProcessInputs()
