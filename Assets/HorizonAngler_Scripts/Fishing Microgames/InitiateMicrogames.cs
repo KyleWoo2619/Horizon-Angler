@@ -28,6 +28,7 @@ public class InitiateMicrogames : MonoBehaviour
     [HideInInspector] public bool inputSpace = false; // is key Pressed
 
     private bool casted;
+    private bool fishingStarted = false;
     private HAPlayerController playerController;
     private float castLockoutTimer = 0f;
     public enum FishZoneType
@@ -40,6 +41,21 @@ public class InitiateMicrogames : MonoBehaviour
         BossOcean
     }
     public static InitiateMicrogames Instance { get; private set; }
+    [Header("Inspector Microgame Set Overrides")]
+    public bool useInspectorOverrides = false;
+    [Header("Microgame Set Checkboxes")]
+    public bool enableSet1 = true;
+    public bool enableSet2 = true;
+    public bool enableSet3 = true;
+    public bool enableSet4 = true;
+    public bool enableSet5 = true;
+    public bool enableSet6 = true;
+    public bool enableSet7 = true;
+
+
+
+    public List<string> ActiveMicrogameSets { get; private set; } = new List<string>();
+
 
     // Start is called before the first frame update
     void Awake()
@@ -50,6 +66,7 @@ public class InitiateMicrogames : MonoBehaviour
         CTC.SetActive(false);
         WFB.SetActive(false);
         FTB.SetActive(false);
+        MGCanvas.SetActive(false); 
         playerController = FindObjectOfType<HAPlayerController>();
     }
 
@@ -75,18 +92,23 @@ public class InitiateMicrogames : MonoBehaviour
                     MGCanvas.SetActive(false);
                     ProcessInputs();
 
-                    // Set Fish Pool based on Zone Type
-                    if (playerController != null)
+                    if (fishingStarted)
                     {
-                        FProgress.SetActiveFishPool(playerController.currentZoneType);
-                        FProgress.activeZoneType = playerController.currentZoneType;
+                        // Set Fish Pool based on Zone Type
+                        if (playerController != null)
+                        {
+                            FProgress.SetActiveFishPool(playerController.currentZoneType);
+                            FProgress.activeZoneType = playerController.currentZoneType;
+                        }
+                        else
+                        {
+                            FProgress.SetActiveFishPool(InitiateMicrogames.FishZoneType.Pond); // Default to Pond for SampleScene
+                        }
+
+                        Cast();
                     }
-                    else
-                    {
-                        FProgress.SetActiveFishPool(InitiateMicrogames.FishZoneType.Pond); // Default to Pond for SampleScene
-                    }
-                    Cast();
                 }
+
             }
         }
         else
@@ -99,6 +121,52 @@ public class InitiateMicrogames : MonoBehaviour
     {
         castLockoutTimer = 0.25f; // 0.25 seconds lockout
     }
+
+    public void SetActiveMicrogameSets(FishZoneType zoneType)
+    {
+        ActiveMicrogameSets.Clear();
+
+        if (useInspectorOverrides)
+        {
+            if (enableSet1) ActiveMicrogameSets.Add("Set1");
+            if (enableSet2) ActiveMicrogameSets.Add("Set2");
+            if (enableSet3) ActiveMicrogameSets.Add("Set3");
+            if (enableSet4) ActiveMicrogameSets.Add("Set4");
+            if (enableSet5) ActiveMicrogameSets.Add("Set5");
+            if (enableSet6) ActiveMicrogameSets.Add("Set6");
+            if (enableSet7) ActiveMicrogameSets.Add("Set7");
+
+            Debug.Log("[Inspector Override] Active Microgame Sets: " + string.Join(", ", ActiveMicrogameSets));
+            return;
+        }
+
+
+        // Default behavior (based on zone)
+        ActiveMicrogameSets.Add("Set3");
+        ActiveMicrogameSets.Add("Set4");
+        ActiveMicrogameSets.Add("Set5");
+        ActiveMicrogameSets.Add("Set7");
+
+        switch (zoneType)
+        {
+            case FishZoneType.Pond:
+            case FishZoneType.BossPond:
+                ActiveMicrogameSets.Add("Set6");
+                break;
+            case FishZoneType.River:
+            case FishZoneType.BossRiver:
+                ActiveMicrogameSets.Add("Set1");
+                break;
+            case FishZoneType.Ocean:
+            case FishZoneType.BossOcean:
+                ActiveMicrogameSets.Add("Set2");
+                break;
+        }
+
+        Debug.Log($"[FishingZone: {zoneType}] Active Microgame Sets: {string.Join(", ", ActiveMicrogameSets)}");
+    }
+
+
 
     void ProcessInputs()
     {
@@ -162,5 +230,12 @@ public class InitiateMicrogames : MonoBehaviour
 
         casted = false;
     }
+
+    public void NotifyFishingStarted()
+    {
+        fishingStarted = true;
+        CCanvas.SetActive(true); // << Show click-to-cast UI now that fishing has begun
+    }
+
 
 }
