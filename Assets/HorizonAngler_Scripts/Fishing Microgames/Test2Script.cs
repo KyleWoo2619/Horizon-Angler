@@ -445,12 +445,20 @@ public class Test2Script : MonoBehaviour
                 Debug.Log("Joystick Button Pressed: " + i);
         }
 
-        for (int i = 1; i <= 10; i++)
+        string[] knownAxes = {
+            "RS_h", "RS_v",
+            "LS_h", "LS_v",
+            "DPad_h", "DPad_v",
+            "LT_Axis", "RT_Axis"
+        };
+
+        foreach (string axis in knownAxes)
         {
-            float val = Input.GetAxis("Axis " + i);
+            float val = Input.GetAxis(axis);
             if (Mathf.Abs(val) > 0.1f)
-                Debug.Log("Axis " + i + " = " + val);
+                Debug.Log(axis + " = " + val);
         }
+
     }
 
 
