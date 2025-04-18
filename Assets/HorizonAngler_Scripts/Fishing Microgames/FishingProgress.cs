@@ -25,12 +25,27 @@ public class FishingProgress : MonoBehaviour
     public bool memorySetupActive = false;
     Dictionary<string, float> setDecayWeights = new Dictionary<string, float>()
     {
-        { "Set1", -0.5f },
-        { "Set3", 1.3f },
-        { "Set4", 0.5f },
-        { "Set5", 1f },
-        { "Set7", 1.8f },
+        { "Set1", -0.5f },    // Undertale
+        { "Set2", 0.1f },     // Whirlpool // Placeholder until Set2 is implemented
+        { "Set3", 1.3f },     // Button Combo
+        { "Set4", 0.3f },     // Memory
+        { "Set5", 1f },       // Mashing
+        { "Set6", 0.1f },     // Rod Alignment // Placeholder until Set6 is implemented
+        { "Set7", 1.8f },     // Reaction  
     };
+
+    [Header("Microgame Bonus Values")]
+    public Dictionary<string, float> microgameBonusValues = new Dictionary<string, float>()
+{
+    { "Set1", 15f },
+    { "Set2", 15f },
+    { "Set3", 15f },
+    { "Set4", 15f },
+    { "Set5", 15f },
+    { "Set6", 25f }, // boosted value for Set6
+    { "Set7", 15f }
+};
+
 
     public static FishingProgress Instance;
 
@@ -245,10 +260,13 @@ public class FishingProgress : MonoBehaviour
         return false;
     }
 
-    public void MicrogameBonus()
+    public void MicrogameBonus(string setName)
     {
-        progress += 15f;
+        float bonus = microgameBonusValues.ContainsKey(setName) ? microgameBonusValues[setName] : 15f;
+        progress += bonus;
     }
+
+
 
     void ProgressSliderVisual()
     {

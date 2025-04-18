@@ -10,6 +10,8 @@ using Random = System.Random;
 
 public class Test2Script : MonoBehaviour
 {
+    public enum FishingZoneType { Pond, River, Ocean, BossPond, BossRiver, BossOcean }
+
     static Random rnd = new Random();
 
     // Inputs
@@ -107,6 +109,9 @@ public class Test2Script : MonoBehaviour
     public Sprite leftArrowSprite;
     public Sprite rightArrowSprite;
     private List<Image> dpadArrowImages = new List<Image>();
+    [HideInInspector] public bool dpadAxisInUseX = false;
+    [HideInInspector] public bool dpadAxisInUseY = false;
+
 
     [Header("Set 4 Variables")]
     public GameObject MemoryParent;
@@ -183,11 +188,11 @@ public class Test2Script : MonoBehaviour
     void AddToSetsDict()
     {
         Sets.Add("Set1", false);  // WASD / L-Joystick Set
-        //Sets.Add("Set2", false);  // Mouse / R-Joystick Set // Mathf.Clamp
+        Sets.Add("Set2", false);  // Mouse / R-Joystick Set // Mathf.Clamp
         Sets.Add("Set3", false);  // IJKL / D-Pad Set // Swap this to Arrow Keys
         Sets.Add("Set4", false);  // Arrow Keys / ABXY Set // Swap this to IJKL
         Sets.Add("Set5", false);  // QE / Bumpers Set
-        //Sets.Add("Set6", false);  // LMB/RMB / LT/RT Set
+        Sets.Add("Set6", false);  // LMB/RMB / LT/RT Set
         Sets.Add("Set7", false);  // Space // Joystick Buttons Set
     }
 
@@ -336,11 +341,15 @@ public class Test2Script : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (microgamesActive == true)
+        if (!microgamesActive)
+            return;
+
+        if (Sets.ContainsKey("Set1") && Sets["Set1"])
         {
             Set1Inputs();
         }
     }
+
 
     void Update()
     {
@@ -355,24 +364,80 @@ public class Test2Script : MonoBehaviour
 
     void ProcessInputs()
     {
-        inputRAxisX = Input.GetAxis(RS_h);
-        inputRAxisY = Input.GetAxis(RS_v);
-        inputLAxisX = Input.GetAxisRaw(LS_h);
-        inputLAxisY = Input.GetAxisRaw(LS_v);
-        inputDAxisX = Input.GetAxisRaw(DPad_h);
-        inputDAxisY = Input.GetAxisRaw(DPad_v);
+        // Right Stick / Mouse Combined Input (for microgame spinning, etc.)
+        float joyRX = Input.GetAxis("RS_h");
+        float joyRY = Input.GetAxis("RS_v");
+        float mouseX = Input.GetAxis("Mouse_X");
+        float mouseY = Input.GetAxis("Mouse_Y");
+        inputRAxisX = joyRX + mouseX;
+        inputRAxisY = joyRY + mouseY;
+
+        // Left Stick / WASD Combined Input (for Undertale-style Set 1 movement)
+        float kbLX = Input.GetAxisRaw("LS_h_KB");
+        float joyLX = Input.GetAxisRaw("LS_h");
+        float kbLY = Input.GetAxisRaw("LS_v_KB");
+        float joyLY = Input.GetAxisRaw("LS_v");
+        inputLAxisX = kbLX + joyLX;
+        inputLAxisY = kbLY + joyLY;
+
+        // D-Pad / IJKL Combined Input with axis debounce
+        float dpadHX = Input.GetAxisRaw("DPad_h") + Input.GetAxisRaw("DPad_h_KB");
+        float dpadVY = Input.GetAxisRaw("DPad_v") + Input.GetAxisRaw("DPad_v_KB");
+
+        inputDAxisX = 0f;
+        inputDAxisY = 0f;
+
+        // Handle horizontal axis debounce
+        if (Mathf.Abs(dpadHX) > 0.5f)
+        {
+            if (!dpadAxisInUseX)
+            {
+                inputDAxisX = Mathf.Sign(dpadHX);
+                dpadAxisInUseX = true;
+            }
+        }
+        else
+        {
+            dpadAxisInUseX = false;
+        }
+
+        // Handle vertical axis debounce
+        if (Mathf.Abs(dpadVY) > 0.5f)
+        {
+            if (!dpadAxisInUseY)
+            {
+                inputDAxisY = Mathf.Sign(dpadVY);
+                dpadAxisInUseY = true;
+            }
+        }
+        else
+        {
+            dpadAxisInUseY = false;
+        }
+
+        // ABXY Buttons
         inputA = Input.GetButtonDown(AButton);
         inputB = Input.GetButtonDown(BButton);
         inputX = Input.GetButtonDown(XButton);
         inputY = Input.GetButtonDown(YButton);
+
+        // Shoulder Buttons (LB, RB)
         inputLB = Input.GetButtonDown(LB);
         inputRB = Input.GetButtonDown(RB);
-        inputLT = Input.GetButtonDown(LT);
-        inputRT = Input.GetButtonDown(RT);
+
+        // Trigger Inputs: combined axis + mouse button detection
+        inputLT = Input.GetAxis("LT_Axis") > 0.5f || Input.GetButtonDown(LT);
+        inputRT = Input.GetAxis("RT_Axis") > 0.5f || Input.GetButtonDown(RT);
+
+        // Joystick button presses (LS/RS press or space fallback)
         inputLS_b = Input.GetButtonDown(LS_b);
         inputRS_b = Input.GetButtonDown(RS_b);
+
+        // Escape (used for exiting microgame)
         inputEscape = Input.GetButtonDown(Escape);
     }
+
+
 
     void MicrogameFailsafe() // This is to ensure that there is at least 1 microgame running at all times
     {
@@ -384,24 +449,28 @@ public class Test2Script : MonoBehaviour
     }
     void Set1Inputs()
     {
-        if (Sets["Set1"] == true)
+        if (Sets.ContainsKey("Set1") && Sets["Set1"])
         {
             Set1Parent.SetActive(true);
             MicrogameSet1();
         }
     }
 
+
     void MicrogamesInputs()
     {
-        foreach (var set in new[] { "Set3", "Set4", "Set5", "Set7" })
+        foreach (var set in new[] { "Set1", "Set2", "Set3", "Set4", "Set5", "Set6", "Set7" })
         {
             if (Sets.ContainsKey(set) && Sets[set])
             {
                 switch (set)
                 {
+                    case "Set1": Set1Parent.SetActive(true); MicrogameSet1(); break;
+                    case "Set2": Set2Parent.SetActive(true); MicrogameSet2(); break;
                     case "Set3": Set3Parent.SetActive(true); MicrogameSet3(); break;
                     case "Set4": Set4Parent.SetActive(true); MicrogameSet4(); break;
                     case "Set5": Set5Parent.SetActive(true); MicrogameSet5(); break;
+                    case "Set6": Set6Parent.SetActive(true); MicrogameSet6(); break;
                     case "Set7": Set7Parent.SetActive(true); MicrogameSet7(); break;
                 }
             }
@@ -439,23 +508,25 @@ public class Test2Script : MonoBehaviour
     {
         if (!dpadInputActive) return;
 
-        if (Input.GetButtonDown(DPad_h))
+        float dpadX = inputDAxisX;
+        float dpadY = inputDAxisY;
+
+        if (Mathf.Abs(dpadX) > 0.5f)
         {
-            float dir = Input.GetAxisRaw(DPad_h);
-            if (dir > 0)
+            if (dpadX > 0)
                 RegisterDpadInput("Right");
-            else if (dir < 0)
+            else
                 RegisterDpadInput("Left");
         }
-        if (Input.GetButtonDown(DPad_v))
+        else if (Mathf.Abs(dpadY) > 0.5f)
         {
-            float dir = Input.GetAxisRaw(DPad_v);
-            if (dir > 0)
+            if (dpadY > 0)
                 RegisterDpadInput("Up");
-            else if (dir < 0)
+            else
                 RegisterDpadInput("Down");
         }
     }
+
 
 
     void MicrogameSet4()
@@ -519,20 +590,31 @@ public class Test2Script : MonoBehaviour
 
     void MicrogameSet6()
     {
+        if (!Set6Parent.activeSelf)
+            Set6Parent.SetActive(true);
 
+        // Reset rod when re-entering Set6
+        Set6RodAlignment rod = FindObjectOfType<Set6RodAlignment>();
+        if (rod != null && rod.IsMicrogameComplete())
+        {
+            FindObjectOfType<FishingProgress>().MicrogameBonus("Set6");
+            Sets["Set6"] = false;
+            activeSets.Remove("Set6");
+            inactiveSets.Add("Set6");
+            Set6Parent.SetActive(false);
 
-        /*
-        activeSets.Remove("Set6");
-        inactiveSets.Add("Set6");
-        */
+            rod.ResetRod(); // <<< Reset the rod here
+        }
     }
+
+
 
     void MicrogameSet7()
     {
         if (inputLS_b && inputRS_b)
         {
             Debug.Log("Set 7 Completed!");
-            FindObjectOfType<FishingProgress>().MicrogameBonus();
+            FindObjectOfType<FishingProgress>().MicrogameBonus("Set7");
             Sets["Set7"] = false;
             activeSets.Remove("Set7");
             inactiveSets.Add("Set7");
@@ -604,7 +686,7 @@ public class Test2Script : MonoBehaviour
         dpadInputActive = false;
         yield return new WaitForSeconds(0.5f);
         Debug.Log("Set 3 Completed!");
-        FindObjectOfType<FishingProgress>().MicrogameBonus();
+        FindObjectOfType<FishingProgress>().MicrogameBonus("Set3");
         Sets["Set3"] = false;
         activeSets.Remove("Set3");
         inactiveSets.Add("Set3");
@@ -806,7 +888,7 @@ public class Test2Script : MonoBehaviour
         if (success)
         {
             Debug.Log("Set 4 Completed!");
-            FindObjectOfType<FishingProgress>().MicrogameBonus();
+            FindObjectOfType<FishingProgress>().MicrogameBonus("Set4");
             Sets["Set4"] = false;
             activeSets.Remove("Set4");
             inactiveSets.Add("Set4");
@@ -865,7 +947,7 @@ public class Test2Script : MonoBehaviour
         if (mashSlider.value >= 1f)
         {
             Debug.Log("Set 5 Completed!");
-            FindObjectOfType<FishingProgress>().MicrogameBonus();
+            FindObjectOfType<FishingProgress>().MicrogameBonus("Set5");
             mashActive = false;
             Sets["Set5"] = false;
             activeSets.Remove("Set5");
@@ -933,15 +1015,26 @@ public class Test2Script : MonoBehaviour
     void InitialInactiveSets()
     {
         inactiveSets.Clear();
+        activeSets.Clear();
 
-        foreach (KeyValuePair<string, bool> kvp in Sets)
+        if (InitiateMicrogames.Instance == null)
         {
-            if (kvp.Value == false)
-            {
-                inactiveSets.Add(kvp.Key);
-            }
+            Debug.LogWarning("InitiateMicrogames instance not found!");
+            return;
+        }
+
+        List<string> activeFromZone = InitiateMicrogames.Instance.ActiveMicrogameSets;
+
+        // Clear and repopulate Sets dictionary safely
+        Sets.Clear();
+        foreach (string setName in activeFromZone)
+        {
+            Sets[setName] = false; // Initially inactive
+            inactiveSets.Add(setName);
         }
     }
+
+
 
     void MicrogameStarter()
     {
@@ -1099,11 +1192,60 @@ public class Test2Script : MonoBehaviour
         {
             yield return new WaitForSeconds(2);
             Debug.Log("Set 1 Completed!");
-            FindObjectOfType<FishingProgress>().MicrogameBonus();
+            FindObjectOfType<FishingProgress>().MicrogameBonus("Set1");
             Sets["Set1"] = false;
             activeSets.Remove("Set1");
             inactiveSets.Add("Set1");
             Set1Parent.SetActive(false);
         }
     }
+
+    public void ConfigureFishingZone(FishingZoneType zoneType)
+    {
+        // Always-included sets
+        List<string> requiredSets = new List<string> { "Set3", "Set4", "Set5", "Set7" };
+
+        // Zone-specific sets
+        switch (zoneType)
+        {
+            case FishingZoneType.Pond:
+            case FishingZoneType.BossPond:
+                requiredSets.Add("Set6");
+                break;
+            case FishingZoneType.River:
+            case FishingZoneType.BossRiver:
+                requiredSets.Add("Set1");
+                break;
+            case FishingZoneType.Ocean:
+            case FishingZoneType.BossOcean:
+                requiredSets.Add("Set2");
+                break;
+        }
+
+        // Final boss will manually include all 7 — not handled here
+
+        // Reset sets
+        Sets.Clear();
+        inactiveSets.Clear();
+        activeSets.Clear();
+
+        // Add only required sets to dict and inactive list
+        foreach (string set in requiredSets)
+        {
+            Sets.Add(set, false);
+            inactiveSets.Add(set);
+        }
+
+        // Disable all parent objects
+        Set1Parent.SetActive(false);
+        Set2Parent.SetActive(false);
+        Set3Parent.SetActive(false);
+        Set4Parent.SetActive(false);
+        Set5Parent.SetActive(false);
+        Set6Parent.SetActive(false);
+        Set7Parent.SetActive(false);
+
+        Debug.Log("Fishing zone configured for: " + zoneType);
+    }
+
 }

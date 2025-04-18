@@ -137,10 +137,18 @@ namespace StarterAssets
             _playerInput.actions["ExitFishing"].performed += ctx =>
             {
                 if (isFishing)
+                {
                     EndFishing();
+
+                    var testScript = FindObjectOfType<Test2Script>();
+                    if (testScript != null)
+                        testScript.ClearAll();
+                }
+
                 if (isInShop)
                     ExitShop();
             };
+
 #endif
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         }
@@ -391,6 +399,8 @@ namespace StarterAssets
                     );
                 }
             }
+
+            InitiateMicrogames.Instance.NotifyFishingStarted();
         }
 
         public void EndFishing()
@@ -436,6 +446,9 @@ namespace StarterAssets
             {
                 inFishZone = true;
                 currentZoneType = fishingZone.zoneType;
+                // Update active microgame sets based on zone type
+                InitiateMicrogames.Instance.SetActiveMicrogameSets(currentZoneType);
+
 
                 bool allowedToFish = false;
 
@@ -458,6 +471,7 @@ namespace StarterAssets
                 }
 
                 canFish = allowedToFish;
+                InitiateMicrogames.Instance.SetActiveMicrogameSets(currentZoneType);
 
                 // Find the FishingLookAt inside the FishingZone
                 Transform lookAt = other.transform.Find("FishingLookAt");
