@@ -428,6 +428,9 @@ public class Test2Script : MonoBehaviour
         // Trigger Inputs: combined axis + mouse button detection
         inputLT = Input.GetAxis("LT_Axis") > 0.5f || Input.GetButtonDown(LT);
         inputRT = Input.GetAxis("RT_Axis") > 0.5f || Input.GetButtonDown(RT);
+        Debug.Log("LT Axis: " + Input.GetAxis("LT_Axis"));
+        Debug.Log("RT Axis: " + Input.GetAxis("RT_Axis"));
+
 
         // Joystick button presses (LS/RS press or space fallback)
         inputLS_b = Input.GetButtonDown(LS_b);
@@ -435,6 +438,19 @@ public class Test2Script : MonoBehaviour
 
         // Escape (used for exiting microgame)
         inputEscape = Input.GetButtonDown(Escape);
+
+        for (int i = 0; i < 20; i++)
+        {
+            if (Input.GetKeyDown("joystick button " + i))
+                Debug.Log("Joystick Button Pressed: " + i);
+        }
+
+        for (int i = 1; i <= 10; i++)
+        {
+            float val = Input.GetAxis("Axis " + i);
+            if (Mathf.Abs(val) > 0.1f)
+                Debug.Log("Axis " + i + " = " + val);
+        }
     }
 
 
