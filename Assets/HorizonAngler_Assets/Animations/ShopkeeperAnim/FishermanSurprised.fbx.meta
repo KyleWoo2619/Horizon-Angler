@@ -1,0 +1,812 @@
+fileFormatVersion: 2
+guid: dafd81f830d7bcb43932dc5dfd2bdba5
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: "\nClip 'JacobRig_Root|JacobRig_Root|HA_ShopkeeperSurprised_FBX|Base
+      Layer' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'JacobRig_Ab'
+      has translation animation that will be discarded.\n\t'JacobRig_Neck' has translation
+      animation that will be discarded.\n\t'JacobRig_Head' has translation animation
+      that will be discarded.\n"
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: JacobRig_Root|JacobRig_Root|HA_ShopkeeperSurprised_FBX|Base Layer
+      takeName: JacobRig_Root|JacobRig_Root|HA_ShopkeeperSurprised_FBX|Base Layer
+      internalID: 5897438402082720776
+      firstFrame: 96
+      lastFrame: 377
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human:
+    - boneName: JacobRig_JacobRig
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LThigh
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RThigh
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LShin
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RShin
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LFoot
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RFoot
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_Ab
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_Chest
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_Neck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_Head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LShoulder
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RShoulder
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LUArm
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RUArm
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LFArm
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RFArm
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LHand
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RHand
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LToe
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RToe
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LThumb1
+      humanName: Left Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LThumb2
+      humanName: Left Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LThumb3
+      humanName: Left Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LIndex1
+      humanName: Left Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LIndex2
+      humanName: Left Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LIndex3
+      humanName: Left Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LMiddle1
+      humanName: Left Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LMiddle2
+      humanName: Left Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LMiddle3
+      humanName: Left Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LRing1
+      humanName: Left Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LRing2
+      humanName: Left Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LRing3
+      humanName: Left Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LPinky1
+      humanName: Left Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LPinky2
+      humanName: Left Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_LPinky3
+      humanName: Left Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RThumb1
+      humanName: Right Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RThumb2
+      humanName: Right Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RThumb3
+      humanName: Right Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RIndex1
+      humanName: Right Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RIndex2
+      humanName: Right Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RIndex3
+      humanName: Right Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RMiddle1
+      humanName: Right Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RMiddle2
+      humanName: Right Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RMiddle3
+      humanName: Right Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RRing1
+      humanName: Right Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RRing2
+      humanName: Right Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RRing3
+      humanName: Right Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RPinky1
+      humanName: Right Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RPinky2
+      humanName: Right Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: JacobRig_RPinky3
+      humanName: Right Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: FishermanDemand(Clone)
+      parentName: 
+      position: {x: 0.000000014901161, y: 0, z: 0}
+      rotation: {x: -0.000000037748947, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: JacobRig_JacobRig
+      parentName: FishermanDemand(Clone)
+      position: {x: -0.000000014901161, y: 0.9394538, z: 0.036863625}
+      rotation: {x: -0.026882334, y: -0.024868205, z: 0.007899927, w: 0.99929804}
+      scale: {x: 1, y: 0.9999999, z: 1}
+    - name: JacobRig_Ab
+      parentName: JacobRig_JacobRig
+      position: {x: 0.0000000025331974, y: 0.07358812, z: -0.000000011324882}
+      rotation: {x: -0.014138164, y: 0.00863623, z: 0.00089380547, w: 0.9998624}
+      scale: {x: 1, y: 1, z: 0.9999999}
+    - name: JacobRig_Chest
+      parentName: JacobRig_Ab
+      position: {x: 0.0000000020861626, y: 0.21404806, z: -0.0000000020489097}
+      rotation: {x: -0.06564012, y: 0.0087258285, z: 0.0012845318, w: 0.9978044}
+      scale: {x: 1, y: 1, z: 1}
+    - name: JacobRig_Neck
+      parentName: JacobRig_Chest
+      position: {x: -0.0000000024959443, y: 0.22912298, z: 0.000000019893049}
+      rotation: {x: 0.10788624, y: -0.032323252, z: -0.02243679, w: 0.9933843}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: JacobRig_Head
+      parentName: JacobRig_Neck
+      position: {x: 0.0000000043213366, y: 0.14273673, z: 0.01891285}
+      rotation: {x: 0.07217942, y: -0.03387058, z: -0.010928454, w: 0.9967565}
+      scale: {x: 0.9999998, y: 1, z: 1}
+    - name: JacobRig_LShoulder
+      parentName: JacobRig_Chest
+      position: {x: -0.037718456, y: 0.16104725, z: -0.010899157}
+      rotation: {x: -0.6826112, y: 0.71972126, z: -0.087162934, w: 0.09190167}
+      scale: {x: 0.9999998, y: 0.9999999, z: 0.99999994}
+    - name: JacobRig_LUArm
+      parentName: JacobRig_LShoulder
+      position: {x: 0.0000000834465, y: 0.135598, z: -0.000000019073486}
+      rotation: {x: -0.1299027, y: 0.20848522, z: -0.07633337, w: 0.9663501}
+      scale: {x: 0.9999999, y: 1, z: 0.99999994}
+    - name: JacobRig_LFArm
+      parentName: JacobRig_LUArm
+      position: {x: -0.000000057220458, y: 0.30082196, z: 0.00000011801719}
+      rotation: {x: -0.010243659, y: -0.46219364, z: 0.039601512, w: 0.88583505}
+      scale: {x: 1.0000001, y: 1, z: 1.0000001}
+    - name: JacobRig_LHand
+      parentName: JacobRig_LFArm
+      position: {x: 0.000000009536743, y: 0.23974702, z: -0.000000009536743}
+      rotation: {x: 0.11418712, y: -0.024629887, z: 0.06242914, w: 0.9911899}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: JacobRig_LThumb1
+      parentName: JacobRig_LHand
+      position: {x: 0.028136462, y: 0.024760291, z: -0.039391167}
+      rotation: {x: -0.44140485, y: -0.1776148, z: 0.20312381, w: 0.8557777}
+      scale: {x: 0.99999994, y: 1.0000001, z: 1}
+    - name: JacobRig_LThumb2
+      parentName: JacobRig_LThumb1
+      position: {x: -0.00000004529953, y: 0.029850474, z: 0.000000011920928}
+      rotation: {x: 0.007778017, y: 0.056807674, z: -0.017199963, w: 0.99820673}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: JacobRig_LThumb3
+      parentName: JacobRig_LThumb2
+      position: {x: -0.000000038146972, y: 0.025513386, z: 0.000000028610229}
+      rotation: {x: -0.00000022538009, y: -0.0000004153699, z: 0.00000025425106, w: 1}
+      scale: {x: 1, y: 0.99999994, z: 0.99999994}
+    - name: JacobRig_LIndex1
+      parentName: JacobRig_LHand
+      position: {x: -0.00000007987022, y: 0.1012916, z: -0.03939115}
+      rotation: {x: -0.06301139, y: 0.17693697, z: -0.05748149, w: 0.9805197}
+      scale: {x: 1.0000001, y: 0.99999994, z: 1.0000001}
+    - name: JacobRig_LIndex2
+      parentName: JacobRig_LIndex1
+      position: {x: -0.00000016331673, y: 0.044918075, z: 0.0000000011920929}
+      rotation: {x: 0.00000070035424, y: 0.00000010430808, z: -0.033505622, w: 0.9994385}
+      scale: {x: 1, y: 0.9999999, z: 1.0000001}
+    - name: JacobRig_LIndex3
+      parentName: JacobRig_LIndex2
+      position: {x: 0.00000002503395, y: 0.022458822, z: -0.0000000035762786}
+      rotation: {x: 0.0000000023756255, y: 0.000000006889314, z: -0.19859634, w: 0.9800814}
+      scale: {x: 0.9999999, y: 0.99999994, z: 1}
+    - name: JacobRig_LMiddle1
+      parentName: JacobRig_LHand
+      position: {x: -0.00000014901161, y: 0.101291485, z: -0.013055372}
+      rotation: {x: -0.061342098, y: 0.097070076, z: -0.051394746, w: 0.992055}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+    - name: JacobRig_LMiddle2
+      parentName: JacobRig_LMiddle1
+      position: {x: -0.000000007152557, y: 0.049409922, z: 0.0000000047683715}
+      rotation: {x: -0.00000031664956, y: -0.000000029802312, z: -0.033506792, w: 0.9994386}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: JacobRig_LMiddle3
+      parentName: JacobRig_LMiddle2
+      position: {x: -0.000000015497207, y: 0.026950853, z: 0.000000014305114}
+      rotation: {x: -0.000000007839565, y: 0.000000005226377, z: -0.19859634, w: 0.9800814}
+      scale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
+    - name: JacobRig_LRing1
+      parentName: JacobRig_LHand
+      position: {x: -0.00000010132789, y: 0.095664345, z: 0.013055326}
+      rotation: {x: -0.064903356, y: 0.16863188, z: -0.05638763, w: 0.98192227}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: JacobRig_LRing2
+      parentName: JacobRig_LRing1
+      position: {x: 0.00000007510185, y: 0.044917956, z: 0.000000009536743}
+      rotation: {x: 0.00000043958414, y: 0.000000044703473, z: -0.033508115, w: 0.9994385}
+      scale: {x: 1, y: 1, z: 1}
+    - name: JacobRig_LRing3
+      parentName: JacobRig_LRing2
+      position: {x: -0.000000072121615, y: 0.022458846, z: -0.0000000047683715}
+      rotation: {x: -0.000000008552251, y: 0.000000015916688, z: -0.19859634, w: 0.9800814}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    - name: JacobRig_LPinky1
+      parentName: JacobRig_LHand
+      position: {x: -0.00000021100044, y: 0.090037026, z: 0.039391108}
+      rotation: {x: -0.06559753, y: 0.1638235, z: -0.05599388, w: 0.9827123}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1}
+    - name: JacobRig_LPinky2
+      parentName: JacobRig_LPinky1
+      position: {x: 0.000000067949294, y: 0.035934523, z: 0.000000009536743}
+      rotation: {x: -0.00000017136331, y: 0.00000007450579, z: -0.033502195, w: 0.99943864}
+      scale: {x: 0.99999994, y: 1, z: 0.99999994}
+    - name: JacobRig_LPinky3
+      parentName: JacobRig_LPinky2
+      position: {x: 0.000000028014183, y: 0.017967155, z: 0.000000009536743}
+      rotation: {x: -0.0000000023756257, y: 0.0000000036822194, z: -0.19859634, w: 0.9800814}
+      scale: {x: 0.99999994, y: 0.99999994, z: 1}
+    - name: JacobRig_RShoulder
+      parentName: JacobRig_Chest
+      position: {x: 0.037718464, y: 0.16104734, z: -0.010899167}
+      rotation: {x: -0.09225341, y: 0.098550394, z: -0.67714316, w: 0.72336316}
+      scale: {x: 1, y: 1, z: 0.9999999}
+    - name: JacobRig_RUArm
+      parentName: JacobRig_RShoulder
+      position: {x: -0.00000005483627, y: 0.135598, z: -0.000000007152557}
+      rotation: {x: 0.12373658, y: -0.2894311, z: -0.12211535, w: 0.9412793}
+      scale: {x: 1, y: 1, z: 1}
+    - name: JacobRig_RFArm
+      parentName: JacobRig_RUArm
+      position: {x: 0.000000085830685, y: 0.300822, z: -0.00000011771917}
+      rotation: {x: 0.029305447, y: 0.33771843, z: 0.045140013, w: 0.93970734}
+      scale: {x: 1, y: 0.99999994, z: 0.99999994}
+    - name: JacobRig_RHand
+      parentName: JacobRig_RFArm
+      position: {x: -0.000000024437904, y: 0.23974705, z: 0.000000019073486}
+      rotation: {x: -0.21930674, y: 0.14972655, z: -0.023766939, w: 0.96380585}
+      scale: {x: 1, y: 0.99999994, z: 1.0000001}
+    - name: JacobRig_RThumb1
+      parentName: JacobRig_RHand
+      position: {x: 0.028136406, y: 0.024760213, z: 0.03939113}
+      rotation: {x: 0.3304266, y: 0.3307111, z: 0.29598197, w: 0.8329725}
+      scale: {x: 0.99999994, y: 0.9999999, z: 1}
+    - name: JacobRig_RThumb2
+      parentName: JacobRig_RThumb1
+      position: {x: -0.000000009536743, y: 0.029850625, z: -0.000000019073486}
+      rotation: {x: -0.03270428, y: 0.05099911, z: 0.0068938476, w: 0.9981393}
+      scale: {x: 0.9999999, y: 0.99999994, z: 1.0000001}
+    - name: JacobRig_RThumb3
+      parentName: JacobRig_RThumb2
+      position: {x: 0.000000014305114, y: 0.025513487, z: 0}
+      rotation: {x: 0.00000026449564, y: 0.00000036880377, z: 0.0000002644956, w: 1}
+      scale: {x: 1, y: 0.9999999, z: 0.99999994}
+    - name: JacobRig_RIndex1
+      parentName: JacobRig_RHand
+      position: {x: -0.00000007152557, y: 0.10129146, z: 0.03939111}
+      rotation: {x: 0.13773426, y: 0.16138129, z: 0.028345967, w: 0.9768223}
+      scale: {x: 0.99999994, y: 0.99999994, z: 0.9999998}
+    - name: JacobRig_RIndex2
+      parentName: JacobRig_RIndex1
+      position: {x: 0.00000019073485, y: 0.04491822, z: 0.000000057220458}
+      rotation: {x: 0.0000005811452, y: 0.000000044703473, z: -0.033510186, w: 0.9994384}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: JacobRig_RIndex3
+      parentName: JacobRig_RIndex2
+      position: {x: -0.0000000667572, y: 0.022458915, z: 0.000000019073486}
+      rotation: {x: 0.000000027319695, y: 0.0000000033258762, z: -0.19859634, w: 0.9800814}
+      scale: {x: 1, y: 1, z: 1}
+    - name: JacobRig_RMiddle1
+      parentName: JacobRig_RHand
+      position: {x: -0.00000019609928, y: 0.101291455, z: 0.013055325}
+      rotation: {x: 0.023505328, y: 0.07901188, z: 0.026502052, w: 0.9962441}
+      scale: {x: 0.99999994, y: 0.99999994, z: 0.9999999}
+    - name: JacobRig_RMiddle2
+      parentName: JacobRig_RMiddle1
+      position: {x: -0.000000104904174, y: 0.04940992, z: -0.0000000047683715}
+      rotation: {x: -0.00000083446474, y: -0.000000029802312, z: -0.03350712, w: 0.9994385}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: JacobRig_RMiddle3
+      parentName: JacobRig_RMiddle2
+      position: {x: -0.000000005960464, y: 0.026950806, z: 0.000000009536743}
+      rotation: {x: 0.00000004561202, y: -0.000000012353255, z: -0.19859634, w: 0.9800814}
+      scale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
+    - name: JacobRig_RRing1
+      parentName: JacobRig_RHand
+      position: {x: 0.000000022947788, y: 0.09566423, z: -0.0130553385}
+      rotation: {x: -0.016753, y: -0.07889224, z: 0.011004125, w: 0.99668163}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: JacobRig_RRing2
+      parentName: JacobRig_RRing1
+      position: {x: 0.000000052237883, y: 0.04491812, z: 0.000000010728836}
+      rotation: {x: 0.0000023003656, y: 0.00000017136327, z: -0.03350173, w: 0.9994387}
+      scale: {x: 0.9999998, y: 0.9999998, z: 0.9999999}
+    - name: JacobRig_RRing3
+      parentName: JacobRig_RRing2
+      position: {x: 0.00000016890466, y: 0.022458948, z: -0.000000009536743}
+      rotation: {x: -0.0000000066517516, y: 0.000000009027377, z: -0.19859634, w: 0.9800814}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: JacobRig_RPinky1
+      parentName: JacobRig_RHand
+      position: {x: -0.0000000340119, y: 0.09003684, z: -0.03939114}
+      rotation: {x: -0.016344482, y: -0.15764453, z: -0.008804506, w: 0.98732144}
+      scale: {x: 0.9999998, y: 0.99999994, z: 0.9999998}
+    - name: JacobRig_RPinky2
+      parentName: JacobRig_RPinky1
+      position: {x: -0.000000017732381, y: 0.03593447, z: 0.000000032186506}
+      rotation: {x: -0.000002598389, y: -0.00000052154047, z: -0.033505335, w: 0.9994386}
+      scale: {x: 1, y: 1, z: 1}
+    - name: JacobRig_RPinky3
+      parentName: JacobRig_RPinky2
+      position: {x: 0.00000011056661, y: 0.017967165, z: 0.000000021457671}
+      rotation: {x: 9.502492e-10, y: 0.00000007506977, z: -0.19859634, w: 0.9800814}
+      scale: {x: 0.99999994, y: 0.99999994, z: 1}
+    - name: JacobRig_LThigh
+      parentName: JacobRig_JacobRig
+      position: {x: -0.09456425, y: -0.000000047683713, z: -0.000000017285346}
+      rotation: {x: 0.9981555, y: 0.0011469414, z: 0.060294352, w: -0.006998135}
+      scale: {x: 0.99999994, y: 1.0000001, z: 0.9999999}
+    - name: JacobRig_LShin
+      parentName: JacobRig_LThigh
+      position: {x: -0.000000009536743, y: 0.45615402, z: 0.0000000023841857}
+      rotation: {x: 0.16680846, y: 0.000000035450388, z: -0.000000010626261, w: 0.98598933}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: JacobRig_LFoot
+      parentName: JacobRig_LShin
+      position: {x: -2.9802322e-10, y: 0.41599998, z: 0.0000000035762786}
+      rotation: {x: -0.8096312, y: 0.07615122, z: 0.08471728, w: 0.5757789}
+      scale: {x: 0.9999999, y: 0.9999999, z: 0.9999997}
+    - name: JacobRig_LToe
+      parentName: JacobRig_LFoot
+      position: {x: -0.0000000048056243, y: 0.14184637, z: 0.06146676}
+      rotation: {x: 0.012568643, y: -0.0000000026923173, z: 0.00000007511929, w: 0.999921}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: JacobRig_RThigh
+      parentName: JacobRig_JacobRig
+      position: {x: 0.09456425, y: -0.000000065937634, z: -0.000000021755694}
+      rotation: {x: 0.9981214, y: 0.014041884, z: -0.058585756, w: -0.011151145}
+      scale: {x: 1, y: 0.9999999, z: 0.9999999}
+    - name: JacobRig_RShin
+      parentName: JacobRig_RThigh
+      position: {x: 0.000000001490116, y: 0.45615405, z: 0.0000000017881393}
+      rotation: {x: 0.14491439, y: 0.000000029649643, z: -0.000000005118095, w: 0.98944426}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: JacobRig_RFoot
+      parentName: JacobRig_RShin
+      position: {x: 0.000000006854534, y: 0.41599998, z: -0.0000000023841857}
+      rotation: {x: -0.7913444, y: -0.08936778, z: -0.08370318, w: 0.59898365}
+      scale: {x: 1, y: 0.9999999, z: 0.99999976}
+    - name: JacobRig_RToe
+      parentName: JacobRig_RFoot
+      position: {x: 0.000000006854534, y: 0.14184639, z: 0.061466753}
+      rotation: {x: -0.0031657517, y: 0.0000000020954862, z: -0.000000008876714, w: 0.999995}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 31880390128d4114687ffd42efc1ff41,
+    type: 3}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 3
+  humanoidOversampling: 1
+  avatarSetup: 2
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
