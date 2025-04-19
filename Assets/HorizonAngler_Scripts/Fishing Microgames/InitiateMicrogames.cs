@@ -33,6 +33,7 @@ public class InitiateMicrogames : MonoBehaviour
     private float castLockoutTimer = 0f;
     public enum FishZoneType
     {
+        Tutorial,
         Pond,
         River,
         Ocean,

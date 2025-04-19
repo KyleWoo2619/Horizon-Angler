@@ -64,6 +64,7 @@ public class FishingProgress : MonoBehaviour
         public Sprite fishSprite;
     }
 
+    public List<Fish> tutorialFishPool = new List<Fish>();
     public List<Fish> pondFishPool = new List<Fish>();
     public List<Fish> riverFishPool = new List<Fish>();
     public List<Fish> oceanFishPool = new List<Fish>();
@@ -117,6 +118,15 @@ public class FishingProgress : MonoBehaviour
 
     [HideInInspector]
     public FishZoneType activeZoneType;
+
+    [Header("Level Settings")]
+    public bool isTutorialLevel = false;
+    public string nextSceneToLoad = "PondScene"; // assign in Inspector
+    [SerializeField] private AudioSource musicSource;
+
+    [Header("Cutscene")]
+    public CutsceneManager cutsceneManager;
+
 
     private void Awake()
     {
@@ -343,15 +353,63 @@ public class FishingProgress : MonoBehaviour
 
     void OnProgressMax()
     {
-        Debug.Log("Player successfully caught the fish!");
-
-        hasCaughtFish = true;
-
-        PickRandomFish();
-        ShowFishCaughtScreen();
+        if (isTutorialLevel)
+        {
+            StartCoroutine(PlayCutsceneThenLoad());
+        }
+        else
+        {
+            Debug.Log("Player successfully caught the fish!");
+            hasCaughtFish = true;
+            PickRandomFish();
+            ShowFishCaughtScreen();
+        }
 
         T2S.microgamesActive = false;
         T2S.ClearAll();
+    }
+
+    IEnumerator PlayCutsceneThenLoad()
+    {
+        HAPlayerController player = FindObjectOfType<HAPlayerController>();
+        if (player != null)
+        {
+            player.EndFishing();
+            player.inFishZone = false;
+            player.canFish = false;
+            if (player.fishingPromptUI != null)
+                player.fishingPromptUI.SetActive(false);
+        }
+
+        // Fade out music if available
+        AudioSource music = GameObject.FindWithTag("Music")?.GetComponent<AudioSource>();
+        if (music != null)
+        {
+            float startVol = music.volume;
+            float duration = 1.5f;
+            float time = 0f;
+
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                music.volume = Mathf.Lerp(startVol, 0f, time / duration);
+                yield return null;
+            }
+            music.volume = 0f;
+        }
+
+        // Play cutscene
+        if (cutsceneManager != null)
+        {
+            cutsceneManager.PlayCutscene();
+            while (cutsceneManager.IsCutscenePlaying())
+            {
+                yield return null;
+            }
+        }
+
+        // Load next scene
+        UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneToLoad);
     }
 
     void OnProgressMin()
@@ -383,6 +441,9 @@ public class FishingProgress : MonoBehaviour
     {
         switch (zoneType)
         {
+            case FishZoneType.Tutorial:
+                activeFishPool = tutorialFishPool; 
+                break;
             case FishZoneType.Pond:
                 activeFishPool = pondFishPool;
                 break;

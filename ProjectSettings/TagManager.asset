@@ -10,6 +10,7 @@ TagManager:
   - FishingZone
   - ObstacleDestroyer
   - Rod
+  - Music
   layers:
   - Default
   - TransparentFX

@@ -6,6 +6,12 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class ObjectiveTextManager : MonoBehaviour
 {
+    public enum LevelType { Tutorial, Pond, River, Ocean, Boss }
+
+    [Header("Level Type")]
+    public LevelType currentLevel;
+
+    
     [Header("References")]
     public CanvasGroup objectiveCanvas;           // <-- New: Whole CanvasGroup for hiding/showing
     public TextMeshProUGUI objectiveText;
@@ -51,23 +57,47 @@ public class ObjectiveTextManager : MonoBehaviour
 
     private void UpdateObjective()
     {
-        if (player.hasTurnedInScroll)
+        if (currentLevel == LevelType.Tutorial)
         {
-            objectiveText.text = "Travel to the river for more exciting fishing.";
+            objectiveText.text = "It's your day off. Time to relax and do what you love—go fish in the pond and enjoy the quiet.";
         }
-        else if (player.caughtPondBoss)
+        else if (currentLevel == LevelType.Pond)
         {
-            objectiveText.text = "Talk to the shopkeeper about the strange scroll.";
+            if (player.hasTurnedInScroll)
+            {
+                objectiveText.text = "Travel to the river for more exciting fishing.";
+            }
+            else if (player.caughtPondBoss)
+            {
+                objectiveText.text = "Talk to the shopkeeper about the strange scroll.";
+            }
+            else if (player.canFishPondBoss)
+            {
+                objectiveText.text = "Check out the strange spot for newer fish.";
+            }
+            else
+            {
+                objectiveText.text = "Enjoy fishing in the pond.";
+            }
         }
-        else if (player.canFishPondBoss)
+        else if (currentLevel == LevelType.River)
         {
-            objectiveText.text = "Check out the strange spot for newer fish.";
+            objectiveText.text = "River currents are tricky. Time your casts!";
+        }
+        else if (currentLevel == LevelType.Ocean)
+        {
+            objectiveText.text = "Strange glowing fish can be found here.";
+        }
+        else if (currentLevel == LevelType.Boss)
+        {
+            objectiveText.text = "This is it. Be ready for the final battle.";
         }
         else
         {
-            objectiveText.text = "Enjoy fishing in the pond.";
+            objectiveText.text = "Explore the waters.";
         }
     }
+
 
     public void SetScrollAcquired()
     {

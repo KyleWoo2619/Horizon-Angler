@@ -454,6 +454,7 @@ namespace StarterAssets
 
                 switch (currentZoneType)
                 {
+                    case InitiateMicrogames.FishZoneType.Tutorial:
                     case InitiateMicrogames.FishZoneType.Pond:
                     case InitiateMicrogames.FishZoneType.River:
                     case InitiateMicrogames.FishZoneType.Ocean:

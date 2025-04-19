@@ -101,4 +101,9 @@ public class CutsceneManager : MonoBehaviour
             Time.timeScale = 1f;  // Resume game
         }
     }
+
+    public bool IsCutscenePlaying()
+    {
+        return isCutscenePlaying;
+    }
 }
