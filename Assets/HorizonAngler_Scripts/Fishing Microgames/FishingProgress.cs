@@ -416,20 +416,22 @@ public class FishingProgress : MonoBehaviour
             fishCaughtText.text = $"Caught {currentCaughtFish.fishName}!";
             fishCaughtScreenActive = true;
             fishCaughtTimer = 0f;
-            // Save to Fishing Log
+
+            // Save to in-game fishing log
             string caughtTime = System.DateTime.Now.ToString("HH:mm:ss");
             string caughtDate = System.DateTime.Now.ToString("MM/dd/yyyy");
 
             HAPlayerController player = FindObjectOfType<HAPlayerController>();
-            fishingLog.Add(
-                new FishingLogEntry(
-                    currentCaughtFish.fishName,
-                    currentCaughtFish.fishSprite,
-                    caughtDate,
-                    caughtTime,
-                    activeZoneType
-                )
-            );
+            fishingLog.Add(new FishingLogEntry(
+                currentCaughtFish.fishName,
+                currentCaughtFish.fishSprite,
+                caughtDate,
+                caughtTime,
+                activeZoneType
+            ));
+
+            // Delegate all save-related tracking to GameManager
+            GameManager.Instance.RecordFishCatch(currentCaughtFish.fishName);
 
             Debug.Log($"Caught {currentCaughtFish.fishName} at {caughtTime} on {caughtDate}");
 
@@ -441,6 +443,8 @@ public class FishingProgress : MonoBehaviour
 
         CheckUnlockBossFishing();
     }
+
+
 
     public int GetNormalFishCaughtCount(InitiateMicrogames.FishZoneType zoneType)
     {
@@ -462,60 +466,74 @@ public class FishingProgress : MonoBehaviour
         if (fishingLog.Count == 0)
             return;
 
-        // Use the zone of the fish you just caught
-        InitiateMicrogames.FishZoneType fishZone = fishingLog[fishingLog.Count - 1].zoneCaught;
+        var lastEntry = fishingLog[fishingLog.Count - 1];
+        var fishName = lastEntry.fishName;
+        var fishZone = lastEntry.zoneCaught;
 
+        bool isBoss = IsBossFish(fishName);
         bool bossUnlocked = false;
 
-        if (player != null)
+        // Check and update save data
+        switch (fishZone)
         {
-            switch (fishZone)
-            {
-                case InitiateMicrogames.FishZoneType.Pond:
-                    if (!player.canFishPondBoss && GetNormalFishCaughtCount(fishZone) >= 3)
-                    {
-                        player.canFishPondBoss = true;
-                        bossUnlocked = true;
-                    }
-                    break;
-                case InitiateMicrogames.FishZoneType.River:
-                    if (!player.canFishRiverBoss && GetNormalFishCaughtCount(fishZone) >= 3)
-                    {
-                        player.canFishRiverBoss = true;
-                        bossUnlocked = true;
-                    }
-                    break;
-                case InitiateMicrogames.FishZoneType.Ocean:
-                    if (!player.canFishOceanBoss && GetNormalFishCaughtCount(fishZone) >= 3)
-                    {
-                        player.canFishOceanBoss = true;
-                        bossUnlocked = true;
-                    }
-                    break;
-            }
+            case FishZoneType.Pond:
+                if (isBoss)
+                {
+                    GameManager.Instance.currentSaveData.hasCaughtPondBoss = true;
+                }
+                else if (!GameManager.Instance.currentSaveData.canFishPondBoss &&
+                         GetNormalFishCaughtCount(fishZone) >= 3)
+                {
+                    GameManager.Instance.currentSaveData.canFishPondBoss = true;
+                    bossUnlocked = true;
+                }
+                break;
+
+            case FishZoneType.River:
+                if (isBoss)
+                {
+                    GameManager.Instance.currentSaveData.hasCaughtRiverBoss = true;
+                }
+                else if (!GameManager.Instance.currentSaveData.canFishRiverBoss &&
+                         GetNormalFishCaughtCount(fishZone) >= 3)
+                {
+                    GameManager.Instance.currentSaveData.canFishRiverBoss = true;
+                    bossUnlocked = true;
+                }
+                break;
+
+            case FishZoneType.Ocean:
+                if (isBoss)
+                {
+                    GameManager.Instance.currentSaveData.hasCaughtOceanBoss = true;
+                }
+                else if (!GameManager.Instance.currentSaveData.canFishOceanBoss &&
+                         GetNormalFishCaughtCount(fishZone) >= 3)
+                {
+                    GameManager.Instance.currentSaveData.canFishOceanBoss = true;
+                    bossUnlocked = true;
+                }
+                break;
         }
 
         if (bossUnlocked)
         {
-            string zoneName = "";
-
-            switch (fishZone)
+            string message = fishZone switch
             {
-                case InitiateMicrogames.FishZoneType.Pond:
-                    zoneName = "You feel a sudden stir in the water. A new fishing spot appeared.";
-                    break;
-                case InitiateMicrogames.FishZoneType.River:
-                    zoneName = "River Boss";
-                    break;
-                case InitiateMicrogames.FishZoneType.Ocean:
-                    zoneName = "Ocean Boss";
-                    break;
-            }
+                FishZoneType.Pond => "You feel a sudden stir in the water. A new fishing spot appeared.",
+                FishZoneType.River => "You sense a powerful current... something new awaits in the river.",
+                FishZoneType.Ocean => "A massive shape moves in the deep... a new fishing spot appears.",
+                _ => "Boss fishing unlocked!"
+            };
 
-            Debug.Log($"{zoneName} fishing is now UNLOCKED!");
-            ShowNotification(zoneName);
+            ShowNotification(message);
         }
+
+        // Save after any potential changes
+        SaveManager.Save(GameManager.Instance.currentSaveData);
     }
+
+
 
     public void ShowNotification(string message)
     {
