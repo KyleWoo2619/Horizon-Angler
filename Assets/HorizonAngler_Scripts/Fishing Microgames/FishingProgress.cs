@@ -26,11 +26,11 @@ public class FishingProgress : MonoBehaviour
     Dictionary<string, float> setDecayWeights = new Dictionary<string, float>()
     {
         { "Set1", -0.5f },    // Undertale
-        { "Set2", 0.1f },     // Whirlpool // Placeholder until Set2 is implemented
+        { "Set2", 1.5f },     // Whirlpool 
         { "Set3", 1.3f },     // Button Combo
         { "Set4", 0.3f },     // Memory
         { "Set5", 1f },       // Mashing
-        { "Set6", 0.1f },     // Rod Alignment // Placeholder until Set6 is implemented
+        { "Set6", 0.1f },     // Rod Alignment 
         { "Set7", 1.8f },     // Reaction  
     };
 
@@ -38,7 +38,7 @@ public class FishingProgress : MonoBehaviour
     public Dictionary<string, float> microgameBonusValues = new Dictionary<string, float>()
 {
     { "Set1", 15f },
-    { "Set2", 15f },
+    { "Set2", 22f },
     { "Set3", 15f },
     { "Set4", 15f },
     { "Set5", 15f },
@@ -64,7 +64,6 @@ public class FishingProgress : MonoBehaviour
         public Sprite fishSprite;
     }
 
-    public List<Fish> tutorialFishPool = new List<Fish>();
     public List<Fish> pondFishPool = new List<Fish>();
     public List<Fish> riverFishPool = new List<Fish>();
     public List<Fish> oceanFishPool = new List<Fish>();
@@ -118,15 +117,6 @@ public class FishingProgress : MonoBehaviour
 
     [HideInInspector]
     public FishZoneType activeZoneType;
-
-    [Header("Level Settings")]
-    public bool isTutorialLevel = false;
-    public string nextSceneToLoad = "PondScene"; // assign in Inspector
-    [SerializeField] private AudioSource musicSource;
-
-    [Header("Cutscene")]
-    public CutsceneManager cutsceneManager;
-
 
     private void Awake()
     {
@@ -353,63 +343,15 @@ public class FishingProgress : MonoBehaviour
 
     void OnProgressMax()
     {
-        if (isTutorialLevel)
-        {
-            StartCoroutine(PlayCutsceneThenLoad());
-        }
-        else
-        {
-            Debug.Log("Player successfully caught the fish!");
-            hasCaughtFish = true;
-            PickRandomFish();
-            ShowFishCaughtScreen();
-        }
+        Debug.Log("Player successfully caught the fish!");
+
+        hasCaughtFish = true;
+
+        PickRandomFish();
+        ShowFishCaughtScreen();
 
         T2S.microgamesActive = false;
         T2S.ClearAll();
-    }
-
-    IEnumerator PlayCutsceneThenLoad()
-    {
-        HAPlayerController player = FindObjectOfType<HAPlayerController>();
-        if (player != null)
-        {
-            player.EndFishing();
-            player.inFishZone = false;
-            player.canFish = false;
-            if (player.fishingPromptUI != null)
-                player.fishingPromptUI.SetActive(false);
-        }
-
-        // Fade out music if available
-        AudioSource music = GameObject.FindWithTag("Music")?.GetComponent<AudioSource>();
-        if (music != null)
-        {
-            float startVol = music.volume;
-            float duration = 1.5f;
-            float time = 0f;
-
-            while (time < duration)
-            {
-                time += Time.deltaTime;
-                music.volume = Mathf.Lerp(startVol, 0f, time / duration);
-                yield return null;
-            }
-            music.volume = 0f;
-        }
-
-        // Play cutscene
-        if (cutsceneManager != null)
-        {
-            cutsceneManager.PlayCutscene();
-            while (cutsceneManager.IsCutscenePlaying())
-            {
-                yield return null;
-            }
-        }
-
-        // Load next scene
-        UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneToLoad);
     }
 
     void OnProgressMin()
@@ -441,9 +383,6 @@ public class FishingProgress : MonoBehaviour
     {
         switch (zoneType)
         {
-            case FishZoneType.Tutorial:
-                activeFishPool = tutorialFishPool; 
-                break;
             case FishZoneType.Pond:
                 activeFishPool = pondFishPool;
                 break;
@@ -477,20 +416,22 @@ public class FishingProgress : MonoBehaviour
             fishCaughtText.text = $"Caught {currentCaughtFish.fishName}!";
             fishCaughtScreenActive = true;
             fishCaughtTimer = 0f;
-            // Save to Fishing Log
+
+            // Save to in-game fishing log
             string caughtTime = System.DateTime.Now.ToString("HH:mm:ss");
             string caughtDate = System.DateTime.Now.ToString("MM/dd/yyyy");
 
             HAPlayerController player = FindObjectOfType<HAPlayerController>();
-            fishingLog.Add(
-                new FishingLogEntry(
-                    currentCaughtFish.fishName,
-                    currentCaughtFish.fishSprite,
-                    caughtDate,
-                    caughtTime,
-                    activeZoneType
-                )
-            );
+            fishingLog.Add(new FishingLogEntry(
+                currentCaughtFish.fishName,
+                currentCaughtFish.fishSprite,
+                caughtDate,
+                caughtTime,
+                activeZoneType
+            ));
+
+            // Delegate all save-related tracking to GameManager
+            GameManager.Instance.RecordFishCatch(currentCaughtFish.fishName);
 
             Debug.Log($"Caught {currentCaughtFish.fishName} at {caughtTime} on {caughtDate}");
 
@@ -502,6 +443,8 @@ public class FishingProgress : MonoBehaviour
 
         CheckUnlockBossFishing();
     }
+
+
 
     public int GetNormalFishCaughtCount(InitiateMicrogames.FishZoneType zoneType)
     {
@@ -523,60 +466,74 @@ public class FishingProgress : MonoBehaviour
         if (fishingLog.Count == 0)
             return;
 
-        // Use the zone of the fish you just caught
-        InitiateMicrogames.FishZoneType fishZone = fishingLog[fishingLog.Count - 1].zoneCaught;
+        var lastEntry = fishingLog[fishingLog.Count - 1];
+        var fishName = lastEntry.fishName;
+        var fishZone = lastEntry.zoneCaught;
 
+        bool isBoss = IsBossFish(fishName);
         bool bossUnlocked = false;
 
-        if (player != null)
+        // Check and update save data
+        switch (fishZone)
         {
-            switch (fishZone)
-            {
-                case InitiateMicrogames.FishZoneType.Pond:
-                    if (!player.canFishPondBoss && GetNormalFishCaughtCount(fishZone) >= 3)
-                    {
-                        player.canFishPondBoss = true;
-                        bossUnlocked = true;
-                    }
-                    break;
-                case InitiateMicrogames.FishZoneType.River:
-                    if (!player.canFishRiverBoss && GetNormalFishCaughtCount(fishZone) >= 3)
-                    {
-                        player.canFishRiverBoss = true;
-                        bossUnlocked = true;
-                    }
-                    break;
-                case InitiateMicrogames.FishZoneType.Ocean:
-                    if (!player.canFishOceanBoss && GetNormalFishCaughtCount(fishZone) >= 3)
-                    {
-                        player.canFishOceanBoss = true;
-                        bossUnlocked = true;
-                    }
-                    break;
-            }
+            case FishZoneType.Pond:
+                if (isBoss)
+                {
+                    GameManager.Instance.currentSaveData.hasCaughtPondBoss = true;
+                }
+                else if (!GameManager.Instance.currentSaveData.canFishPondBoss &&
+                         GetNormalFishCaughtCount(fishZone) >= 3)
+                {
+                    GameManager.Instance.currentSaveData.canFishPondBoss = true;
+                    bossUnlocked = true;
+                }
+                break;
+
+            case FishZoneType.River:
+                if (isBoss)
+                {
+                    GameManager.Instance.currentSaveData.hasCaughtRiverBoss = true;
+                }
+                else if (!GameManager.Instance.currentSaveData.canFishRiverBoss &&
+                         GetNormalFishCaughtCount(fishZone) >= 3)
+                {
+                    GameManager.Instance.currentSaveData.canFishRiverBoss = true;
+                    bossUnlocked = true;
+                }
+                break;
+
+            case FishZoneType.Ocean:
+                if (isBoss)
+                {
+                    GameManager.Instance.currentSaveData.hasCaughtOceanBoss = true;
+                }
+                else if (!GameManager.Instance.currentSaveData.canFishOceanBoss &&
+                         GetNormalFishCaughtCount(fishZone) >= 3)
+                {
+                    GameManager.Instance.currentSaveData.canFishOceanBoss = true;
+                    bossUnlocked = true;
+                }
+                break;
         }
 
         if (bossUnlocked)
         {
-            string zoneName = "";
-
-            switch (fishZone)
+            string message = fishZone switch
             {
-                case InitiateMicrogames.FishZoneType.Pond:
-                    zoneName = "You feel a sudden stir in the water. A new fishing spot appeared.";
-                    break;
-                case InitiateMicrogames.FishZoneType.River:
-                    zoneName = "River Boss";
-                    break;
-                case InitiateMicrogames.FishZoneType.Ocean:
-                    zoneName = "Ocean Boss";
-                    break;
-            }
+                FishZoneType.Pond => "You feel a sudden stir in the water. A new fishing spot appeared.",
+                FishZoneType.River => "You sense a powerful current... something new awaits in the river.",
+                FishZoneType.Ocean => "A massive shape moves in the deep... a new fishing spot appears.",
+                _ => "Boss fishing unlocked!"
+            };
 
-            Debug.Log($"{zoneName} fishing is now UNLOCKED!");
-            ShowNotification(zoneName);
+            ShowNotification(message);
         }
+
+        // Save after any potential changes
+        SaveManager.Save(GameManager.Instance.currentSaveData);
     }
+
+
 
     public void ShowNotification(string message)
     {
