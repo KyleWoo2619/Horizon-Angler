@@ -60,6 +60,7 @@ namespace StarterAssets
         private Quaternion _originalShopCameraRotation;
         public GameObject foundScrollButton;
         public bool hasTurnedInScroll = false;
+        public bool hasMovedShop = false;
 
         [Header("Camera Settings")]
         public GameObject CinemachineCameraTarget;

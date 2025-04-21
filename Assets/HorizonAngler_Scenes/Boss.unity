@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 10756, guid: 0000000000000000e000000000000000, type: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -4353,6 +4353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3a085f8cf664b4282b874b084c6ec0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentLevel: 0
   objectiveCanvas: {fileID: 1717279067}
   objectiveText: {fileID: 899804463}
   objectiveUpdateSign: {fileID: 2109391750}
@@ -43103,7 +43104,7 @@ GameObject:
   - component: {fileID: 775653248610780620}
   - component: {fileID: 6270778167759228602}
   m_Layer: 0
-  m_Name: FishingZone_BossPond
+  m_Name: FishingZone_Ocean
   m_TagString: FishingZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43134,7 +43135,7 @@ GameObject:
   - component: {fileID: 775653248636453825}
   - component: {fileID: 6270778167768123573}
   m_Layer: 0
-  m_Name: FishingZone_Pond
+  m_Name: FishingZone_Tutorial
   m_TagString: FishingZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43165,7 +43166,7 @@ GameObject:
   - component: {fileID: 775653248747773034}
   - component: {fileID: 6270778167896545056}
   m_Layer: 0
-  m_Name: FishingZone_Pond
+  m_Name: FishingZone_Tutorial
   m_TagString: FishingZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43196,7 +43197,7 @@ GameObject:
   - component: {fileID: 775653249449485661}
   - component: {fileID: 6270778169604894249}
   m_Layer: 0
-  m_Name: FishingZone_Pond
+  m_Name: FishingZone_Tutorial
   m_TagString: FishingZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

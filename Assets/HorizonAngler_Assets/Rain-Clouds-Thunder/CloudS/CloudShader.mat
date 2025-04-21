@@ -53,7 +53,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0.25
     - _CloudAlpha: 25
-    - _CloudPower: 1.25
+    - _CloudPower: 1.99
     - _CloudScale: 200
     - _DistorSpeed: 0.001
     - _Distortion: 100
