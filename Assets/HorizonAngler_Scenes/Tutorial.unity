@@ -2540,7 +2540,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00018310547, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!328 &184353841
@@ -6383,7 +6383,7 @@ MonoBehaviour:
   videoPlayer: {fileID: 184353841}
   cutsceneRawImage: {fileID: 184353842}
   cutsceneCanvas: {fileID: 1876944555}
-  rewardUIPanel: {fileID: 891242728}
+  rewardUIPanel: {fileID: 0}
 --- !u!4 &388478089
 Transform:
   m_ObjectHideFlags: 0
@@ -15639,6 +15639,11 @@ PrefabInstance:
       objectReference: {fileID: 1458936303}
     - target: {fileID: 4673737751652137396, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
+      propertyPath: TutorialFishLocation
+      value: 
+      objectReference: {fileID: 6270778169604894248}
+    - target: {fileID: 4673737751652137396, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
       propertyPath: notificationTextShadow
       value: 
       objectReference: {fileID: 655903348}
@@ -24390,18 +24395,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 746814659}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 8221879815040523556}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -24414,7 +24407,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 215502873}
+      - m_Target: {fileID: 746814659}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -46350,18 +46343,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8221879815040523556}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 746814659}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -46374,7 +46355,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 215502873}
+      - m_Target: {fileID: 8221879815040523556}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -46384,7 +46365,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!224 &7758310415467666660
 RectTransform:

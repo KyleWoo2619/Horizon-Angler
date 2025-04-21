@@ -5,11 +5,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static InitiateMicrogames;
+using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 
 public class FishingProgress : MonoBehaviour
 {
     private HAPlayerController playerController;
     public GameObject BossfishLocation;
+    public GameObject TutorialFishLocation;
     public float progress;
     public Slider progressSlider;
 
@@ -343,17 +346,68 @@ public class FishingProgress : MonoBehaviour
 
     void OnProgressMax()
     {
-        Debug.Log("Player successfully caught the fish!");
+        if (activeZoneType == FishZoneType.Tutorial)
+        {
+            hasCaughtFish = true;
+            HAPlayerController player = FindObjectOfType<HAPlayerController>();
+            player.inFishZone = false;
+            player.canFish = false;
+            player.EndFishing();
+            
 
-        hasCaughtFish = true;
+            Debug.Log("Tutorial fish caught! Triggering tutorial cutscene...");
 
-        PickRandomFish();
-        ShowFishCaughtScreen();
+            CutsceneManager cutsceneManager = FindObjectOfType<CutsceneManager>();
+            if (cutsceneManager != null)
+            {
+                GameObject musicObject = GameObject.FindWithTag("Music");
+                if (musicObject != null)
+                {
+                    AudioSource musicSource = musicObject.GetComponent<AudioSource>();
+                    if (musicSource != null && musicSource.isPlaying)
+                    {
+                        musicSource.Stop();
+                    }
+                }
+                cutsceneManager.PlayCutscene();
+                cutsceneManager.videoPlayer.loopPointReached += OnTutorialCutsceneFinished;
+            }
+            else
+            {
+                Debug.LogWarning("CutsceneManager not found for tutorial region!");
+            }
+            TutorialFishLocation.SetActive(false);
 
-        T2S.microgamesActive = false;
-        T2S.ClearAll();
+            
+            T2S.microgamesActive = false;
+            T2S.ClearAll();
+            
+        }
+        else
+        {
+            Debug.Log("Player successfully caught the fish!");
+
+            hasCaughtFish = true;
+
+            PickRandomFish();
+            ShowFishCaughtScreen();
+
+            T2S.microgamesActive = false;
+            T2S.ClearAll();
+        }
     }
 
+    private void OnTutorialCutsceneFinished(VideoPlayer vp)
+    {
+        Debug.Log("Cutscene ended. Loading MainRegion scene...");
+        
+        // Unsubscribe so it doesn't fire again
+        vp.loopPointReached -= OnTutorialCutsceneFinished;
+
+        // Load the new scene
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Pond"); // replace with actual scene name
+    }
+    
     void OnProgressMin()
     {
         Debug.Log("Player failed to catch the fish...");
