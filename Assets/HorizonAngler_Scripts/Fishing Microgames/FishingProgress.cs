@@ -399,14 +399,24 @@ public class FishingProgress : MonoBehaviour
 
     private void OnTutorialCutsceneFinished(VideoPlayer vp)
     {
-        Debug.Log("Cutscene ended. Loading MainRegion scene...");
-        
+        Debug.Log("Cutscene ended. Loading PostTutorial scene...");
+
         // Unsubscribe so it doesn't fire again
         vp.loopPointReached -= OnTutorialCutsceneFinished;
 
-        // Load the new scene
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Pond"); // replace with actual scene name
-    }
+        // Find the LoadingManager in the scene
+        LoadingManager loadingManager = FindObjectOfType<LoadingManager>();
+        if (loadingManager != null)
+        {
+            loadingManager.LoadSceneWithLoadingScreen("PostTutorial");
+        }
+        else
+        {
+            Debug.LogWarning("LoadingManager not found! Loading scene directly.");
+            SceneManager.LoadScene("PostTutorial"); // Fallback
+        }
+}
+
     
     void OnProgressMin()
     {
