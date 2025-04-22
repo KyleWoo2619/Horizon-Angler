@@ -645,4 +645,17 @@ public class FishingProgress : MonoBehaviour
         }
         canvasGroup.alpha = end;
     }
+
+    public void Clear()
+    {
+        progress = 0f;
+        progressSlider.value = 0f;
+
+        memorySetupActive = false;
+        hasCaughtFish = false;
+        fishCaughtScreenActive = false;
+
+        Debug.Log("[FishingProgress] Reset complete.");
+    }
+
 }

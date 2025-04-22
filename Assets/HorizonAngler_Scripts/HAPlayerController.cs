@@ -26,6 +26,7 @@ namespace StarterAssets
 
         [Range(0, 1)]
         public float FootstepAudioVolume = 0.5f;
+        public Test2Script T2S;
 
         [Header("Ground Check Settings")]
         public bool Grounded = true;
@@ -122,7 +123,6 @@ namespace StarterAssets
 
         private void Start()
         {
-        
             _controller = GetComponent<CharacterController>();
             _hasAnimator = TryGetComponent(out _animator);
             AssignAnimationIDs();
@@ -359,7 +359,6 @@ namespace StarterAssets
         {
             isFishing = true;
             originalParent = transform.parent;
-            isFishing = true;
             if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Ocean")
             {
                 BoatBobbing boat = FindObjectOfType<BoatBobbing>();
@@ -417,7 +416,11 @@ namespace StarterAssets
                 }
             }
 
-            InitiateMicrogames.Instance.NotifyFishingStarted();
+            if (InitiateMicrogames.Instance != null)
+            {
+                InitiateMicrogames.Instance.NotifyFishingStarted();
+            }
+            
         }
 
         public void EndFishing()
@@ -442,8 +445,6 @@ namespace StarterAssets
             {
                 _animator.SetBool("Fishing", false);
                 _animator.SetFloat(_animIDSpeed, 0f);
-
-                //  Force play back Idle immediately
                 _animator.Play("Idle Walk Blend", 0, 0f);
             }
 
@@ -451,6 +452,12 @@ namespace StarterAssets
             CinemachineCameraTarget.transform.rotation = _originalCameraRotation;
 
             LockCameraPosition = false;
+
+            // FULL RESET of fishing system
+            if (InitiateMicrogames.Instance != null)
+            {
+                InitiateMicrogames.Instance.FullFishingReset();
+            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -481,13 +488,16 @@ namespace StarterAssets
                         allowedToFish = true;
                         break;
                     case InitiateMicrogames.FishZoneType.BossPond:
-                        allowedToFish = canFishPondBoss;
+                        allowedToFish = GameManager.Instance.currentSaveData.canFishPondBoss;
+                        this.canFishPondBoss = allowedToFish;
                         break;
                     case InitiateMicrogames.FishZoneType.BossRiver:
-                        allowedToFish = canFishRiverBoss;
+                        allowedToFish = GameManager.Instance.currentSaveData.canFishRiverBoss;
+                        this.canFishRiverBoss = allowedToFish;
                         break;
                     case InitiateMicrogames.FishZoneType.BossOcean:
-                        allowedToFish = canFishOceanBoss;
+                        allowedToFish = GameManager.Instance.currentSaveData.canFishOceanBoss;
+                        this.canFishOceanBoss = allowedToFish;
                         break;
                 }
 

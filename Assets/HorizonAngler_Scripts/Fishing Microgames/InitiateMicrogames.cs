@@ -86,10 +86,12 @@ public class InitiateMicrogames : MonoBehaviour
         {
             if (!T2S.microgamesActive)
             {
+                Debug.Log("Microgame inactive. Chekcing cast conditions...");
                 CCanvas.SetActive(true);
 
                 if (!casted && !FProgress.fishCaughtScreenActive && castLockoutTimer <= 0f)
                 {
+                    Debug.Log("Waiting for cast input...");
                     MGCanvas.SetActive(false);
                     ProcessInputs();
 
@@ -200,7 +202,7 @@ public class InitiateMicrogames : MonoBehaviour
             playerController.PlayCasting();
 
         WFB.SetActive(true);
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         StartCoroutine(TookBait());
     }
 
@@ -235,8 +237,55 @@ public class InitiateMicrogames : MonoBehaviour
     public void NotifyFishingStarted()
     {
         fishingStarted = true;
+        playerController.isFishing = true;
+        Debug.Log("[Fishing] Started, casting UI will be shown.");
         CCanvas.SetActive(true); // << Show click-to-cast UI now that fishing has begun
     }
 
+    public void ResetMinigame()
+    {
+        casted = false;
+        playerController.isFishing = false;
 
+        // Reset input states
+        inputA = false;
+        inputLMB = false;
+        inputSpace = false;
+
+        // Reset UI
+        CTC.SetActive(false); // Click to Cast text
+        WFB.SetActive(false); // Waiting for Bite
+        FTB.SetActive(false); // Fish Took Bait
+        MGCanvas.SetActive(false); // Minigame UI
+        TookBaitAnim.SetActive(false);
+
+        CCanvas.SetActive(false);
+    }
+    
+    public void FullFishingReset()
+    {
+        Debug.Log("[Fishing Reset] Fully resetting fishing system.");
+        casted = false;
+        fishingStarted = false;
+
+        inputA = inputLMB = inputSpace = false;
+
+        CTC.SetActive(false);
+        WFB.SetActive(false);
+        FTB.SetActive(false);
+        MGCanvas.SetActive(false);
+        TookBaitAnim.SetActive(false);
+        CCanvas.SetActive(false);
+
+        if (T2S != null)
+        {
+            T2S.microgamesActive = false;
+            T2S.ClearAll();
+        }
+
+        if (FProgress != null)
+        {
+            FProgress.Clear();
+        }
+    }
 }

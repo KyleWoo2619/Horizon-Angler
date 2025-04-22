@@ -16,7 +16,7 @@ public class Set6RodAlignment : MonoBehaviour
     public float friction = 1f;
     public float inputAcceleration = 50f;
     public float idleJerkCooldown = 0.5f;
-    public float progressGainRate = 0.15f;
+    public float progressGainRate = 0.4f;
     public float progressLossMultiplier = 2f;
     public float progressLossOnHit = 20f;
 
