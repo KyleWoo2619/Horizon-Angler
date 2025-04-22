@@ -95,6 +95,7 @@ namespace StarterAssets
         private Animator _animator;
         private CharacterController _controller;
         private GameObject _mainCamera;
+        private Transform originalParent;
 
 #if ENABLE_INPUT_SYSTEM
         private PlayerInput _playerInput;
@@ -357,6 +358,10 @@ namespace StarterAssets
         private void StartFishing()
         {
             isFishing = true;
+            originalParent = transform.parent;
+            Transform boatTransform = FindObjectOfType<BoatBobbing>().transform;
+            transform.SetParent(boatTransform, true); // 'true' keeps world position
+            
             fishingPromptUI.SetActive(false);
             fishingMinigameUI.SetActive(true);
             fishingrod.SetActive(true);
@@ -407,6 +412,9 @@ namespace StarterAssets
         public void EndFishing()
         {
             isFishing = false;
+
+            transform.SetParent(originalParent, true);
+
             fishingMinigameUI.SetActive(false);
             fishingrod.SetActive(false);
 
