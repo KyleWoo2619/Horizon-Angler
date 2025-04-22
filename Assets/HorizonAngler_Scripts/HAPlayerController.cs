@@ -359,9 +359,20 @@ namespace StarterAssets
         {
             isFishing = true;
             originalParent = transform.parent;
-            Transform boatTransform = FindObjectOfType<BoatBobbing>().transform;
-            transform.SetParent(boatTransform, true); // 'true' keeps world position
-            
+            isFishing = true;
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Ocean")
+            {
+                BoatBobbing boat = FindObjectOfType<BoatBobbing>();
+                if (boat != null)
+                {
+                    transform.SetParent(boat.transform, true); // Attach to the boat
+                }
+                else
+                {
+                    Debug.LogWarning("BoatBobbing not found in Ocean scene.");
+                }
+            }
+
             fishingPromptUI.SetActive(false);
             fishingMinigameUI.SetActive(true);
             fishingrod.SetActive(true);
