@@ -59,16 +59,16 @@ public class ObstacleMover : MonoBehaviour
         yield return null;
 
         if (hitRod)
-        {
             Debug.Log($"[Obstacle] Deactivating {gameObject.name} (from rod hit)");
-        }
         else
-        {
             Debug.Log($"[Obstacle] Deactivating {gameObject.name} (from destroyer)");
-        }
 
         gameObject.SetActive(false);
+
+        // Return to pool only AFTER deactivation
+        ObstaclePooler.Instance.ReturnToPool(gameObject);
     }
+
 
     void OnEnable()
     {
@@ -78,5 +78,4 @@ public class ObstacleMover : MonoBehaviour
         if (rectTransform == null)
             rectTransform = GetComponent<RectTransform>();
     }
-
 }

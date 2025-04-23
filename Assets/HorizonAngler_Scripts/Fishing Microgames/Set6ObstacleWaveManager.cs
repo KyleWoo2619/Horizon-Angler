@@ -20,34 +20,40 @@ public class Set6ObstacleWaveManager : MonoBehaviour
     public float timeBetweenWaves = 4f;
     public int obstaclesPerWave = 1;
     public float obstacleFallSpeed = 250f;
+    private bool isRunning = false;
 
     private Coroutine waveRoutine;
+    private Coroutine monitorRoutine;
 
     void Start()
     {
         gameManager = FindObjectOfType<Test2Script>();
 
-        // Make sure warnings are hidden at start
         leftWarning.gameObject.SetActive(false);
         rightWarning.gameObject.SetActive(false);
 
-        // Start checking for Set6 activation/deactivation
-        StartCoroutine(MonitorSet6State());
+        if (monitorRoutine == null)
+            monitorRoutine = StartCoroutine(MonitorSet6State());
     }
 
-    void Update()
+    void OnEnable()
     {
-        if (Input.GetKeyDown(KeyCode.F1)) // temp debug key
+        if (monitorRoutine == null)
+            monitorRoutine = StartCoroutine(MonitorSet6State());
+    }
+
+
+    void OnDisable()
+    {
+        if (monitorRoutine != null)
         {
-            StartCoroutine(WaveRoutine());
+            StopCoroutine(monitorRoutine);
+            monitorRoutine = null;
         }
     }
 
-
     IEnumerator MonitorSet6State()
     {
-        bool isRunning = false;
-
         while (true)
         {
             bool shouldBeRunning = gameManager != null &&
@@ -57,31 +63,50 @@ public class Set6ObstacleWaveManager : MonoBehaviour
 
             if (shouldBeRunning && !isRunning)
             {
-                waveRoutine = StartCoroutine(WaveRoutine());
+                if (waveRoutine != null)
+                {
+                    StopCoroutine(waveRoutine);
+                    waveRoutine = null;
+                }
+
                 isRunning = true;
+                waveRoutine = StartCoroutine(WaveRoutine());
                 Debug.Log("[WaveManager] Started Set6 waves");
             }
             else if (!shouldBeRunning && isRunning)
             {
                 if (waveRoutine != null)
+                {
                     StopCoroutine(waveRoutine);
+                    waveRoutine = null;
+                }
 
                 isRunning = false;
-
                 leftWarning.gameObject.SetActive(false);
                 rightWarning.gameObject.SetActive(false);
 
                 Debug.Log("[WaveManager] Stopped Set6 waves");
             }
 
+
             yield return null;
         }
     }
 
+
     IEnumerator WaveRoutine()
     {
+        Debug.Log("[WaveManager] Entered WaveRoutine loop");
+
         while (true)
         {
+            if (!isRunning)
+            {
+                Debug.Log("[WaveManager] WaveRoutine canceled immediately — isRunning false at start");
+                yield break;
+            }
+            leftWarning.gameObject.SetActive(false);
+            rightWarning.gameObject.SetActive(false);
             bool isLeft = Random.value < 0.5f;
             Transform warn = isLeft ? leftWarning : rightWarning;
             Transform spawnMin = isLeft ? leftSpawnMin : rightSpawnMin;
@@ -130,5 +155,21 @@ public class Set6ObstacleWaveManager : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenWaves);
         }
     }
+
+    public void ResetObstaclesAndState()
+    {
+        if (waveRoutine != null)
+        {
+            StopCoroutine(waveRoutine);
+            waveRoutine = null;
+        }
+
+        isRunning = false; // <<< CRITICAL
+        leftWarning.gameObject.SetActive(false);
+        rightWarning.gameObject.SetActive(false);
+
+        Debug.Log("[WaveManager] ResetObstaclesAndState completed.");
+    }
+
 
 }

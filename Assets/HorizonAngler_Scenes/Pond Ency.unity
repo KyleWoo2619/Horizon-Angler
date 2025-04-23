@@ -6040,7 +6040,7 @@ MonoBehaviour:
   inputAcceleration: 50
   idleJerkCooldown: 2.5
   progressGainRate: 0.15
-  progressLossMultiplier: 2
+  progressLossMultiplier: 0.75
   progressLossOnHit: 20
 --- !u!1 &230382980
 GameObject:
@@ -22481,7 +22481,7 @@ PrefabInstance:
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: enableSet6
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
@@ -22496,7 +22496,7 @@ PrefabInstance:
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: useInspectorOverrides
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5910396708968895698, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
@@ -22963,6 +22963,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8542477031035791375, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: OWM
+      value: 
+      objectReference: {fileID: 1295964532}
     - target: {fileID: 8542477031035791375, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: EPressed
