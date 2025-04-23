@@ -491,7 +491,7 @@ public class FishingProgress : MonoBehaviour
         vp.loopPointReached -= OnTutorialCutsceneFinished;
 
         // Load the new scene
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Pond"); // replace with actual scene name
+        UnityEngine.SceneManagement.SceneManager.LoadScene("PostTutorial"); // replace with actual scene name
     }
     
     void OnProgressMin()

@@ -12,20 +12,20 @@ EditorBuildSettings:
     path: Assets/HorizonAngler_Scenes/Tutorial.unity
     guid: 2b32b9e98b1442940b0127d4d834637e
   - enabled: 1
-    path: Assets/HorizonAngler_Scenes/Pond.unity
-    guid: ddb9ee946fc906d4a9d900e54b22a56b
-  - enabled: 1
-    path: Assets/HorizonAngler_Scenes/River.unity
-    guid: 211d62bcb24dddc4fb82687412a59c25
-  - enabled: 1
-    path: Assets/HorizonAngler_Scenes/Ocean.unity
-    guid: 43c1ae7c8a87cb843bba788b3f0fc350
+    path: Assets/HorizonAngler_Scenes/PostTutorial.unity
+    guid: d2a33c9ee38726143a3718fffdc5788b
   - enabled: 1
     path: Assets/HorizonAngler_Scenes/Shop.unity
     guid: e97dbcc07ebdcb648ab58c21b6b37e2d
   - enabled: 1
-    path: Assets/HorizonAngler_Scenes/PostTutorial.unity
-    guid: d2a33c9ee38726143a3718fffdc5788b
+    path: Assets/HorizonAngler_Scenes/Pond.unity
+    guid: a6812a2fc5e623a4bbcd626df9c02fb1
+  - enabled: 1
+    path: Assets/HorizonAngler_Scenes/River.unity
+    guid: 10df676e66c3f88418ced56d8dfc44b9
+  - enabled: 1
+    path: Assets/HorizonAngler_Scenes/Ocean.unity
+    guid: 43c1ae7c8a87cb843bba788b3f0fc350
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: d4909ac9826b31a44a31e1d3cebf30a3,
       type: 2}
