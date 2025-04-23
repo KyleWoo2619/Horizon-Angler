@@ -145,6 +145,24 @@ public class FishingProgress : MonoBehaviour
             notificationCanvas.SetActive(false);
             notificationGroup.alpha = 0f;
         }
+
+        FishBossAI bossAI = FindObjectOfType<FishBossAI>();
+        if (bossAI != null)
+        {
+            bossAI.DisableIfBossCaught();
+
+            var save = GameManager.Instance.currentSaveData;
+            bool goToBoss = save.currentLevel switch
+            {
+                "Pond" => save.canFishPondBoss,
+                "River" => save.canFishRiverBoss,
+                "Ocean" => save.canFishOceanBoss,
+                _ => false
+            };
+
+            if (goToBoss)
+                bossAI.GoToBossLocation();
+        }
     }
 
     public void Initialize()
@@ -650,7 +668,13 @@ public class FishingProgress : MonoBehaviour
             };
 
             ShowNotification(message);
+
+            // NEW: Trigger boss fish AI to swim to the catch location
+            FishBossAI bossAI = FindObjectOfType<FishBossAI>();
+            if (bossAI != null)
+                bossAI.GoToBossLocation();
         }
+
 
         // Save after any potential changes
         SaveManager.Save(GameManager.Instance.currentSaveData);
