@@ -126,6 +126,7 @@ public class FishingProgress : MonoBehaviour
 
     [HideInInspector]
     public FishZoneType activeZoneType;
+    private bool isShowingBossUnlockNotification = false;
 
     private void Awake()
     {
@@ -177,24 +178,45 @@ public class FishingProgress : MonoBehaviour
         // Always check if we're waiting on player input to hide win/fail screen
         if (fishCaughtScreenActive)
         {
-            fishCaughtTimer += Time.unscaledDeltaTime; // In case you’re paused
-            if (fishCaughtTimer >= 0f)
+            fishCaughtTimer += Time.unscaledDeltaTime;
+
+            // Add check for boss notification here
+            if (fishCaughtTimer > fishCaughtInputDelay && Input.anyKeyDown)
             {
-                fishCaughtTimer += Time.deltaTime;
-                if (fishCaughtTimer > fishCaughtInputDelay && Input.anyKeyDown)
+                Debug.Log("[FishingProgress] Hiding win/lose screen due to input.");
+                
+                // Check if notification is active - if so, don't hide yet
+                if (!isShowingBossUnlockNotification)
                 {
-                    Debug.Log("[FishingProgress] Hiding win/lose screen due to input.");
                     HideFishCaughtScreen();
                 }
+                else
+                {
+                    Debug.Log("[FishingProgress] Can't hide screen during boss notification - ignoring input");
+                    
+                    // Special case for Exit Fishing (X key)
+                    if (Input.GetKeyDown(KeyCode.X))
+                    {
+                        Debug.Log("Exit Fishing pressed during boss notification - forcing cleanup");
+                        
+                        // Force cleanup
+                        isShowingBossUnlockNotification = false;
+                        fishCaughtScreenActive = false;
+                        
+                        basicWinScreen?.SetActive(false);
+                        basicLoseScreen?.SetActive(false);
+                        bossCatchScreen?.SetActive(false);
+                        
+                        // Let the player exit fishing normally
+                        HAPlayerController player = FindObjectOfType<HAPlayerController>();
+                        if (player != null)
+                        {
+                            player.EndFishing();
+                        }
+                    }
+                }
             }
-            else
-            {
-                // Skip first frame of input check
-                fishCaughtTimer = 0f;
-            }
-
         }
-
 
         // Skip update unless we're fishing
         if (InitiateMicrogames.Instance == null || !InitiateMicrogames.Instance.MGCanvas.activeSelf)
@@ -209,18 +231,18 @@ public class FishingProgress : MonoBehaviour
         {
             if (IsAnyMicrogameTrulyActive())
             {
-                Debug.Log("Microgame ACTIVE: Decaying progress...");
+                // Debug.Log("Microgame ACTIVE: Decaying progress...");
                 ProgressDecay();
             }
             else
             {
-                Debug.Log("Microgame TIMER only: Passive progress...");
+                // Debug.Log("Microgame TIMER only: Passive progress...");
                 PassiveProgress();
             }
         }
         else
         {
-            Debug.Log("No microgames: Passive progress...");
+            // Debug.Log("No microgames: Passive progress...");
             PassiveProgress();
         }
 
@@ -237,25 +259,36 @@ public class FishingProgress : MonoBehaviour
     void HideFishCaughtScreen()
     {
         Debug.Log("[FishingProgress] Hiding win/lose screen due to input.");
+        
+        // Prevent hiding during boss notification
+        if (isShowingBossUnlockNotification)
+        {
+            Debug.Log("[FishingProgress] Can't hide screen during boss notification - ignoring input");
+            return;
+        }
 
-        // Hide all possible catch result screens
+        Debug.Log($"Screen states before hiding - basicWinScreen: {(basicWinScreen?.activeSelf)}, " +
+                $"basicLoseScreen: {(basicLoseScreen?.activeSelf)}, " + 
+                $"bossCatchScreen: {(bossCatchScreen?.activeSelf)}");
+
         basicWinScreen?.SetActive(false);
         basicLoseScreen?.SetActive(false);
         bossCatchScreen?.SetActive(false);
 
         fishCaughtScreenActive = false;
 
-        // Hide the Microgame UI
         if (InitiateMicrogames.Instance != null)
         {
+            // Enable cast screen *after* win screen disappears
             InitiateMicrogames.Instance.MGCanvas.SetActive(false);
-            InitiateMicrogames.Instance.CCanvas.SetActive(true); // Show Cast Prompt Canvas
+            InitiateMicrogames.Instance.CCanvas.SetActive(true);
+            InitiateMicrogames.Instance.CTC?.SetActive(true);
+            InitiateMicrogames.Instance.fishingStarted = true;
             InitiateMicrogames.Instance.StartCastLockout();
         }
 
         if (currentCaughtFish != null && IsBossFish(currentCaughtFish.fishName))
         {
-            Debug.Log("Caught a boss fish! Playing cutscene...");
             BossfishLocation.SetActive(false);
 
             HAPlayerController player = FindObjectOfType<HAPlayerController>();
@@ -267,9 +300,7 @@ public class FishingProgress : MonoBehaviour
                 player.canFish = false;
 
                 if (player.fishingPromptUI != null)
-                {
                     player.fishingPromptUI.SetActive(false);
-                }
             }
 
             CutsceneManager cutsceneManager = FindObjectOfType<CutsceneManager>();
@@ -283,11 +314,8 @@ public class FishingProgress : MonoBehaviour
             }
         }
 
-        // RESET state for next round
         StartCoroutine(DelayedClear());
     }
-
-
 
     public void Set1ObstaclePenalty()
     {
@@ -584,9 +612,6 @@ public class FishingProgress : MonoBehaviour
         InitiateMicrogames.Instance.fishingStarted = false; // Prevent CTC from returning during win screen
     }
 
-
-
-
     public int GetNormalFishCaughtCount(InitiateMicrogames.FishZoneType zoneType)
     {
         int count = 0;
@@ -680,8 +705,6 @@ public class FishingProgress : MonoBehaviour
         SaveManager.Save(GameManager.Instance.currentSaveData);
     }
 
-
-
     public void ShowNotification(string message)
     {
         Debug.Log($"Trying to show notification: {message}");
@@ -689,6 +712,14 @@ public class FishingProgress : MonoBehaviour
         if (notificationCanvas != null && notificationText != null)
         {
             Debug.Log("Notification references are good! Showing message.");
+            
+            // Check if this is a boss unlock notification
+            if (message.Contains("new fishing spot") || message.Contains("stir in the water"))
+            {
+                isShowingBossUnlockNotification = true;
+                Debug.Log("Boss unlock notification detected - special handling active");
+            }
+            
             notificationText.text = message;
             notificationTextShadow.text = message;
             StopAllCoroutines(); // Stop previous notification fades if any
@@ -698,8 +729,9 @@ public class FishingProgress : MonoBehaviour
         {
             Debug.LogWarning("NotificationCanvas or NotificationText is missing!");
         }
-    }
+}
 
+    // Modify the NotificationRoutine method to handle the fish caught screen when a notification is shown
     public IEnumerator NotificationRoutine()
     {
         Debug.Log("Starting NotificationRoutine...");
@@ -709,9 +741,7 @@ public class FishingProgress : MonoBehaviour
         if (notificationGroup != null)
         {
             yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 0f, 1f, 0.5f));
-
             yield return new WaitForSeconds(2f);
-
             yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 1f, 0f, 0.5f));
         }
         else
@@ -720,6 +750,33 @@ public class FishingProgress : MonoBehaviour
         }
 
         notificationCanvas.SetActive(false);
+        
+        // This is the critical part - AFTER the notification is done
+        if (isShowingBossUnlockNotification)
+        {
+            Debug.Log("[NotificationRoutine] Boss notification complete, forcing screen cleanup");
+            
+            isShowingBossUnlockNotification = false;
+            
+            // Force hide the fish caught screen
+            basicWinScreen?.SetActive(false);
+            basicLoseScreen?.SetActive(false); 
+            bossCatchScreen?.SetActive(false);
+            
+            fishCaughtScreenActive = false;
+            
+            // Re-enable the casting UI
+            if (InitiateMicrogames.Instance != null)
+            {
+                InitiateMicrogames.Instance.MGCanvas.SetActive(false);
+                InitiateMicrogames.Instance.CCanvas.SetActive(true);
+                InitiateMicrogames.Instance.CTC?.SetActive(true);
+                InitiateMicrogames.Instance.fishingStarted = true;
+            }
+            
+            // Add this to ensure proper clean up
+            StartCoroutine(DelayedClear());
+        }
     }
 
     private IEnumerator FadeCanvasGroup(

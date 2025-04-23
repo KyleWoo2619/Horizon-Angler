@@ -86,14 +86,14 @@ public class InitiateMicrogames : MonoBehaviour
         {
             if (!T2S.microgamesActive && !FProgress.fishCaughtScreenActive && fishingStarted)
             {
-                Debug.Log("Microgame inactive. Checking cast conditions...");
+                // Debug.Log("Microgame inactive. Checking cast conditions...");
                 CCanvas.SetActive(true);
 
 
 
                 if (!casted && !FProgress.fishCaughtScreenActive && castLockoutTimer <= 0f)
                 {
-                    Debug.Log("Waiting for cast input...");
+                    // Debug.Log("Waiting for cast input...");
                     MGCanvas.SetActive(false);
                     ProcessInputs();
 

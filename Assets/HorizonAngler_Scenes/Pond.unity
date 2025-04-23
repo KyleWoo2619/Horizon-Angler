@@ -2682,7 +2682,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 1501605009}
-  boatAnimator: {fileID: 0}
 --- !u!1 &113590111
 GameObject:
   m_ObjectHideFlags: 0
@@ -6100,6 +6099,9 @@ MonoBehaviour:
     hasCaughtPondBoss: 0
     hasCaughtRiverBoss: 0
     hasCaughtOceanBoss: 0
+    dredgedHand: 0
+    AllCollected: 0
+    BecameHorizonAngler: 0
     currentLevel: Pond
 --- !u!1 &257653023
 GameObject:
@@ -17237,6 +17239,16 @@ PrefabInstance:
       propertyPath: m_Alpha
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6915184707838051738, guid: 3f1626cd96d171d4da29f4e3025df17c,
+        type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915184707838051738, guid: 3f1626cd96d171d4da29f4e3025df17c,
+        type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -19069,6 +19081,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 293526205}
   firstSelectedButton: {fileID: 0}
+  encyclopedia: {fileID: 0}
+  encyBtnContainer: {fileID: 0}
+  pauseBtnContainer: {fileID: 0}
+  map: {fileID: 0}
+  optionsMenu: {fileID: 0}
+  controlsMenu: {fileID: 0}
+  encyclopediaUI: {fileID: 0}
 --- !u!4 &714611314
 Transform:
   m_ObjectHideFlags: 0

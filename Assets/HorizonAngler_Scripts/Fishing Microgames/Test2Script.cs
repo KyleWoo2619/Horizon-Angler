@@ -426,8 +426,8 @@ public class Test2Script : MonoBehaviour
         // Trigger Inputs: combined axis + mouse button detection
         inputLT = Input.GetAxis("LT_Axis") > 0.5f || Input.GetButtonDown(LT);
         inputRT = Input.GetAxis("RT_Axis") > 0.5f || Input.GetButtonDown(RT);
-        Debug.Log("LT Axis: " + Input.GetAxis("LT_Axis"));
-        Debug.Log("RT Axis: " + Input.GetAxis("RT_Axis"));
+        // Debug.Log("LT Axis: " + Input.GetAxis("LT_Axis"));
+        // Debug.Log("RT Axis: " + Input.GetAxis("RT_Axis"));
 
 
         // Joystick button presses (LS/RS press or space fallback)
