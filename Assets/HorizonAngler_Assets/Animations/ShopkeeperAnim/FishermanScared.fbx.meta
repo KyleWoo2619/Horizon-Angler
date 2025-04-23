@@ -38,7 +38,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: JacobRig_Root|JacobRig_Root|HA_ShopkeeperScared_000_FBX|Base Layer
+      name: ShopkeeperScared
       takeName: JacobRig_Root|JacobRig_Root|HA_ShopkeeperScared_000_FBX|Base Layer
       internalID: 5226046084137260581
       firstFrame: 84
