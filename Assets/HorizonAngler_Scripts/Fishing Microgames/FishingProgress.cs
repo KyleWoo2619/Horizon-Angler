@@ -56,9 +56,13 @@ public class FishingProgress : MonoBehaviour
     public float passiveProgressRate = 1f;
 
     [Header("Fish Caught UI")]
-    public GameObject fishCaughtCanvas;
     public Image fishCaughtImage;
     public TextMeshProUGUI fishCaughtText;
+
+    [Header("Caught Screen Variants")]
+    public GameObject basicWinScreen;
+    public GameObject basicLoseScreen;
+    public GameObject bossCatchScreen;
 
     [System.Serializable]
     public class Fish
@@ -131,7 +135,9 @@ public class FishingProgress : MonoBehaviour
     {
         T2S = GetComponent<Test2Script>();
         Initialize();
-        fishCaughtCanvas.SetActive(false);
+        basicWinScreen?.SetActive(false);
+        basicLoseScreen?.SetActive(false);
+        bossCatchScreen?.SetActive(false);
 
         if (notificationCanvas != null)
         {
@@ -148,9 +154,20 @@ public class FishingProgress : MonoBehaviour
 
     void Update()
     {
+        // Always check if we're waiting on player input to hide win/fail screen
+        if (fishCaughtScreenActive)
+        {
+            fishCaughtTimer += Time.deltaTime;
+            if (fishCaughtTimer > fishCaughtInputDelay && Input.anyKeyDown)
+            {
+                HideFishCaughtScreen();
+            }
+            return; // Don't do anything else while result screen is active
+        }
+
+        // Skip update unless we're fishing
         if (InitiateMicrogames.Instance == null || !InitiateMicrogames.Instance.MGCanvas.activeSelf)
         {
-            // Player hasn't casted yet
             return;
         }
 
@@ -177,16 +194,8 @@ public class FishingProgress : MonoBehaviour
         }
 
         progress = Mathf.Clamp(progress, 0f, 100f);
-
-        if (fishCaughtScreenActive)
-        {
-            fishCaughtTimer += Time.deltaTime;
-            if (fishCaughtTimer > fishCaughtInputDelay && Input.anyKeyDown)
-            {
-                HideFishCaughtScreen();
-            }
-        }
     }
+
 
     private bool IsBossFish(string fishName)
     {
@@ -196,7 +205,11 @@ public class FishingProgress : MonoBehaviour
 
     void HideFishCaughtScreen()
     {
-        fishCaughtCanvas.SetActive(false);
+        // Hide all possible catch result screens
+        basicWinScreen?.SetActive(false);
+        basicLoseScreen?.SetActive(false);
+        bossCatchScreen?.SetActive(false);
+
         fishCaughtScreenActive = false;
 
         // Hide the Microgame UI
@@ -225,6 +238,7 @@ public class FishingProgress : MonoBehaviour
                     player.fishingPromptUI.SetActive(false);
                 }
             }
+
             CutsceneManager cutsceneManager = FindObjectOfType<CutsceneManager>();
             if (cutsceneManager != null)
             {
@@ -236,6 +250,7 @@ public class FishingProgress : MonoBehaviour
             }
         }
     }
+
 
     public void Set1ObstaclePenalty()
     {
@@ -411,6 +426,12 @@ public class FishingProgress : MonoBehaviour
     
     void OnProgressMin()
     {
+        InitiateMicrogames.Instance.MGCanvas.SetActive(false);
+        InitiateMicrogames.Instance.CCanvas.SetActive(false);
+        basicLoseScreen.SetActive(true);
+        fishCaughtScreenActive = true;
+        fishCaughtTimer = 0f;
+
         Debug.Log("Player failed to catch the fish...");
         T2S.microgamesActive = false;
         T2S.ClearAll();
@@ -464,9 +485,15 @@ public class FishingProgress : MonoBehaviour
 
     void ShowFishCaughtScreen()
     {
+        InitiateMicrogames.Instance.MGCanvas.SetActive(false);
+        InitiateMicrogames.Instance.CCanvas.SetActive(false);
+
         if (currentCaughtFish != null && fishCaughtImage != null && fishCaughtText != null)
         {
-            fishCaughtCanvas.SetActive(true);
+            if (IsBossFish(currentCaughtFish.fishName))
+                bossCatchScreen.SetActive(true);
+            else
+                basicWinScreen.SetActive(true);
             fishCaughtImage.sprite = currentCaughtFish.fishSprite;
             fishCaughtText.text = $"Caught {currentCaughtFish.fishName}!";
             fishCaughtScreenActive = true;
