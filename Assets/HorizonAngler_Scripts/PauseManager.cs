@@ -8,6 +8,14 @@ public class PauseManager : MonoBehaviour
     private bool isPaused = false;
     private PlayerInput playerInput; // Your Input System reference
     public GameObject firstSelectedButton; // The button to select when the menu opens
+    public GameObject encyclopedia;
+    public GameObject encyBtnContainer;
+    public GameObject pauseBtnContainer;
+    public GameObject map;
+    public GameObject optionsMenu;
+    public GameObject controlsMenu;
+
+    public FishEncyclopediaUI encyclopediaUI;
 
     private void Start()
     {
@@ -32,6 +40,7 @@ public class PauseManager : MonoBehaviour
 
     public void PauseGame()
     {
+        encyclopediaUI.UpdatePageUI(); // custom method to re-call UpdatePageUI
         pauseMenuUI.SetActive(true); // Show the pause UI
         Time.timeScale = 0; // Pause gameplay
         isPaused = true;
@@ -48,10 +57,17 @@ public class PauseManager : MonoBehaviour
     public void ResumeGame()
     {
         pauseMenuUI.SetActive(false); // Hide the pause UI
+        encyclopedia.SetActive(false);
+        encyBtnContainer.SetActive(false);
+        pauseBtnContainer.SetActive(true);
+        optionsMenu.SetActive(false);
+        controlsMenu.SetActive(false);
+        map.SetActive(true);
         Time.timeScale = 1; // Resume gameplay
         isPaused = false;
 
         Cursor.lockState = CursorLockMode.Locked; // Lock mouse again
         Cursor.visible = false;
+        encyclopediaUI.ResetToFirstPage();
     }
 }
