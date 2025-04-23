@@ -55,7 +55,18 @@ public class ObstaclePooler : MonoBehaviour
         obj.transform.SetParent(parent, false);
         obj.GetComponent<RectTransform>().anchoredPosition = anchoredPos;
 
-        poolDictionary[tag].Enqueue(obj); // Recycle back into pool
         return obj;
     }
+    public void ReturnToPool(GameObject obj)
+    {
+        string tag = obj.name.Replace("(Clone)", "").Trim();
+        if (!poolDictionary.ContainsKey(tag))
+        {
+            Debug.LogWarning($"No pool found for tag: {tag}");
+            return;
+        }
+
+        poolDictionary[tag].Enqueue(obj);
+    }
+
 }

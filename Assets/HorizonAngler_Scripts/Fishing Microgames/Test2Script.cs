@@ -14,6 +14,8 @@ public class Test2Script : MonoBehaviour
 
     static Random rnd = new Random();
 
+    public Set6ObstacleWaveManager OWM;
+
     // Inputs
     [HideInInspector] public string RS_h = "RS_h";   // Also handles horizontal mouse movement
     [HideInInspector] public string RS_v = "RS_v";   // Also handles vertical mouse movement
@@ -154,6 +156,7 @@ public class Test2Script : MonoBehaviour
     public void ClearAll()
     {
         StopAllCoroutines();
+        OWM.ResetObstaclesAndState();
         obstacles.Clear();
         inactiveSets.Clear();
         activeSets.Clear();
@@ -162,11 +165,11 @@ public class Test2Script : MonoBehaviour
             t.SetActive(false);
         }
         Sets["Set1"] = false;
-        //Sets["Set2"] = false;
+        Sets["Set2"] = false;
         Sets["Set3"] = false;
         Sets["Set4"] = false;
         Sets["Set5"] = false;
-        //Sets["Set6"] = false;
+        Sets["Set6"] = false;
         Sets["Set7"] = false;
         Set1Parent.SetActive(false);
         Set2Parent.SetActive(false);
@@ -234,10 +237,6 @@ public class Test2Script : MonoBehaviour
         {
             t.SetActive(false);
         }
-
-
-        // Input System Controls Here
-        //set1Action = playerInput.actions.FindAction("Microgames/Set1"); // isn't working
     }
 
     void InitialSetupSet4()
@@ -338,7 +337,6 @@ public class Test2Script : MonoBehaviour
     }
 
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         if (!microgamesActive)
@@ -461,8 +459,6 @@ public class Test2Script : MonoBehaviour
 
     }
 
-
-
     void MicrogameFailsafe() // This is to ensure that there is at least 1 microgame running at all times
     {
         if (activeSets.Count == 0)
@@ -551,8 +547,6 @@ public class Test2Script : MonoBehaviour
         }
     }
 
-
-
     void MicrogameSet4()
     {
         if (!memorySetupDone)
@@ -565,7 +559,6 @@ public class Test2Script : MonoBehaviour
             CaptureMemoryInput();
         }
     }
-
 
     void MicrogameSet5()
     {
@@ -598,7 +591,6 @@ public class Test2Script : MonoBehaviour
         }
     }
 
-
     void DecayMashSlider()
     {
         if (!mashActive)
@@ -628,9 +620,14 @@ public class Test2Script : MonoBehaviour
             Set6Parent.SetActive(false);
 
             rod.ResetRod(); // <<< Reset the rod here
+            StartCoroutine(DelayedResetSet6Obstacles());
         }
     }
-
+    IEnumerator DelayedResetSet6Obstacles()
+    {
+        yield return null; // Wait one frame
+        OWM.ResetObstaclesAndState();
+    }
 
 
     void MicrogameSet7()
@@ -698,13 +695,6 @@ public class Test2Script : MonoBehaviour
         Set3Setup(); // Restart combo
     }
 
-    IEnumerator Set3Mistake()
-    {
-        dpadInputActive = false;
-        yield return new WaitForSeconds(0.5f);
-        Set3Setup(); // Restart
-    }
-
     IEnumerator Set3Completed()
     {
         dpadInputActive = false;
@@ -751,13 +741,13 @@ public class Test2Script : MonoBehaviour
     {
         memoryText.text = "Ready...";
         yield return StartCoroutine(FadeText(memoryText, 0f, 1f, 0.3f));
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.4f);
         yield return StartCoroutine(FadeText(memoryText, 1f, 0f, 0.3f));
         yield return new WaitForSeconds(0.2f);
 
         memoryText.text = "Set...";
         yield return StartCoroutine(FadeText(memoryText, 0f, 1f, 0.3f));
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.4f);
         yield return StartCoroutine(FadeText(memoryText, 1f, 0f, 0.3f));
         yield return new WaitForSeconds(0.2f);
 
@@ -1023,7 +1013,6 @@ public class Test2Script : MonoBehaviour
         }
     }
 
-
     IEnumerator VibrateMashUI()
     {
         Vector3 originalPos = mashUIRect.localPosition;
@@ -1057,8 +1046,6 @@ public class Test2Script : MonoBehaviour
             inactiveSets.Add(setName);
         }
     }
-
-
 
     void MicrogameStarter()
     {
