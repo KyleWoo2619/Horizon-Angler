@@ -23305,6 +23305,11 @@ PrefabInstance:
       objectReference: {fileID: 223613649}
     - target: {fileID: 4673737751652137396, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
+      propertyPath: fishCaughtText
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4673737751652137396, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
       propertyPath: basicLoseScreen
       value: 
       objectReference: {fileID: 1166648529}
@@ -23313,6 +23318,11 @@ PrefabInstance:
       propertyPath: bossCatchScreen
       value: 
       objectReference: {fileID: 18041812}
+    - target: {fileID: 4673737751652137396, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: fishCaughtImage
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4673737751652137396, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: BossfishLocation
@@ -23679,12 +23689,12 @@ PrefabInstance:
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: enableSet6
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: enableSet7
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
@@ -23694,7 +23704,7 @@ PrefabInstance:
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: useInspectorOverrides
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5910396708968895698, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}

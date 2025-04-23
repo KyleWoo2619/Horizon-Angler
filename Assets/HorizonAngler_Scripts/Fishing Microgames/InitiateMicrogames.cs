@@ -28,7 +28,7 @@ public class InitiateMicrogames : MonoBehaviour
     [HideInInspector] public bool inputSpace = false; // is key Pressed
 
     private bool casted;
-    private bool fishingStarted = false;
+    public bool fishingStarted = false;
     private HAPlayerController playerController;
     private float castLockoutTimer = 0f;
     public enum FishZoneType
@@ -84,10 +84,12 @@ public class InitiateMicrogames : MonoBehaviour
         // Check if player is allowed to fish (in a Fish Zone OR testing in SampleScene)
         if ((isSampleScene || (playerController != null && playerController.inFishZone)))
         {
-            if (!T2S.microgamesActive)
+            if (!T2S.microgamesActive && !FProgress.fishCaughtScreenActive && fishingStarted)
             {
-                Debug.Log("Microgame inactive. Chekcing cast conditions...");
+                Debug.Log("Microgame inactive. Checking cast conditions...");
                 CCanvas.SetActive(true);
+
+
 
                 if (!casted && !FProgress.fishCaughtScreenActive && castLockoutTimer <= 0f)
                 {
