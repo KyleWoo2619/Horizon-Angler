@@ -10,11 +10,27 @@ public class ShopInteractionManager : MonoBehaviour
     public TextMeshProUGUI specialButtonText;
     public TextMeshProUGUI textComponent;
     public GameObject dialogueButton;
-    public GameObject upgradeButton;
     public GameObject shopBaseDialogue;
+    public TextMeshProUGUI rodNameText;
+    public UnityEngine.UI.Image rodImage;
+    public Sprite upgradedRodSprite;
+    public Sprite professionalRodSprite;
+    public Sprite defaultRodSprite;
 
     [Header("Dialogue Settings")]
     public float textSpeed = 0.05f;
+    private bool waitingForCutscene = false;
+
+    [Header("Legendary Canvas")]
+    public GameObject legendaryCanvas;
+    public GameObject reelObject;
+    public GameObject spineObject;
+    public GameObject hooksObject;
+    public GameObject rodObject;
+    public float visualDisplayTime = 5f;
+    [SerializeField] public CanvasGroup legendaryCanvasGroup;
+    [SerializeField] private float fadeDuration = 0.5f;
+
 
     [Header("Base Dialogue Content")]
     public string[] initialBaseDialogue;
@@ -31,13 +47,14 @@ public class ShopInteractionManager : MonoBehaviour
     public string[] boneRodDialogue;
     public string[] handDialogue;
     public string[] vesselDialogue;
-    public string[] finalFightDialogue;
+    public string[] postBossDialogue;
 
     private SaveData saveData;
     private string[] currentLines;
     private int dialogueIndex;
     private bool isTyping = false;
     private Coroutine typingCoroutine;
+    private string lastSpecialPlayed = "";
 
     void Start()
     {
@@ -49,12 +66,22 @@ public class ShopInteractionManager : MonoBehaviour
         }
 
         saveData = SaveManager.Load();
-
         if (saveData == null)
         {
             Debug.LogError("Save data could not be loaded.");
             return;
         }
+
+        // Hide legendary items at start
+        if (legendaryCanvas != null)
+        {
+            legendaryCanvas.SetActive(false);
+        }
+        
+        if (reelObject != null) reelObject.SetActive(false);
+        if (spineObject != null) spineObject.SetActive(false);
+        if (hooksObject != null) hooksObject.SetActive(false);
+        if (rodObject != null) rodObject.SetActive(false);
 
         UpdateShopState();
         dialoguePanel.SetActive(false);
@@ -63,7 +90,8 @@ public class ShopInteractionManager : MonoBehaviour
 
     void Update()
     {
-        if (dialoguePanel.activeSelf && Input.GetMouseButtonDown(0))
+        // Only handle mouse clicks when dialogue is active and we're not waiting for a cutscene
+        if (dialoguePanel.activeSelf && !waitingForCutscene && Input.GetMouseButtonDown(0))
         {
             if (!isTyping || textComponent.text == currentLines[dialogueIndex])
             {
@@ -81,19 +109,17 @@ public class ShopInteractionManager : MonoBehaviour
         }
     }
 
-    // Call this method whenever save data changes
     public void UpdateShopState()
     {
         UpdateSpecialButton();
-        UpdateUpgradeButton();
     }
 
     void UpdateSpecialButton()
     {
-        // Hide the special button by default
+        // Hide special button by default
         specialButton.SetActive(false);
 
-        // Only show special button based on game progression
+        // Show special button based on game progression
         if (saveData.hasCaughtPondBoss && !saveData.hasCaughtRiverBoss)
         {
             specialButton.SetActive(true);
@@ -114,31 +140,23 @@ public class ShopInteractionManager : MonoBehaviour
             specialButton.SetActive(true);
             specialButtonText.text = "Show the hand to the shopkeeper.";
         }
-        else if (saveData.AllCollected && !saveData.dredgedHand)
+        else if (saveData.AllCollected && !saveData.BecameHorizonAngler)
         {
             specialButton.SetActive(true);
             specialButtonText.text = "Prepare the vessel.";
         }
-        else if (saveData.dredgedHand)
+        else if (saveData.BecameHorizonAngler)
         {
             specialButton.SetActive(true);
-            specialButtonText.text = "Get ready for the final fight.";
+            specialButtonText.text = "Hand him the lower half";
         }
-    }
-
-    void UpdateUpgradeButton()
-    {
-        // You can implement conditions to enable/disable the upgrade button here
-        // Example: upgradeButton.SetActive(someCondition);
-        
-        // You can also change the text of the upgrade button based on game progress
-        // Example: upgradeButtonText.text = "New Text";
     }
 
     public void OnTalkButton()
     {
         string[] selectedDialogue = null;
 
+        // Select dialogue based on game progress
         if (!saveData.hasCaughtPondBoss)
         {
             selectedDialogue = initialBaseDialogue;
@@ -168,12 +186,12 @@ public class ShopInteractionManager : MonoBehaviour
             selectedDialogue = finalStateDialogue;
         }
 
-        // Randomize one line if the array is valid
+        // Choose a random line from the selected dialogue
         if (selectedDialogue != null && selectedDialogue.Length > 0)
         {
-            string[] randomSingleLine = new string[1];
-            randomSingleLine[0] = selectedDialogue[Random.Range(0, selectedDialogue.Length)];
-            StartDialogue(randomSingleLine);
+            string[] randomLine = new string[1];
+            randomLine[0] = selectedDialogue[Random.Range(0, selectedDialogue.Length)];
+            StartDialogue(randomLine);
         }
         else
         {
@@ -181,45 +199,41 @@ public class ShopInteractionManager : MonoBehaviour
         }
     }
 
-
     public void OnSpecialButton()
     {
+        // Play special dialogue based on game progress
         if (saveData.hasCaughtPondBoss && !saveData.hasCaughtRiverBoss)
         {
+            lastSpecialPlayed = "Scroll";
             StartDialogue(scrollDialogue);
         }
         else if (saveData.hasCaughtRiverBoss && !saveData.hasCaughtOceanBoss)
         {
+            lastSpecialPlayed = "Hair";
             StartDialogue(hairDialogue);
         }
         else if (saveData.hasCaughtOceanBoss && !saveData.dredgedHand)
         {
+            lastSpecialPlayed = "BoneRod";
             StartDialogue(boneRodDialogue);
         }
         else if (saveData.dredgedHand && !saveData.AllCollected)
         {
+            lastSpecialPlayed = "Hand";
             StartDialogue(handDialogue);
         }
-        else if (saveData.AllCollected && !saveData.dredgedHand)
+        else if (saveData.AllCollected && !saveData.BecameHorizonAngler)
         {
+            lastSpecialPlayed = "Vessel";
             StartDialogue(vesselDialogue);
         }
-        else if (saveData.dredgedHand)
+        else if (saveData.BecameHorizonAngler)
         {
-            StartDialogue(finalFightDialogue);
+            lastSpecialPlayed = "Final";
+            StartDialogue(postBossDialogue);
         }
     }
 
-    public void OnUpgradeButton()
-    {
-        // Implement your upgrade logic here
-        Debug.Log("Upgrade button pressed");
-        
-        // Example: Show different upgrade dialogue based on game progress
-        // StartDialogue(upgradeDialogue);
-    }
-
-    // Dialogue Manager Functionality
     void StartDialogue(string[] lines)
     {
         if (lines == null || lines.Length == 0)
@@ -227,17 +241,35 @@ public class ShopInteractionManager : MonoBehaviour
             Debug.LogError("Attempted to start dialogue with null or empty lines array");
             return;
         }
-        
+
+        // Setup dialogue
         currentLines = lines;
         dialogueIndex = 0;
-        
-        dialoguePanel.SetActive(true);
+        textComponent.text = string.Empty;
+
+        if (lastSpecialPlayed == "Hand" && saveData != null && !saveData.AllCollected)
+        {
+            saveData.AllCollected = true;
+            SaveManager.Save(saveData);
+            Debug.Log("AllCollected has been set to TRUE.");
+        }
+
+        if (lastSpecialPlayed == "Vessel" && saveData != null && !saveData.BecameHorizonAngler)
+        {
+            saveData.BecameHorizonAngler = true;
+            SaveManager.Save(saveData);
+            Debug.Log("BecameHorizonAngler has been set to TRUE.");
+        }
+
+
+        // Hide shop UI
         shopBaseDialogue.SetActive(false);
         dialogueButton.SetActive(false);
-        upgradeButton.SetActive(false);
         
-        textComponent.text = string.Empty;
-        
+        // Show dialogue panel
+        dialoguePanel.SetActive(true);
+
+        // Start typing the first line
         if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);
@@ -261,22 +293,198 @@ public class ShopInteractionManager : MonoBehaviour
 
     void NextLine()
     {
+        // Don't proceed if waiting for cutscene
+        if (waitingForCutscene) return;
+
         dialogueIndex++;
-        
+
+        // Check if we've reached the end of dialogue
         if (dialogueIndex >= currentLines.Length)
         {
+            // End of dialogue, show shop UI again
             dialoguePanel.SetActive(false);
             shopBaseDialogue.SetActive(true);
             dialogueButton.SetActive(true);
-            upgradeButton.SetActive(true);
-        }
-        else
-        {
-            if (typingCoroutine != null)
+
+            // Handle end of special dialogues
+            if (lastSpecialPlayed == "Scroll" || lastSpecialPlayed == "Hair")
             {
-                StopCoroutine(typingCoroutine);
+                UpgradeRodVisuals();
             }
-            typingCoroutine = StartCoroutine(TypeLine());
+            
+            UpdateShopState();
+            lastSpecialPlayed = "";
+            return;
+        }
+
+        // Zero-based index for matching inspector elements
+        int zeroBasedIndex = dialogueIndex - 1;
+        
+        // Handle special visuals for Hand dialogue
+        if (lastSpecialPlayed == "Hand")
+        {
+            if (zeroBasedIndex == 3)
+            {
+                ShowLegendaryItem(reelObject);
+                return;
+            }
+            else if (zeroBasedIndex == 5)
+            {
+                ShowLegendaryItem(spineObject);
+                return;
+            }
+            else if (zeroBasedIndex == 8)
+            {
+                ShowLegendaryItem(hooksObject);
+                return;
+            }
+            else if (zeroBasedIndex == 10)
+            {
+                ShowLegendaryItem(rodObject);
+                return;
+            }
+        }
+        
+        // Handle BoneRod cutscene
+        if (lastSpecialPlayed == "BoneRod" && dialogueIndex == 4)
+        {
+            CutsceneManager cutscene = FindObjectOfType<CutsceneManager>();
+            if (cutscene != null)
+            {
+                waitingForCutscene = true;
+                cutscene.PlayCutscene();
+                return;
+            }
+        }
+
+        // Continue to next line
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+        typingCoroutine = StartCoroutine(TypeLine());
+    }
+
+    void ShowLegendaryItem(GameObject itemToShow)
+    {
+        if (itemToShow == null)
+        {
+            Debug.LogError("Item reference is null");
+            NextLine();
+            return;
+        }
+
+        Debug.Log($"Showing item: {itemToShow.name}");
+
+        // Hide dialogue
+        dialoguePanel.SetActive(false);
+
+        // Ensure legendary canvas is active
+        if (legendaryCanvas != null)
+            legendaryCanvas.SetActive(true);
+
+        // Hide all legendary items first
+        reelObject?.SetActive(false);
+        spineObject?.SetActive(false);
+        hooksObject?.SetActive(false);
+        rodObject?.SetActive(false);
+
+        // Show the desired item
+        itemToShow.SetActive(true);
+
+        // Fade in the canvas
+        StartCoroutine(FadeCanvasGroup(legendaryCanvasGroup, 0f, 1f, fadeDuration));
+
+        // Wait before fading out
+        waitingForCutscene = true;
+        StartCoroutine(ContinueAfterFadeDisplay(itemToShow));
+    }
+
+    IEnumerator FadeCanvasGroup(CanvasGroup group, float start, float end, float duration)
+    {
+        float elapsed = 0f;
+        group.alpha = start;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            group.alpha = Mathf.Lerp(start, end, elapsed / duration);
+            yield return null;
+        }
+
+        group.alpha = end;
+    }
+
+    IEnumerator ContinueAfterFadeDisplay(GameObject itemToHide)
+    {
+        yield return new WaitForSeconds(visualDisplayTime);
+
+        // Fade out
+        yield return FadeCanvasGroup(legendaryCanvasGroup, 1f, 0f, fadeDuration);
+
+        // Cleanup
+        itemToHide.SetActive(false);
+        if (legendaryCanvas != null)
+            legendaryCanvas.SetActive(false);
+
+        waitingForCutscene = false;
+        dialoguePanel.SetActive(true);
+
+        if (typingCoroutine != null)
+            StopCoroutine(typingCoroutine);
+
+        typingCoroutine = StartCoroutine(TypeLine());
+    }
+
+    void ReturnToDialogue()
+    {
+        Debug.Log("Returning to dialogue");
+        
+        // Hide legendary items
+        if (legendaryCanvas != null)
+        {
+            legendaryCanvas.SetActive(false);
+        }
+        
+        if (reelObject != null) reelObject.SetActive(false);
+        if (spineObject != null) spineObject.SetActive(false);
+        if (hooksObject != null) hooksObject.SetActive(false);
+        if (rodObject != null) rodObject.SetActive(false);
+        
+        // Show dialogue panel
+        dialoguePanel.SetActive(true);
+        
+        // Reset waiting flag
+        waitingForCutscene = false;
+        
+        // Continue dialogue
+        NextLine();
+    }
+
+    public void ResumeDialogueAfterCutscene()
+    {
+        waitingForCutscene = false;
+        NextLine();
+    }
+
+    void UpgradeRodVisuals()
+    {
+        Debug.Log("UpgradeRodVisuals called");
+
+        if (rodNameText != null)
+        {
+            if (lastSpecialPlayed == "Scroll")
+                rodNameText.text = "Enhanced Fishing Rod";
+            else if (lastSpecialPlayed == "Hair")
+                rodNameText.text = "Professional Rod";
+        }
+
+        if (rodImage != null)
+        {
+            if (lastSpecialPlayed == "Scroll" && upgradedRodSprite != null)
+                rodImage.sprite = upgradedRodSprite;
+            else if (lastSpecialPlayed == "Hair" && professionalRodSprite != null)
+                rodImage.sprite = professionalRodSprite;
         }
     }
 }

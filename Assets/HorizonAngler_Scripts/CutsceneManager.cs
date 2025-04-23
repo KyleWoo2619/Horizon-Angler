@@ -77,11 +77,11 @@ public class CutsceneManager : MonoBehaviour
         isCutscenePlaying = false;
 
         Debug.Log("Cutscene Finished!");
-
-        ShowRewardUI(); // <-- NEW
+        FindObjectOfType<ShopInteractionManager>()?.ResumeDialogueAfterCutscene();
+        ShowRewardUI();
     }
 
-    private void ShowRewardUI()   // <-- NEW
+    private void ShowRewardUI()
     {
         if (rewardUIPanel != null)
         {
@@ -92,7 +92,7 @@ public class CutsceneManager : MonoBehaviour
         }
     }
 
-    private void HideRewardUI()   // <-- NEW
+    private void HideRewardUI()
     {
         if (rewardUIPanel != null)
         {
