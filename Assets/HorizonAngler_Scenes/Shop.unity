@@ -1449,6 +1449,7 @@ GameObject:
   - component: {fileID: 115081589}
   - component: {fileID: 115081591}
   - component: {fileID: 115081590}
+  - component: {fileID: 115081592}
   m_Layer: 0
   m_Name: ShopManager
   m_TagString: Untagged
@@ -1496,6 +1497,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5cad26dfcf7ebd4e9d0a5534e133636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &115081592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115081588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb312d96023a74b478fb7e014734a7d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialoguePanel: {fileID: 1525395838}
+  specialButton: {fileID: 1712381059}
+  specialButtonText: {fileID: 2040743520}
+  textComponent: {fileID: 1525395840}
+  dialogueButton: {fileID: 188469956}
+  upgradeButton: {fileID: 0}
+  shopBaseDialogue: {fileID: 2082387711}
+  textSpeed: 0.05
+  initialBaseDialogue:
+  - '"You lost or somethin''? Keep movin''."'
+  - "\"Fish don\u2019t bite on questions, kid.\""
+  - "\"Don\u2019t expect a welcome mat. This ain\u2019t that kinda shop.\""
+  afterPondBossDialogue:
+  - "\u201CTrade ya silence for gear. Deal?\u201D"
+  - "\u201CEver think you were happier not knowin\u2019?\u201D"
+  - "\u201CRod\u2019s not gonna swing itself, y\u2019know.\u201D"
+  afterRiverBossDialogue:
+  - "\u201CNo... it can\u2019t be... Buried under all that tides and time...\""
+  - "\u201CA boat, huh? Just don\u2019t steer it toward the truth.\u201D"
+  - "\u201CBringin\u2019 back pieces don\u2019t mean you can fix what\u2019s broke.\u201D"
+  afterOceanBossDialogue:
+  - "\u201C...You shouldn\u2019t be doin\u2019 this.\u201D"
+  - "\u201CThis ain\u2019t bravery, kid. It\u2019s just draggin\u2019 weight upstream.\u201D"
+  - "\u201CReelin\u2019 in bones. What does that make you, huh?\u201D"
+  afterDredgedHandDialogue:
+  - "\u201CThat hand... you felt it pullin\u2019, didn\u2019t you?\u201D"
+  - "\u201CYou\u2019re fishin\u2019 for ghosts now. And ghosts don\u2019t let go
+    easy.\u201D"
+  afterAllCollectedDialogue:
+  - "\u201CYou\u2019re gettin\u2019 close. Too close.\u201D"
+  - "\u201CHeh... maybe it\u2019s not my choice to stop you.\u201D"
+  finalStateDialogue: []
+  scrollDialogue:
+  - "\u201C...! Where did you find that scroll?\u201D"
+  - '* Shopkeeper forcefully takes scroll out of your hand.'
+  - "\u201C......\u201D"
+  - "\u201CForget about what you saw.\u201D"
+  - '* Shopkeeper hands you a new fishing rod.'
+  - '* Despite the strange exchange, a thrill runs through you.'
+  - '* You can''t hide your excitement to fish IN THE RIVER now.'
+  hairDialogue:
+  - "\u201CThis\u2026 was inside a fish?\u201D"
+  - '* Shopkeeper snatches the reel hideen behind gruesome clump, hands trembling.'
+  - "\u201CI threw mine away. Burned it, too\u2026 I think. Doesn\u2019t matter.\u201D"
+  - "\u201CDon\u2019t ask me about it. Ever.\u201D"
+  - "* He hands you a boat key. Doesn\u2019t meet your eyes."
+  - He places the reel behind the counter. But now... water seeps across the floor,
+    soaking the shop table.
+  boneRodDialogue:
+  - "\"It came back\u2026 after all this time?\u201D"
+  - "* Shopkeeper whispers something you can\u2019t make out."
+  - "\u201CYou\u2026 you brought it back.\u201D"
+  - '* As he takes the spine, you feel the land tremble. The lights go out.'
+  - "\u201CYou need to go. Go to the pond. While you still can.\u201D"
+  handDialogue:
+  - '* The hand twitches the moment it nears the Shopkeeper. Like it remembers him.'
+  - "\u201CThe final piece... it waited.\u201D"
+  - "* He takes it, eyes sunken, expression unreadable \u2014 as if mourning something
+    only he recalls."
+  - "* In silence, he assembles the rod \u2014 with hands that have done this before."
+  - '* The air thickens. The pull is undeniable. This rod was meant for you.'
+  vesselDialogue:
+  - '"......"'
+  - '"............"'
+  - "\u201CThe rod\u2019s complete. But are you?\u201D"
+  - "\u201CThe last one...failed.\u201D"
+  - "\u201CThere\u2019s a name for someone who reels the sun\u2026\u201D"
+  - "\u201CMay you yet become the Horizon Angler.\u201D"
+  finalFightDialogue:
+  - '* You return with the remains. The lower half of a man.  '
+  - "\u201CGood job finding your bones.\u201D  "
+  - "\u201CWhat do you mean\u2026?\u201D you ask."
+  - "\u201CMy name is Pierre Jonah Santiago.\u201D"
+  - "* He almost smiles \u2014 but it doesn\u2019t reach his/my eyes."
+  - "The reflection blinks \u2014 not his, not yours. Just\u2026 there."
+  - He vanishes. Or maybe you do.
 --- !u!1 &116482744
 GameObject:
   m_ObjectHideFlags: 0
@@ -2579,8 +2668,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 321.93756, y: 188.54852}
-  m_SizeDelta: {x: 347.7062, y: 92.0497}
+  m_AnchoredPosition: {x: 249.4884, y: 209.15994}
+  m_SizeDelta: {x: 492.6046, y: 133.2725}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &188469958
 MonoBehaviour:
@@ -2662,10 +2751,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1379609336}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 115081592}
+        m_TargetAssemblyTypeName: ShopInteractionManager, Assembly-CSharp
+        m_MethodName: OnTalkButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3199,10 +3300,12 @@ MonoBehaviour:
     canFishPondBoss: 0
     canFishRiverBoss: 0
     canFishOceanBoss: 0
-    hasCaughtPondBoss: 0
+    hasCaughtPondBoss: 1
     hasCaughtRiverBoss: 0
     hasCaughtOceanBoss: 0
-    currentLevel: Pond
+    dredgedHand: 0
+    AllCollected: 0
+    currentLevel: Shop
 --- !u!1 &257653023
 GameObject:
   m_ObjectHideFlags: 0
@@ -3667,7 +3770,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &293526206
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6645,8 +6748,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24.89
-  m_fontSizeBase: 24.89
+  m_fontSize: 49
+  m_fontSizeBase: 49
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -9901,6 +10004,7 @@ GameObject:
   m_Component:
   - component: {fileID: 714611314}
   - component: {fileID: 714611313}
+  - component: {fileID: 714611315}
   m_Layer: 0
   m_Name: PauseManager
   m_TagString: Untagged
@@ -9915,13 +10019,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 714611312}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bb1813fbf591077449c47021fbd19913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 293526205}
   firstSelectedButton: {fileID: 1961423485}
+  encyclopedia: {fileID: 0}
+  encyBtnContainer: {fileID: 0}
+  pauseBtnContainer: {fileID: 0}
+  map: {fileID: 0}
+  optionsMenu: {fileID: 0}
+  controlsMenu: {fileID: 0}
+  encyclopediaUI: {fileID: 0}
 --- !u!4 &714611314
 Transform:
   m_ObjectHideFlags: 0
@@ -9937,6 +10048,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1939564626}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &714611315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714611312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2feaaaff44060e443bedab8cdc641b25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopPauseCanvas: {fileID: 293526205}
+  pauseAction:
+    m_Name: Pause
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f313eb13-94b0-4594-a4c9-5af394278179
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 73ebd56e-a9eb-4e8d-940d-09b255af22a7
+      m_Path: <Keyboard>/escape
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Pause
+      m_Flags: 0
+    - m_Name: 
+      m_Id: c4fd5db8-e242-4873-8a38-f8c84d13c965
+      m_Path: <Keyboard>/p
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Pause
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 5398dff3-1068-442f-a5a6-6590af0b527e
+      m_Path: <Gamepad>/start
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Pause
+      m_Flags: 0
+    m_Flags: 0
 --- !u!1 &719026514
 GameObject:
   m_ObjectHideFlags: 0
@@ -11516,11 +11673,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2082387715}
+  - {fileID: 1525395839}
   - {fileID: 1314352097}
-  - {fileID: 1237148352}
   - {fileID: 1237400571}
   - {fileID: 188469957}
-  - {fileID: 1379609337}
   - {fileID: 1712381060}
   m_Father: {fileID: 1287373719}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11918,161 +12074,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 922545628}
   m_CullTransparentMesh: 1
---- !u!1 &927952171
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 927952175}
-  - component: {fileID: 927952174}
-  - component: {fileID: 927952173}
-  - component: {fileID: 927952172}
-  m_Layer: 0
-  m_Name: UpgradeDialogueText
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &927952172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 927952171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 924fd8b01ba78944dbaf0cf50f5045cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textComponent: {fileID: 927952173}
-  dialogueButton: {fileID: 188469956}
-  upgradeButton: {fileID: 1379609336}
-  ShopBaseDialogue: {fileID: 2082387711}
-  lines:
-  - '" ... Nothin'' here is for sale. "'
-  textSpeed: 0
---- !u!114 &927952173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 927952171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_text: 
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
-  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
-    type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 38.93
-  m_fontSizeBase: 38.93
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 1
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 1
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &927952174
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 927952171}
-  m_CullTransparentMesh: 1
---- !u!224 &927952175
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 927952171}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1237148352}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000015258789}
-  m_SizeDelta: {x: 900.0717, y: 148.3218}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &933094808
 GameObject:
   m_ObjectHideFlags: 0
@@ -14954,141 +14955,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195529386}
   m_CullTransparentMesh: 1
---- !u!1 &1199688365
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1199688366}
-  - component: {fileID: 1199688368}
-  - component: {fileID: 1199688367}
-  m_Layer: 0
-  m_Name: Text (TMP)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1199688366
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1199688365}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1379609337}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1199688367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1199688365}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_text: Purchase
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
-  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
-    type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 24.89
-  m_fontSizeBase: 24.89
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 1
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 1
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1199688368
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1199688365}
-  m_CullTransparentMesh: 1
 --- !u!1 &1202407170
 GameObject:
   m_ObjectHideFlags: 0
@@ -15321,44 +15187,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1220783875}
   m_CullTransparentMesh: 1
---- !u!1 &1237148351
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1237148352}
-  m_Layer: 0
-  m_Name: DialogueTexts
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1237148352
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1237148351}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1525395839}
-  - {fileID: 927952175}
-  - {fileID: 1673654325}
-  m_Father: {fileID: 912028472}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.76278687, y: -15.175398}
-  m_SizeDelta: {x: 900.0717, y: 148.3218}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1237400570
 GameObject:
   m_ObjectHideFlags: 0
@@ -16948,175 +16776,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1379528709}
   m_CullTransparentMesh: 1
---- !u!1 &1379609336
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1379609337}
-  - component: {fileID: 1379609340}
-  - component: {fileID: 1379609339}
-  - component: {fileID: 1379609338}
-  m_Layer: 0
-  m_Name: UpgradeButton
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1379609337
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1379609336}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1199688366}
-  m_Father: {fileID: 912028472}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 321.93756, y: 292}
-  m_SizeDelta: {x: 347.7062, y: 92.0497}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1379609338
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1379609336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 0.7529412, b: 0, a: 1}
-    m_PressedColor: {r: 1, g: 0.7529412, b: 0, a: 1}
-    m_SelectedColor: {r: 1, g: 0.7529412, b: 0, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1379609339}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2082387711}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1379609336}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 188469956}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 927952171}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
---- !u!114 &1379609339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1379609336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2d7bbfdcc8151964eb0c9637c1ed81cc, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1379609340
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1379609336}
-  m_CullTransparentMesh: 1
 --- !u!1 &1405264409
 GameObject:
   m_ObjectHideFlags: 0
@@ -18141,14 +17800,13 @@ GameObject:
   - component: {fileID: 1525395839}
   - component: {fileID: 1525395841}
   - component: {fileID: 1525395840}
-  - component: {fileID: 1525395842}
   m_Layer: 0
-  m_Name: BasicDialogueText
+  m_Name: DialogueText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1525395839
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18161,11 +17819,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1237148352}
+  m_Father: {fileID: 912028472}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000015258789}
+  m_AnchoredPosition: {x: -0.76275635, y: -15.175446}
   m_SizeDelta: {x: 900.0717, y: 148.3218}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1525395840
@@ -18188,7 +17846,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: Why not working?????
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
   m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
@@ -18266,26 +17924,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1525395838}
   m_CullTransparentMesh: 1
---- !u!114 &1525395842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1525395838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 924fd8b01ba78944dbaf0cf50f5045cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textComponent: {fileID: 1525395840}
-  dialogueButton: {fileID: 188469956}
-  upgradeButton: {fileID: 1379609336}
-  ShopBaseDialogue: {fileID: 2082387711}
-  lines:
-  - '" ... Are ya gonna stand ''round, or are ya gonna use that rod while it''s still
-    light out? "'
-  textSpeed: 0
 --- !u!1 &1527434282
 GameObject:
   m_ObjectHideFlags: 0
@@ -19001,197 +18639,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0.000061035, y: -267.93713}
   m_SizeDelta: {x: 841.611, y: 67.5826}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1673654324
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1673654325}
-  - component: {fileID: 1673654328}
-  - component: {fileID: 1673654327}
-  - component: {fileID: 1673654326}
-  - component: {fileID: 1673654329}
-  m_Layer: 0
-  m_Name: ScrollDialogueText
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &1673654325
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1673654324}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1237148352}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000015258789}
-  m_SizeDelta: {x: 900.0717, y: 148.3218}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1673654326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1673654324}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 924fd8b01ba78944dbaf0cf50f5045cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textComponent: {fileID: 1673654327}
-  dialogueButton: {fileID: 188469956}
-  upgradeButton: {fileID: 1379609336}
-  ShopBaseDialogue: {fileID: 2082387711}
-  lines:
-  - '"...! Where did you find that scroll?"'
-  - Shopkeepr forcefully takes scroll out of your hand.
-  - '"......"'
-  - '"Forget about what you saw."'
-  - Shopkeeper hands you a new fishing rod.
-  - Desprite the strange exchange, a thrill runs throgh you.
-  - You can't hide your excitement to fish IN THE RIVER now.
-  textSpeed: 0
---- !u!114 &1673654327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1673654324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_text: '"...! Where did you find that scroll?"'
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
-  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
-    type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 38.93
-  m_fontSizeBase: 38.93
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 1
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 1
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1673654328
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1673654324}
-  m_CullTransparentMesh: 1
---- !u!114 &1673654329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1673654324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7461316402e488b4daa3fe51dc59332b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textComponent: {fileID: 1673654327}
-  ShopBaseDialogue: {fileID: 2082387711}
-  dialogueButton: {fileID: 188469956}
-  upgradeButton: {fileID: 1379609336}
-  fishingRodIcon: {fileID: 2101480711}
-  upgradedRodSprite: {fileID: 21300000, guid: 2d160c3c4e2d6d84487ceba0cc887afe, type: 3}
-  fishingRodNameText: {fileID: 486254589}
-  upgradedRodName: Enhanced Fishing Rod
-  lines:
-  - '"...! Where did you find that scroll?"'
-  - '* Shopkeepr forcefully takes scroll out of your hand.'
-  - '"......"'
-  - '"Forget about what you saw."'
-  - '* Shopkeeper hands you a new fishing rod.'
-  - '* Despite the strange exchange, a thrill runs throgh you.'
-  - '* You can''t hide your excitement to fish IN THE RIVER now.'
-  textSpeed: 0
 --- !u!1 &1691302171
 GameObject:
   m_ObjectHideFlags: 0
@@ -19574,12 +19021,12 @@ GameObject:
   - component: {fileID: 1712381062}
   - component: {fileID: 1712381061}
   m_Layer: 0
-  m_Name: FoundScrollButton
+  m_Name: SpecialButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1712381060
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19597,8 +19044,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 321.93756, y: 384.04968}
-  m_SizeDelta: {x: 347.7062, y: 92.0497}
+  m_AnchoredPosition: {x: 249.4884, y: 342.43}
+  m_SizeDelta: {x: 492.6046, y: 133.2725}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1712381061
 MonoBehaviour:
@@ -19680,7 +19127,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1673654324}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -19690,12 +19137,12 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1379609336}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 115081592}
+        m_TargetAssemblyTypeName: ShopInteractionManager, Assembly-CSharp
+        m_MethodName: OnSpecialButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -21602,6 +21049,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 115081589}
   - {fileID: 714611314}
   - {fileID: 1083294561}
   - {fileID: 1527434285}
@@ -21609,7 +21057,6 @@ Transform:
   - {fileID: 388478089}
   - {fileID: 311818111}
   - {fileID: 257613224}
-  - {fileID: 115081589}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1939970754
@@ -22348,8 +21795,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 3.2283936, y: -1.0761032}
+  m_SizeDelta: {x: -122.6819, y: -71.0264}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2040743520
 MonoBehaviour:
@@ -22371,11 +21818,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ask about Scroll
+  m_text: Show the hand to the shopkeeper."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
-  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 701d4d8ce6bd301409acc73583e7cc40, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -22399,13 +21845,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18.6
-  m_fontSizeBase: 18.6
+  m_fontSize: 22.51
+  m_fontSizeBase: 22.51
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 21
+  m_fontStyle: 17
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -22435,7 +21881,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 1.0761108, y: 0, z: 1.0761719, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -22883,7 +22329,7 @@ GameObject:
   - component: {fileID: 2082387714}
   - component: {fileID: 2082387713}
   m_Layer: 0
-  m_Name: SampleText
+  m_Name: BaseShop...Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -21,6 +21,8 @@ public class SaveData
     public bool hasCaughtPondBoss = false;
     public bool hasCaughtRiverBoss = false;
     public bool hasCaughtOceanBoss = false;
+    public bool dredgedHand = false;
+    public bool AllCollected = false;
 
     // Last known level the player was in
     public string currentLevel = "Pond";
