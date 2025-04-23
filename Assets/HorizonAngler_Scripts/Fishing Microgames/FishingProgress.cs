@@ -113,6 +113,7 @@ public class FishingProgress : MonoBehaviour
     public List<FishingLogEntry> fishingLog = new List<FishingLogEntry>();
 
     private bool hasCaughtFish = false;
+    public bool progressMaxHandled = false;
 
     private float fishCaughtInputDelay = 0.5f; // Half second delay
     private float fishCaughtTimer = 0f;
@@ -144,12 +145,31 @@ public class FishingProgress : MonoBehaviour
             notificationCanvas.SetActive(false);
             notificationGroup.alpha = 0f;
         }
+
+        FishBossAI bossAI = FindObjectOfType<FishBossAI>();
+        if (bossAI != null)
+        {
+            bossAI.DisableIfBossCaught();
+
+            var save = GameManager.Instance.currentSaveData;
+            bool goToBoss = save.currentLevel switch
+            {
+                "Pond" => save.canFishPondBoss,
+                "River" => save.canFishRiverBoss,
+                "Ocean" => save.canFishOceanBoss,
+                _ => false
+            };
+
+            if (goToBoss)
+                bossAI.GoToBossLocation();
+        }
     }
 
     public void Initialize()
     {
         progress = 50f;
         hasCaughtFish = false;
+        progressMaxHandled = false;
     }
 
     void Update()
@@ -157,13 +177,24 @@ public class FishingProgress : MonoBehaviour
         // Always check if we're waiting on player input to hide win/fail screen
         if (fishCaughtScreenActive)
         {
-            fishCaughtTimer += Time.deltaTime;
-            if (fishCaughtTimer > fishCaughtInputDelay && Input.anyKeyDown)
+            fishCaughtTimer += Time.unscaledDeltaTime; // In case you’re paused
+            if (fishCaughtTimer >= 0f)
             {
-                HideFishCaughtScreen();
+                fishCaughtTimer += Time.deltaTime;
+                if (fishCaughtTimer > fishCaughtInputDelay && Input.anyKeyDown)
+                {
+                    Debug.Log("[FishingProgress] Hiding win/lose screen due to input.");
+                    HideFishCaughtScreen();
+                }
             }
-            return; // Don't do anything else while result screen is active
+            else
+            {
+                // Skip first frame of input check
+                fishCaughtTimer = 0f;
+            }
+
         }
+
 
         // Skip update unless we're fishing
         if (InitiateMicrogames.Instance == null || !InitiateMicrogames.Instance.MGCanvas.activeSelf)
@@ -205,6 +236,8 @@ public class FishingProgress : MonoBehaviour
 
     void HideFishCaughtScreen()
     {
+        Debug.Log("[FishingProgress] Hiding win/lose screen due to input.");
+
         // Hide all possible catch result screens
         basicWinScreen?.SetActive(false);
         basicLoseScreen?.SetActive(false);
@@ -249,7 +282,11 @@ public class FishingProgress : MonoBehaviour
                 Debug.LogWarning("CutsceneManager not found in scene!");
             }
         }
+
+        // RESET state for next round
+        StartCoroutine(DelayedClear());
     }
+
 
 
     public void Set1ObstaclePenalty()
@@ -294,8 +331,9 @@ public class FishingProgress : MonoBehaviour
 
     void ProgressTracker()
     {
-        if (progress >= 100f && !hasCaughtFish)
+        if (progress >= 100f && !hasCaughtFish && !progressMaxHandled)
         {
+            progressMaxHandled = true;
             OnProgressMax();
         }
         else if (progress <= 0f)
@@ -362,6 +400,8 @@ public class FishingProgress : MonoBehaviour
 
     void OnProgressMax()
     {
+        hasCaughtFish = true;
+
         if (activeZoneType == FishZoneType.Tutorial)
         {
             hasCaughtFish = true;
@@ -406,6 +446,8 @@ public class FishingProgress : MonoBehaviour
             hasCaughtFish = true;
 
             PickRandomFish();
+            Debug.Log($"[FishingProgress] Picked random fish: {currentCaughtFish?.fishName}");
+
             ShowFishCaughtScreen();
 
             T2S.microgamesActive = false;
@@ -415,24 +457,14 @@ public class FishingProgress : MonoBehaviour
 
     private void OnTutorialCutsceneFinished(VideoPlayer vp)
     {
-        Debug.Log("Cutscene ended. Loading PostTutorial scene...");
-
+        Debug.Log("Cutscene ended. Loading MainRegion scene...");
+        
         // Unsubscribe so it doesn't fire again
         vp.loopPointReached -= OnTutorialCutsceneFinished;
 
-        // Find the LoadingManager in the scene
-        LoadingManager loadingManager = FindObjectOfType<LoadingManager>();
-        if (loadingManager != null)
-        {
-            loadingManager.LoadSceneWithLoadingScreen("PostTutorial");
-        }
-        else
-        {
-            Debug.LogWarning("LoadingManager not found! Loading scene directly.");
-            SceneManager.LoadScene("PostTutorial"); // Fallback
-        }
-}
-
+        // Load the new scene
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Pond"); // replace with actual scene name
+    }
     
     void OnProgressMin()
     {
@@ -451,6 +483,7 @@ public class FishingProgress : MonoBehaviour
         {
             player.PlayFishingIdle();
         }
+        InitiateMicrogames.Instance.fishingStarted = false; // Prevent CTC from returning on fail
     }
 
     void PickRandomFish()
@@ -495,52 +528,62 @@ public class FishingProgress : MonoBehaviour
 
     void ShowFishCaughtScreen()
     {
-        InitiateMicrogames.Instance.MGCanvas.SetActive(false);
-        InitiateMicrogames.Instance.CCanvas.SetActive(false);
+        Debug.Log($"[FishingProgress] Preparing to show caught screen...");
 
-        if (currentCaughtFish != null && fishCaughtImage != null && fishCaughtText != null)
+        if (currentCaughtFish == null)
         {
-            if (IsBossFish(currentCaughtFish.fishName))
-                bossCatchScreen.SetActive(true);
-            else
-                basicWinScreen.SetActive(true);
-            fishCaughtImage.sprite = currentCaughtFish.fishSprite;
-            fishCaughtText.text = $"Caught {currentCaughtFish.fishName}!";
-            fishCaughtScreenActive = true;
-            fishCaughtTimer = 0f;
-
-            // Save to in-game fishing log
-            string caughtTime = System.DateTime.Now.ToString("HH:mm:ss");
-            string caughtDate = System.DateTime.Now.ToString("MM/dd/yyyy");
-
-            HAPlayerController player = FindObjectOfType<HAPlayerController>();
-            fishingLog.Add(new FishingLogEntry(
-                currentCaughtFish.fishName,
-                currentCaughtFish.fishSprite,
-                caughtDate,
-                caughtTime,
-                activeZoneType
-            ));
-
-            // Delegate all save-related tracking to GameManager
-            GameManager.Instance.RecordFishCatch(currentCaughtFish.fishName, activeZoneType.ToString());
-
-            FishEncyclopediaUI encyUI = FindObjectOfType<FishEncyclopediaUI>();
-            if (encyUI != null)
-            {
-                encyUI.NotifyFishDiscovered(currentCaughtFish.fishName);
-            }
-
-            Debug.Log($"Caught {currentCaughtFish.fishName} at {caughtTime} on {caughtDate}");
-
-            if (player != null)
-            {
-                player.PlayFishingIdle();
-            }
+            Debug.LogWarning("[FishingProgress] currentCaughtFish is null, aborting screen display.");
+            return;
         }
 
+        if (InitiateMicrogames.Instance != null)
+        {
+            InitiateMicrogames.Instance.MGCanvas.SetActive(false);
+            InitiateMicrogames.Instance.CCanvas.SetActive(false);
+
+            // Hide Click to Cast prompt
+            InitiateMicrogames.Instance.CTC.SetActive(false);
+        }
+
+        Debug.Log($"[FishingProgress] Caught fish: {currentCaughtFish.fishName}, Image: {(fishCaughtImage != null ? "OK" : "Missing")}, Text: {(fishCaughtText != null ? "OK" : "Missing")}");
+
+        if (IsBossFish(currentCaughtFish.fishName))
+            bossCatchScreen?.SetActive(true);
+        else
+            basicWinScreen?.SetActive(true);
+
+        if (fishCaughtImage != null) fishCaughtImage.sprite = currentCaughtFish.fishSprite;
+        if (fishCaughtText != null) fishCaughtText.text = $"Caught {currentCaughtFish.fishName}!";
+
+        string time = System.DateTime.Now.ToString("HH:mm:ss");
+        string date = System.DateTime.Now.ToString("MM/dd/yyyy");
+
+        fishingLog.Add(new FishingLogEntry(
+            currentCaughtFish.fishName,
+            currentCaughtFish.fishSprite,
+            date,
+            time,
+            activeZoneType
+        ));
+
+        GameManager.Instance?.RecordFishCatch(currentCaughtFish.fishName, activeZoneType.ToString());
+
+        var encyUI = FindObjectOfType<FishEncyclopediaUI>();
+        encyUI?.NotifyFishDiscovered(currentCaughtFish.fishName);
+
+        Debug.Log($"[FishingProgress] Showing win screen for {currentCaughtFish.fishName} at {time} on {date}");
+
+        HAPlayerController player = FindObjectOfType<HAPlayerController>();
+        if (player != null)
+            player.PlayFishingIdle();
+
+        StartCoroutine(EnableFishCaughtInputNextFrame());
+        InitiateMicrogames.Instance.CTC?.SetActive(false); // Force hide Click to Cast
+
         CheckUnlockBossFishing();
+        InitiateMicrogames.Instance.fishingStarted = false; // Prevent CTC from returning during win screen
     }
+
 
 
 
@@ -625,7 +668,13 @@ public class FishingProgress : MonoBehaviour
             };
 
             ShowNotification(message);
+
+            // NEW: Trigger boss fish AI to swim to the catch location
+            FishBossAI bossAI = FindObjectOfType<FishBossAI>();
+            if (bossAI != null)
+                bossAI.GoToBossLocation();
         }
+
 
         // Save after any potential changes
         SaveManager.Save(GameManager.Instance.currentSaveData);
@@ -702,4 +751,16 @@ public class FishingProgress : MonoBehaviour
         Debug.Log("[FishingProgress] Reset complete.");
     }
 
+
+    private IEnumerator DelayedClear()
+    {
+        yield return null; // Wait 1 frame
+        Clear();
+    }
+    private IEnumerator EnableFishCaughtInputNextFrame()
+    {
+        yield return null;
+        fishCaughtScreenActive = true;
+        fishCaughtTimer = 0f;
+    }
 }

@@ -21,6 +21,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        // SHIFT + T + X + O + U deletes the save file and reloads a fresh save
+        if (Input.GetKey(KeyCode.LeftShift) &&
+            Input.GetKeyDown(KeyCode.T) &&
+            Input.GetKey(KeyCode.X) &&
+            Input.GetKey(KeyCode.O) &&
+            Input.GetKey(KeyCode.U))
+        {
+            Debug.LogWarning("[GameManager] SECRET COMBO ACTIVATED: Deleting save file...");
+            SaveManager.DeleteSave();
+
+            // Refresh all save-dependent data
+            currentSaveData = SaveManager.Load();
+
+            // Optional: Notify other systems to update their cached values
+            FishingProgress.Instance?.Initialize(); // Resets progress bar, etc.
+            Debug.Log("[GameManager] Save data reloaded and variables refreshed.");
+        }
+    }
+
+
     void OnApplicationQuit()
     {
         SaveManager.Save(currentSaveData);
