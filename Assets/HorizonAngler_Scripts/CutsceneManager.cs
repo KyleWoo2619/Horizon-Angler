@@ -70,17 +70,25 @@ public class CutsceneManager : MonoBehaviour
         isCutscenePlaying = true;
     }
 
+    // In CutsceneManager.cs, update the OnCutsceneFinished method:
     private void OnCutsceneFinished(VideoPlayer vp)
     {
         cutsceneRawImage.gameObject.SetActive(false);
-        Time.timeScale = 1f; // Resume the game
         isCutscenePlaying = false;
-
         Debug.Log("Cutscene Finished!");
-        FindObjectOfType<ShopInteractionManager>()?.ResumeDialogueAfterCutscene();
+        
+        // Don't resume time yet - we'll wait for the reward UI
+        ShopInteractionManager shopManager = FindObjectOfType<ShopInteractionManager>();
+        if (shopManager != null)
+        {
+            shopManager.ResumeDialogueAfterCutscene();
+        }
+        
+        // Show reward UI after cutscene
         ShowRewardUI();
     }
 
+    // And update ShowRewardUI to handle if there's no reward panel:
     private void ShowRewardUI()
     {
         if (rewardUIPanel != null)
@@ -88,7 +96,12 @@ public class CutsceneManager : MonoBehaviour
             rewardUIPanel.SetActive(true);
             rewardUIActive = true;
             rewardTimer = 0f;
-            Time.timeScale = 0f;  // Pause game again while showing reward
+            Time.timeScale = 0f;  // Keep game paused while showing reward
+        }
+        else
+        {
+            // If there's no reward panel, just resume time
+            Time.timeScale = 1f;
         }
     }
 

@@ -10,7 +10,7 @@ using Random = System.Random;
 
 public class Test2Script : MonoBehaviour
 {
-    public enum FishingZoneType { Pond, River, Ocean, BossPond, BossRiver, BossOcean }
+    public enum FishingZoneType {Tutorial, Pond, River, Ocean, BossPond, BossRiver, BossOcean }
 
     static Random rnd = new Random();
 
@@ -1037,6 +1037,7 @@ public class Test2Script : MonoBehaviour
         }
 
         List<string> activeFromZone = InitiateMicrogames.Instance.ActiveMicrogameSets;
+        Debug.Log("[Test2Script] Active sets from zone: " + string.Join(", ", activeFromZone));
 
         // Clear and repopulate Sets dictionary safely
         Sets.Clear();
@@ -1219,6 +1220,10 @@ public class Test2Script : MonoBehaviour
         // Zone-specific sets
         switch (zoneType)
         {
+            case FishingZoneType.Tutorial:
+                // In tutorial, keep it simple
+                requiredSets = new List<string> { "Set4" }; // Or Set1/Set5/etc. depending on what you want to test
+                break;
             case FishingZoneType.Pond:
             case FishingZoneType.BossPond:
                 requiredSets.Add("Set6");
@@ -1233,14 +1238,11 @@ public class Test2Script : MonoBehaviour
                 break;
         }
 
-        // Final boss will manually include all 7 — not handled here
-
         // Reset sets
         Sets.Clear();
         inactiveSets.Clear();
         activeSets.Clear();
 
-        // Add only required sets to dict and inactive list
         foreach (string set in requiredSets)
         {
             Sets.Add(set, false);

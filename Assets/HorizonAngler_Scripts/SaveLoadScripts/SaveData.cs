@@ -19,11 +19,15 @@ public class SaveData
     public bool canFishOceanBoss = false;
     public bool arrivedAtShop = false;
     public bool hasCaughtPondBoss = false;
+    public bool hasTurnedInScroll = false;
     public bool hasCaughtRiverBoss = false;
+    public bool hasTurnedInHair = false;
     public bool hasCaughtOceanBoss = false;
+    public bool hasTurnedInRod = false;
     public bool dredgedHand = false;
     public bool AllCollected = false;
     public bool BecameHorizonAngler = false;
+    public string lastScene = "Pond";
 
     // Last known level the player was in
     public string currentLevel = "Pond";

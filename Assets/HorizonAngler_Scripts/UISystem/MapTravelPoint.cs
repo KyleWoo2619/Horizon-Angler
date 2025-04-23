@@ -2,19 +2,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
-using StarterAssets;
+using System.Collections;
 
 public class MapTravelPoint : MonoBehaviour
 {
-    public enum RegionType { Tutorial, Pond, River, Ocean, Shop }
+    public enum RegionType {Pond, River, Ocean, Shop, BlackPond, Boss }
 
     [Header("Region Info")]
     public RegionType regionType;
 
     [Header("UI Components")]
-    public Button travelButton;             // The pin's Button
-    public Image pinImage;                  // The pin's image to tint
-    public GameObject confirmationPopup;    // The confirmation panel
+    public Button travelButton;
+    public Image pinImage;
+    public GameObject confirmationPopup;
     public TextMeshProUGUI confirmationText;
     public Button yesButton;
     public Button noButton;
@@ -23,64 +23,70 @@ public class MapTravelPoint : MonoBehaviour
     public Color lockedColor = Color.gray;
     public Color unlockedColor = Color.white;
 
-    private HAPlayerController player;
+    [Header("Boss Fade Elements")]
+    public CanvasGroup bossTravelCanvasGroup; // Optional for Boss fade only
+    public float fadeDuration = 1f;
 
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<HAPlayerController>();
-
         SetupButton();
     }
 
     private void SetupButton()
     {
-        if (regionType == RegionType.River)
+        var save = GameManager.Instance?.currentSaveData;
+
+        if (regionType == RegionType.Shop)
         {
-            if (player != null && player.hasTurnedInScroll)
-                Unlock();
-            else
-                Lock();
-        }
-        else if (regionType == RegionType.Shop)
-        {
-            if (player != null && player.hasMovedShop)
-                Unlock();
-            else
-                Lock();
+            SetPinActive(save != null && save.arrivedAtShop);
         }
         else if (regionType == RegionType.Pond)
         {
-            Unlock(); // Always available
+            if (save != null && save.hasTurnedInRod)
+            {
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                SetPinActive(save != null && save.arrivedAtShop);
+            }
+        }
+        else if (regionType == RegionType.BlackPond)
+        {
+            gameObject.SetActive(true); // Always visible after unlocking
+            SetPinActive(save != null && save.hasTurnedInRod);
+        }
+        else if (regionType == RegionType.River)
+        {
+            SetPinActive(save != null && save.hasTurnedInScroll);
         }
         else if (regionType == RegionType.Ocean)
         {
-            // Example: unlock if player caught river boss (you can customize this)
-            if (GameManager.Instance != null && GameManager.Instance.currentSaveData.hasCaughtRiverBoss)
-                Unlock();
-            else
-                Lock();
+            SetPinActive(save != null && save.hasTurnedInHair);
         }
-        else
+        else if (regionType == RegionType.Boss)
         {
-            Lock();
+            if (save != null && save.AllCollected)
+            {
+                SetPinActive(true);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
 
         travelButton.onClick.AddListener(OnTravelButtonClicked);
         confirmationPopup.SetActive(false);
     }
 
-    private void Lock()
+    private void SetPinActive(bool unlocked)
     {
-        travelButton.interactable = false;
+        gameObject.SetActive(true);
+        if (travelButton != null)
+            travelButton.interactable = unlocked;
         if (pinImage != null)
-            pinImage.color = lockedColor;
-    }
-
-    private void Unlock()
-    {
-        travelButton.interactable = true;
-        if (pinImage != null)
-            pinImage.color = unlockedColor;
+            pinImage.color = unlocked ? unlockedColor : lockedColor;
     }
 
     private void OnTravelButtonClicked()
@@ -89,7 +95,9 @@ public class MapTravelPoint : MonoBehaviour
 
         confirmationPopup.SetActive(true);
         string displayName = GetRegionDisplayName(regionType);
-        confirmationText.text = $"Would you like to travel to the {displayName}?";
+        confirmationText.text = regionType == RegionType.Boss
+            ? "Are you ready to confront the terror of the Horizon Angler?"
+            : $"Would you like to travel to the {displayName}?";
 
         yesButton.onClick.RemoveAllListeners();
         noButton.onClick.RemoveAllListeners();
@@ -110,12 +118,23 @@ public class MapTravelPoint : MonoBehaviour
     {
         Debug.Log($"Traveling to {region}...");
 
-        Time.timeScale = 1f; // Unpause the game
+        Time.timeScale = 1f;
 
-        // Get the LoadingManager instance
+        if (region == RegionType.Boss)
+        {
+            if (bossTravelCanvasGroup != null)
+            {
+                StartCoroutine(FadeAndLoadBossScene());
+            }
+            else
+            {
+                SceneManager.LoadScene("Boss");
+            }
+            return;
+        }
+
         LoadingManager loadingManager = FindObjectOfType<LoadingManager>();
 
-        // Call the loading screen method
         switch (region)
         {
             case RegionType.River:
@@ -123,34 +142,57 @@ public class MapTravelPoint : MonoBehaviour
                 break;
             case RegionType.Ocean:
                 loadingManager.LoadSceneWithLoadingScreen("Ocean");
-                break;        
+                break;
             case RegionType.Shop:
                 loadingManager.LoadSceneWithLoadingScreen("Shop");
                 break;
             case RegionType.Pond:
                 loadingManager.LoadSceneWithLoadingScreen("Pond");
-                break;        default:
+                break;
+            case RegionType.BlackPond:
+                loadingManager.LoadSceneWithLoadingScreen("BlackPond");
+                break;
+            default:
                 Debug.Log("Region travel not implemented.");
                 break;
         }
     }
 
+    private IEnumerator FadeAndLoadBossScene()
+    {
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            bossTravelCanvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
+            yield return null;
+        }
+        SceneManager.LoadScene("Boss");
+    }
 
     private string GetRegionDisplayName(RegionType region)
     {
-        switch (region)
+        return region switch
         {
-            case RegionType.River: return "River";
-            case RegionType.Ocean: return "The Deep Blue";
-            case RegionType.Shop: return "Shop";
-            case RegionType.Pond: return "Pond";
-            case RegionType.Tutorial: return "Tutorial Region";
-            default: return "Unknown Region";
-        }
+            RegionType.River => "River",
+            RegionType.Ocean => "The Deep Blue",
+            RegionType.Shop => "Shop",
+            RegionType.Pond => "Pond",
+            RegionType.BlackPond => "Black Pond",
+            RegionType.Boss => "Final Horizon",
+            _ => "Unknown Region",
+        };
     }
 
     public void ForceUnlock()
     {
         Unlock();
+    }
+
+    private void Unlock()
+    {
+        travelButton.interactable = true;
+        if (pinImage != null)
+            pinImage.color = unlockedColor;
     }
 }

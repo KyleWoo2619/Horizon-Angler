@@ -124,6 +124,35 @@ public class ShopInteractionManager : MonoBehaviour
     public void UpdateShopState()
     {
         UpdateSpecialButton();
+        UpdateRodVisuals();
+    }
+
+    void UpdateRodVisuals()
+    {
+        if (!saveData.arrivedAtShop)
+        {
+            if (rodImage != null) rodImage.enabled = false;
+            if (rodNameText != null) rodNameText.text = "";
+            return;
+        }
+
+        if (rodImage != null) rodImage.enabled = true;
+
+        if (saveData.hasTurnedInHair)
+        {
+            rodNameText.text = "Professional Rod";
+            rodImage.sprite = professionalRodSprite;
+        }
+        else if (saveData.hasTurnedInScroll)
+        {
+            rodNameText.text = "Enhanced Fishing Rod";
+            rodImage.sprite = upgradedRodSprite;
+        }
+        else
+        {
+            rodNameText.text = "Basic Fishing Rod";
+            rodImage.sprite = defaultRodSprite;
+        }
     }
 
     void UpdateSpecialButton()
@@ -135,23 +164,24 @@ public class ShopInteractionManager : MonoBehaviour
         if (!saveData.arrivedAtShop)
         {
             specialButton.SetActive(true);
-            specialButtonText.text = "Ask him where this place is";
+            specialButtonText.text = "Ask him where this place is.";
         }
-        else if (saveData.hasCaughtPondBoss && !saveData.hasCaughtRiverBoss)
+        if (saveData.hasCaughtPondBoss && !saveData.hasCaughtRiverBoss && !saveData.hasTurnedInScroll)
         {
             specialButton.SetActive(true);
-            specialButtonText.text = "Ask about the strange scroll";
+            specialButtonText.text = "Ask about the strange scroll.";
         }
-        else if (saveData.hasCaughtRiverBoss && !saveData.hasCaughtOceanBoss)
+        else if (saveData.hasCaughtRiverBoss && !saveData.hasCaughtOceanBoss && !saveData.hasTurnedInHair)
         {
             specialButton.SetActive(true);
             specialButtonText.text = "Ask about... the hair.";
         }
-        else if (saveData.hasCaughtOceanBoss && !saveData.dredgedHand)
+        else if (saveData.hasCaughtOceanBoss && !saveData.dredgedHand && !saveData.hasTurnedInRod)
         {
             specialButton.SetActive(true);
             specialButtonText.text = "Ask about the spine.";
         }
+
         else if (saveData.dredgedHand && !saveData.AllCollected)
         {
             specialButton.SetActive(true);
@@ -165,7 +195,7 @@ public class ShopInteractionManager : MonoBehaviour
         else if (saveData.BecameHorizonAngler)
         {
             specialButton.SetActive(true);
-            specialButtonText.text = "Hand him the lower half";
+            specialButtonText.text = "Hand him the lower half.";
         }
     }
 
@@ -325,9 +355,13 @@ public class ShopInteractionManager : MonoBehaviour
             shopBaseDialogue.SetActive(true);
             dialogueButton.SetActive(true);
 
+            // Handle First Visit
             if (lastSpecialPlayed == "FirstVisit" && !saveData.arrivedAtShop)
             {
                 saveData.arrivedAtShop = true;
+                if (GameManager.Instance != null)
+                    GameManager.Instance.currentSaveData.arrivedAtShop = true;
+
                 SaveManager.Save(saveData);
                 Debug.Log("Player has arrived at the shop for the first time.");
 
@@ -342,46 +376,42 @@ public class ShopInteractionManager : MonoBehaviour
                 }
             }
 
-            // Handle other endings
-            if (lastSpecialPlayed == "Scroll" || lastSpecialPlayed == "Hair")
+            // Handle special dialogue progression
+            if (lastSpecialPlayed == "Scroll" && !saveData.hasTurnedInScroll)
             {
-                UpgradeRodVisuals();
+                saveData.hasTurnedInScroll = true;
+                GameManager.Instance.currentSaveData.hasTurnedInScroll = true;
+                Debug.Log("hasTurnedInScroll set to TRUE");
+            }
+            else if (lastSpecialPlayed == "Hair" && !saveData.hasTurnedInHair)
+            {
+                saveData.hasTurnedInHair = true;
+                GameManager.Instance.currentSaveData.hasTurnedInHair = true;
+                Debug.Log("hasTurnedInHair set to TRUE");
+            }
+            else if (lastSpecialPlayed == "BoneRod" && !saveData.hasTurnedInRod)
+            {
+                saveData.hasTurnedInRod = true;
+                GameManager.Instance.currentSaveData.hasTurnedInRod = true;
+                Debug.Log("hasTurnedInRod set to TRUE");
             }
 
-            UpdateShopState();
+            SaveManager.Save(saveData);
+            UpdateShopState(); // <- updates rod visuals + special button logic
             lastSpecialPlayed = "";
             return;
         }
 
-
-        // Zero-based index for matching inspector elements
-        int zeroBasedIndex = dialogueIndex - 1;
-        
         // Handle special visuals for Hand dialogue
+        int zeroBasedIndex = dialogueIndex - 1;
         if (lastSpecialPlayed == "Hand")
         {
-            if (zeroBasedIndex == 3)
-            {
-                ShowLegendaryItem(reelObject);
-                return;
-            }
-            else if (zeroBasedIndex == 5)
-            {
-                ShowLegendaryItem(spineObject);
-                return;
-            }
-            else if (zeroBasedIndex == 8)
-            {
-                ShowLegendaryItem(hooksObject);
-                return;
-            }
-            else if (zeroBasedIndex == 9)
-            {
-                ShowLegendaryItem(rodObject);
-                return;
-            }
+            if (zeroBasedIndex == 3) { ShowLegendaryItem(reelObject); return; }
+            if (zeroBasedIndex == 5) { ShowLegendaryItem(spineObject); return; }
+            if (zeroBasedIndex == 8) { ShowLegendaryItem(hooksObject); return; }
+            if (zeroBasedIndex == 9) { ShowLegendaryItem(rodObject); return; }
         }
-        
+
         // Handle BoneRod cutscene
         if (lastSpecialPlayed == "BoneRod" && dialogueIndex == 4)
         {
@@ -394,6 +424,7 @@ public class ShopInteractionManager : MonoBehaviour
             }
         }
 
+        // Handle final boss cutscene
         if (lastSpecialPlayed == "Final" && dialogueIndex == currentLines.Length - 1)
         {
             if (finalCutsceneManager != null)
@@ -404,11 +435,10 @@ public class ShopInteractionManager : MonoBehaviour
             }
         }
 
-        // Continue to next line
+        // Continue dialogue
         if (typingCoroutine != null)
-        {
             StopCoroutine(typingCoroutine);
-        }
+
         typingCoroutine = StartCoroutine(TypeLine());
     }
 

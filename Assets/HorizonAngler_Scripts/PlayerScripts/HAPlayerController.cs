@@ -48,6 +48,8 @@ namespace StarterAssets
         public bool isFishing = false;
         private Vector3 fishingLookTarget;
         public bool caughtPondBoss = false;
+        public bool caughtRiverBoss = false;
+        public bool caughtOceanBoss = false;
         public Transform FishingLookAt; // Target to look at when fishing starts
 
         [Header("Shop Settings")]
@@ -157,6 +159,8 @@ namespace StarterAssets
 
         private void Update()
         {
+            caughtPondBoss = GameManager.Instance.currentSaveData.hasCaughtPondBoss;
+            hasTurnedInScroll = GameManager.Instance.currentSaveData.hasTurnedInScroll;
             _hasAnimator = TryGetComponent(out _animator);
 
             GroundedCheck();
@@ -473,11 +477,15 @@ namespace StarterAssets
             {
                 inFishZone = true;
                 currentZoneType = fishingZone.zoneType;
+                
                 // Update active microgame sets based on zone type
-                InitiateMicrogames.Instance.SetActiveMicrogameSets(currentZoneType);
-
+                if (InitiateMicrogames.Instance != null)
+                {
+                    InitiateMicrogames.Instance.SetActiveMicrogameSets(currentZoneType);
+                }
 
                 bool allowedToFish = false;
+                bool bossAlreadyCaught = false;
 
                 switch (currentZoneType)
                 {
@@ -489,21 +497,29 @@ namespace StarterAssets
                         break;
                     case InitiateMicrogames.FishZoneType.BossPond:
                         allowedToFish = GameManager.Instance.currentSaveData.canFishPondBoss;
-                        this.canFishPondBoss = allowedToFish;
+                        canFishPondBoss = allowedToFish;
+                        bossAlreadyCaught = GameManager.Instance.currentSaveData.hasCaughtPondBoss;
                         break;
                     case InitiateMicrogames.FishZoneType.BossRiver:
                         allowedToFish = GameManager.Instance.currentSaveData.canFishRiverBoss;
-                        this.canFishRiverBoss = allowedToFish;
+                        canFishRiverBoss = allowedToFish;
+                        bossAlreadyCaught = GameManager.Instance.currentSaveData.hasCaughtRiverBoss;
                         break;
                     case InitiateMicrogames.FishZoneType.BossOcean:
                         allowedToFish = GameManager.Instance.currentSaveData.canFishOceanBoss;
-                        this.canFishOceanBoss = allowedToFish;
+                        canFishOceanBoss = allowedToFish;
+                        bossAlreadyCaught = GameManager.Instance.currentSaveData.hasCaughtOceanBoss;
                         break;
                 }
 
-                canFish = allowedToFish;
-                InitiateMicrogames.Instance.SetActiveMicrogameSets(currentZoneType);
+                // Don't allow fishing if the boss is already caught
+                if (bossAlreadyCaught)
+                {
+                    allowedToFish = false;
+                }
 
+                canFish = allowedToFish;
+                
                 // Find the FishingLookAt inside the FishingZone
                 Transform lookAt = other.transform.Find("FishingLookAt");
                 if (lookAt != null)
@@ -515,7 +531,8 @@ namespace StarterAssets
                     Debug.LogWarning("FishingLookAt not found in fishing zone: " + other.gameObject.name);
                 }
 
-                if (!allowedToFish)
+                // Show boss fishing prompt if needed
+                if (!allowedToFish && !bossAlreadyCaught)
                 {
                     if (!shownLockedZoneNotification)
                     {
@@ -523,14 +540,18 @@ namespace StarterAssets
                         shownLockedZoneNotification = true;
                     }
                 }
-
-                if (!isFishing)
+                else if (bossAlreadyCaught)
+                {
+                    fishingPromptUI.SetActive(false);
+                    BossfishingPrompt.SetActive(false);
+                }
+                else if (!isFishing)
                 {
                     fishingPromptUI.SetActive(allowedToFish);
                 }
             }
         }
-
+        
         private void OnTriggerExit(Collider other)
         {
             FishingZone fishingZone = other.GetComponent<FishingZone>();

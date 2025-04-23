@@ -26,6 +26,8 @@ public class FishingProgress : MonoBehaviour
     public float maxDecayMultiplier = 2f;
 
     public bool memorySetupActive = false;
+    private bool isDebugMode = true; // Set to false in production
+    private int normalFishCaughtInSession = 0;
     Dictionary<string, float> setDecayWeights = new Dictionary<string, float>()
     {
         { "Set1", -0.5f },    // Undertale
@@ -70,6 +72,12 @@ public class FishingProgress : MonoBehaviour
         public string fishName;
         public Sprite fishSprite;
         public string description;
+    }
+
+    private int GetNormalFishCaughtCount(FishZoneType zoneType)
+    {
+        // Count the number of non-boss fish caught in the specified zone
+        return fishingLog.FindAll(entry => entry.zoneCaught == zoneType && !IsBossFish(entry.fishName)).Count;
     }
 
     public List<Fish> pondFishPool = new List<Fish>();
@@ -135,6 +143,7 @@ public class FishingProgress : MonoBehaviour
 
     void Start()
     {
+        LegendaryRewardManager legendary = FindObjectOfType<LegendaryRewardManager>();
         T2S = GetComponent<Test2Script>();
         Initialize();
         basicWinScreen?.SetActive(false);
@@ -166,6 +175,7 @@ public class FishingProgress : MonoBehaviour
         }
     }
 
+    
     public void Initialize()
     {
         progress = 50f;
@@ -253,7 +263,9 @@ public class FishingProgress : MonoBehaviour
     private bool IsBossFish(string fishName)
     {
         // Just check if it's Froggy or other boss fish names
-        return fishName == "Sun-Infused Croakmaw" || fishName == "OtherBossName"; // add more boss fish names here
+        return fishName == "Sun-Infused Croakmaw" || 
+            fishName == "Solar-Spined Riftmaw" ||
+            fishName == "Sun-Eclipsed Embermaw"; // add more boss fish names here
     }
 
     void HideFishCaughtScreen()
@@ -271,47 +283,109 @@ public class FishingProgress : MonoBehaviour
                 $"basicLoseScreen: {(basicLoseScreen?.activeSelf)}, " + 
                 $"bossCatchScreen: {(bossCatchScreen?.activeSelf)}");
 
+        bool wasBossCatchScreen = bossCatchScreen?.activeSelf == true;
+        
+        // Hide all screens
         basicWinScreen?.SetActive(false);
         basicLoseScreen?.SetActive(false);
         bossCatchScreen?.SetActive(false);
 
         fishCaughtScreenActive = false;
 
+        // Only process special boss handling if we were viewing a boss catch screen
+        if (wasBossCatchScreen && currentCaughtFish != null && IsBossFish(currentCaughtFish.fishName))
+        {
+            Debug.Log("[FishingProgress] Boss fish caught screen dismissed");
+            
+            // Update save data based on zone type
+            switch (activeZoneType)
+            {
+                case FishZoneType.BossRiver:
+                    GameManager.Instance.currentSaveData.hasCaughtRiverBoss = true;
+                    SaveManager.Save(GameManager.Instance.currentSaveData);
+                    Debug.Log("Saved hasCaughtRiverBoss = true to GameManager and SaveData");
+                    
+                    // Show legendary reward for River boss (no cutscene)
+                    LegendaryRewardManager legendary = FindObjectOfType<LegendaryRewardManager>();
+                    if (legendary != null)
+                    {
+                        Debug.Log("Found LegendaryRewardManager, showing River reward");
+                        legendary.ShowReward("River");
+                    }
+                    break;
+                    
+                case FishZoneType.BossOcean:
+                    GameManager.Instance.currentSaveData.hasCaughtOceanBoss = true;
+                    SaveManager.Save(GameManager.Instance.currentSaveData);
+                    Debug.Log("Saved hasCaughtOceanBoss = true to GameManager and SaveData");
+                    
+                    // Show legendary reward for Ocean boss (no cutscene)
+                    LegendaryRewardManager legendary2 = FindObjectOfType<LegendaryRewardManager>();
+                    if (legendary2 != null)
+                    {
+                        Debug.Log("Found LegendaryRewardManager, showing Ocean reward");
+                        legendary2.ShowReward("Ocean");
+                    }
+                    break;
+                    
+                case FishZoneType.BossPond:
+                    GameManager.Instance.currentSaveData.hasCaughtPondBoss = true;
+                    SaveManager.Save(GameManager.Instance.currentSaveData);
+                    Debug.Log("Saved hasCaughtPondBoss = true to GameManager and SaveData");
+                    
+                    // Only play cutscene for Pond boss
+                    CutsceneManager cutsceneManager = FindObjectOfType<CutsceneManager>();
+                    if (cutsceneManager != null)
+                    {
+                        Debug.Log("Playing cutscene for Pond boss");
+                        cutsceneManager.PlayCutscene();
+                    }
+                    break;
+            }
+            
+            // Hide the boss fish location
+            BossfishLocation?.SetActive(false);
+            
+            // Update player state for boss fish
+            HAPlayerController player = FindObjectOfType<HAPlayerController>();
+            if (player != null)
+            {
+                player.EndFishing();
+                player.inFishZone = false;
+                player.canFish = false;
+                
+                // Make sure fishing prompts are hidden
+                if (player.fishingPromptUI != null)
+                    player.fishingPromptUI.SetActive(false);
+                    
+                // Update player's caught status for the appropriate boss
+                switch (activeZoneType)
+                {
+                    case FishZoneType.BossPond:
+                        player.caughtPondBoss = true;
+                        break;
+                    case FishZoneType.BossRiver:
+                        // Add caughtRiverBoss to HAPlayerController
+                        player.caughtRiverBoss = true;
+                        break;
+                    case FishZoneType.BossOcean:
+                        // Add caughtOceanBoss to HAPlayerController
+                        player.caughtOceanBoss = true;
+                        break;
+                }
+            }
+            
+            return; // Exit early without enabling regular fishing UI
+        }
+        
+        // Regular fish handling - re-enable fishing UI
         if (InitiateMicrogames.Instance != null)
         {
-            // Enable cast screen *after* win screen disappears
             InitiateMicrogames.Instance.MGCanvas.SetActive(false);
             InitiateMicrogames.Instance.CCanvas.SetActive(true);
             InitiateMicrogames.Instance.CTC?.SetActive(true);
             InitiateMicrogames.Instance.fishingStarted = true;
             InitiateMicrogames.Instance.StartCastLockout();
-        }
-
-        if (currentCaughtFish != null && IsBossFish(currentCaughtFish.fishName))
-        {
-            BossfishLocation.SetActive(false);
-
-            HAPlayerController player = FindObjectOfType<HAPlayerController>();
-            if (player != null)
-            {
-                player.EndFishing();
-                player.caughtPondBoss = true;
-                player.inFishZone = false;
-                player.canFish = false;
-
-                if (player.fishingPromptUI != null)
-                    player.fishingPromptUI.SetActive(false);
-            }
-
-            CutsceneManager cutsceneManager = FindObjectOfType<CutsceneManager>();
-            if (cutsceneManager != null)
-            {
-                cutsceneManager.PlayCutscene();
-            }
-            else
-            {
-                Debug.LogWarning("CutsceneManager not found in scene!");
-            }
         }
 
         StartCoroutine(DelayedClear());
@@ -349,8 +423,6 @@ public class FishingProgress : MonoBehaviour
         float bonus = microgameBonusValues.ContainsKey(setName) ? microgameBonusValues[setName] : 15f;
         progress += bonus;
     }
-
-
 
     void ProgressSliderVisual()
     {
@@ -568,24 +640,35 @@ public class FishingProgress : MonoBehaviour
         {
             InitiateMicrogames.Instance.MGCanvas.SetActive(false);
             InitiateMicrogames.Instance.CCanvas.SetActive(false);
-
-            // Hide Click to Cast prompt
             InitiateMicrogames.Instance.CTC.SetActive(false);
         }
 
         Debug.Log($"[FishingProgress] Caught fish: {currentCaughtFish.fishName}, Image: {(fishCaughtImage != null ? "OK" : "Missing")}, Text: {(fishCaughtText != null ? "OK" : "Missing")}");
 
+        // Show the appropriate screen based on fish type
+        // Inside ShowFishCaughtScreen method
         if (IsBossFish(currentCaughtFish.fishName))
-            bossCatchScreen?.SetActive(true);
+        {
+            Debug.Log($"[FishingProgress] Boss fish caught! Showing boss catch screen for {activeZoneType}");
+            bossCatchScreen.SetActive(true);  // Make sure this is active and visible
+            
+            // Make sure we don't activate both screens
+            basicWinScreen.SetActive(false);
+        }
         else
-            basicWinScreen?.SetActive(true);
+        {
+            basicWinScreen.SetActive(true);
+            bossCatchScreen.SetActive(false);
+        }
 
+        // Update the fish information display
         if (fishCaughtImage != null) fishCaughtImage.sprite = currentCaughtFish.fishSprite;
         if (fishCaughtText != null) fishCaughtText.text = $"Caught {currentCaughtFish.fishName}!";
 
+        // Record the catch in the fishing log
         string time = System.DateTime.Now.ToString("HH:mm:ss");
         string date = System.DateTime.Now.ToString("MM/dd/yyyy");
-
+        
         fishingLog.Add(new FishingLogEntry(
             currentCaughtFish.fishName,
             currentCaughtFish.fishSprite,
@@ -596,39 +679,25 @@ public class FishingProgress : MonoBehaviour
 
         GameManager.Instance?.RecordFishCatch(currentCaughtFish.fishName, activeZoneType.ToString());
 
+        // Update encyclopedia
         var encyUI = FindObjectOfType<FishEncyclopediaUI>();
         encyUI?.NotifyFishDiscovered(currentCaughtFish.fishName);
 
-        Debug.Log($"[FishingProgress] Showing win screen for {currentCaughtFish.fishName} at {time} on {date}");
-
+        // Update player animation
         HAPlayerController player = FindObjectOfType<HAPlayerController>();
         if (player != null)
             player.PlayFishingIdle();
 
+        // Enable input handling for the fish caught screen
         StartCoroutine(EnableFishCaughtInputNextFrame());
-        InitiateMicrogames.Instance.CTC?.SetActive(false); // Force hide Click to Cast
+        InitiateMicrogames.Instance.fishingStarted = false;
 
+        // Check if this catch unlocks boss fishing
         CheckUnlockBossFishing();
-        InitiateMicrogames.Instance.fishingStarted = false; // Prevent CTC from returning during win screen
-    }
-
-    public int GetNormalFishCaughtCount(InitiateMicrogames.FishZoneType zoneType)
-    {
-        int count = 0;
-        foreach (var entry in fishingLog)
-        {
-            if (entry.zoneCaught == zoneType)
-            {
-                count++;
-            }
-        }
-        return count;
     }
 
     void CheckUnlockBossFishing()
     {
-        HAPlayerController player = FindObjectOfType<HAPlayerController>();
-
         if (fishingLog.Count == 0)
             return;
 
@@ -639,19 +708,31 @@ public class FishingProgress : MonoBehaviour
         bool isBoss = IsBossFish(fishName);
         bool bossUnlocked = false;
 
-        // Check and update save data
+        // Debug logs for tracking issues
+        if (isDebugMode)
+        {
+            normalFishCaughtInSession++;
+            Debug.Log($"[DEBUG] CheckUnlockBossFishing - Zone: {fishZone}, Fish: {fishName}, IsBoss: {isBoss}");
+            Debug.Log($"[DEBUG] SaveData - canFishPondBoss: {GameManager.Instance.currentSaveData.canFishPondBoss}, " +
+                    $"canFishRiverBoss: {GameManager.Instance.currentSaveData.canFishRiverBoss}, " +
+                    $"canFishOceanBoss: {GameManager.Instance.currentSaveData.canFishOceanBoss}");
+            Debug.Log($"[DEBUG] Fish caught in zone: {GetNormalFishCaughtCount(fishZone)}");
+        }
+
         switch (fishZone)
         {
             case FishZoneType.Pond:
                 if (isBoss)
                 {
                     GameManager.Instance.currentSaveData.hasCaughtPondBoss = true;
+                    if (isDebugMode) Debug.Log("[DEBUG] Pond boss caught!");
                 }
                 else if (!GameManager.Instance.currentSaveData.canFishPondBoss &&
-                         GetNormalFishCaughtCount(fishZone) >= 3)
+                        GetNormalFishCaughtCount(fishZone) >= 3)
                 {
                     GameManager.Instance.currentSaveData.canFishPondBoss = true;
                     bossUnlocked = true;
+                    if (isDebugMode) Debug.Log("[DEBUG] Pond boss fishing unlocked!");
                 }
                 break;
 
@@ -659,12 +740,14 @@ public class FishingProgress : MonoBehaviour
                 if (isBoss)
                 {
                     GameManager.Instance.currentSaveData.hasCaughtRiverBoss = true;
+                    if (isDebugMode) Debug.Log("[DEBUG] River boss caught!");
                 }
                 else if (!GameManager.Instance.currentSaveData.canFishRiverBoss &&
-                         GetNormalFishCaughtCount(fishZone) >= 3)
+                        GetNormalFishCaughtCount(fishZone) >= 3)
                 {
                     GameManager.Instance.currentSaveData.canFishRiverBoss = true;
                     bossUnlocked = true;
+                    if (isDebugMode) Debug.Log("[DEBUG] River boss fishing unlocked!");
                 }
                 break;
 
@@ -672,16 +755,19 @@ public class FishingProgress : MonoBehaviour
                 if (isBoss)
                 {
                     GameManager.Instance.currentSaveData.hasCaughtOceanBoss = true;
+                    if (isDebugMode) Debug.Log("[DEBUG] Ocean boss caught!");
                 }
                 else if (!GameManager.Instance.currentSaveData.canFishOceanBoss &&
-                         GetNormalFishCaughtCount(fishZone) >= 3)
+                        GetNormalFishCaughtCount(fishZone) >= 3)
                 {
                     GameManager.Instance.currentSaveData.canFishOceanBoss = true;
                     bossUnlocked = true;
+                    if (isDebugMode) Debug.Log("[DEBUG] Ocean boss fishing unlocked!");
                 }
                 break;
         }
 
+        // Show notification if a boss was unlocked
         if (bossUnlocked)
         {
             string message = fishZone switch
@@ -692,16 +778,25 @@ public class FishingProgress : MonoBehaviour
                 _ => "Boss fishing unlocked!"
             };
 
+            if (isDebugMode) Debug.Log($"[DEBUG] Showing boss unlock notification: {message}");
+            
+            // Make sure the notification shows up
             ShowNotification(message);
 
-            // NEW: Trigger boss fish AI to swim to the catch location
+            // Trigger boss fish AI to swim to catch location
             FishBossAI bossAI = FindObjectOfType<FishBossAI>();
             if (bossAI != null)
+            {
+                if (isDebugMode) Debug.Log("[DEBUG] Triggering BossAI.GoToBossLocation()");
                 bossAI.GoToBossLocation();
+            }
+            else
+            {
+                Debug.LogWarning("[DEBUG] FishBossAI not found in scene!");
+            }
         }
 
-
-        // Save after any potential changes
+        // Always save after potential changes
         SaveManager.Save(GameManager.Instance.currentSaveData);
     }
 
@@ -713,23 +808,33 @@ public class FishingProgress : MonoBehaviour
         {
             Debug.Log("Notification references are good! Showing message.");
             
+            // Reset previous state if any
+            StopAllCoroutines(); // Stop previous notification fades if any
+            
             // Check if this is a boss unlock notification
-            if (message.Contains("new fishing spot") || message.Contains("stir in the water"))
+            if (message.Contains("new fishing spot") || 
+                message.Contains("stir in the water") || 
+                message.Contains("powerful current") || 
+                message.Contains("massive shape"))
             {
                 isShowingBossUnlockNotification = true;
                 Debug.Log("Boss unlock notification detected - special handling active");
             }
+            else
+            {
+                isShowingBossUnlockNotification = false;
+            }
             
             notificationText.text = message;
             notificationTextShadow.text = message;
-            StopAllCoroutines(); // Stop previous notification fades if any
+            
             StartCoroutine(NotificationRoutine());
         }
         else
         {
             Debug.LogWarning("NotificationCanvas or NotificationText is missing!");
         }
-}
+    }
 
     // Modify the NotificationRoutine method to handle the fish caught screen when a notification is shown
     public IEnumerator NotificationRoutine()
@@ -741,7 +846,10 @@ public class FishingProgress : MonoBehaviour
         if (notificationGroup != null)
         {
             yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 0f, 1f, 0.5f));
-            yield return new WaitForSeconds(2f);
+            
+            // Wait longer for the notification to be visible
+            yield return new WaitForSeconds(3f); // Increased from 2f to give more time to see notification
+            
             yield return StartCoroutine(FadeCanvasGroup(notificationGroup, 1f, 0f, 0.5f));
         }
         else
@@ -755,6 +863,15 @@ public class FishingProgress : MonoBehaviour
         if (isShowingBossUnlockNotification)
         {
             Debug.Log("[NotificationRoutine] Boss notification complete, forcing screen cleanup");
+            
+            // Wait a short moment to ensure notification is fully gone
+            yield return new WaitForSeconds(0.3f);
+            
+            // Double check screen states
+            Debug.Log($"Before cleanup - basicWinScreen: {(basicWinScreen?.activeSelf)}, " +
+                    $"basicLoseScreen: {(basicLoseScreen?.activeSelf)}, " + 
+                    $"bossCatchScreen: {(bossCatchScreen?.activeSelf)}, " +
+                    $"fishCaughtScreenActive: {fishCaughtScreenActive}");
             
             isShowingBossUnlockNotification = false;
             
@@ -773,6 +890,12 @@ public class FishingProgress : MonoBehaviour
                 InitiateMicrogames.Instance.CTC?.SetActive(true);
                 InitiateMicrogames.Instance.fishingStarted = true;
             }
+            
+            // Check screen states again after cleanup
+            Debug.Log($"After cleanup - basicWinScreen: {(basicWinScreen?.activeSelf)}, " +
+                    $"basicLoseScreen: {(basicLoseScreen?.activeSelf)}, " + 
+                    $"bossCatchScreen: {(bossCatchScreen?.activeSelf)}, " +
+                    $"fishCaughtScreenActive: {fishCaughtScreenActive}");
             
             // Add this to ensure proper clean up
             StartCoroutine(DelayedClear());

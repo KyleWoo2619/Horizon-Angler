@@ -111,4 +111,36 @@ public class AsyncSceneLoader : MonoBehaviour
             blackScreenImage.color = finalColor;
         }
     }
+
+    public void LoadLastSavedScene()
+    {
+        SaveData saveData = SaveManager.Load();
+        if (saveData == null || string.IsNullOrEmpty(saveData.lastScene))
+        {
+            Debug.LogWarning("No saved scene found. Falling back to default.");
+            sceneToLoad = "Pond"; // fallback scene
+        }
+        else
+        {
+            sceneToLoad = saveData.lastScene;
+            Debug.Log("Loading saved scene: " + sceneToLoad);
+        }
+
+        StartCoroutine(LoadSceneAsync_NoCutscene(sceneToLoad));
+    }
+
+    IEnumerator LoadSceneAsync_NoCutscene(string sceneName)
+    {
+        yield return FadeOutMusicAndScreen();
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        asyncLoad.allowSceneActivation = false;
+
+        while (asyncLoad.progress < 0.9f)
+        {
+            yield return null;
+        }
+
+        asyncLoad.allowSceneActivation = true;
+    }
 }
