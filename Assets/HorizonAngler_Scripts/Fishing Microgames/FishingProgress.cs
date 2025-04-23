@@ -39,15 +39,15 @@ public class FishingProgress : MonoBehaviour
 
     [Header("Microgame Bonus Values")]
     public Dictionary<string, float> microgameBonusValues = new Dictionary<string, float>()
-{
-    { "Set1", 15f },
-    { "Set2", 22f },
-    { "Set3", 15f },
-    { "Set4", 15f },
-    { "Set5", 15f },
-    { "Set6", 25f }, // boosted value for Set6
-    { "Set7", 15f }
-};
+    {
+        { "Set1", 15f }, // Undertale
+        { "Set2", 22f }, // Whirlpool 
+        { "Set3", 15f }, // Button Combo
+        { "Set4", 30f }, // Memory
+        { "Set5", 20f }, // Mashing
+        { "Set6", 25f }, // Rod Alignment
+        { "Set7", 20f }  // Reaction
+    };
 
 
     public static FishingProgress Instance;
@@ -65,6 +65,7 @@ public class FishingProgress : MonoBehaviour
     {
         public string fishName;
         public Sprite fishSprite;
+        public string description;
     }
 
     public List<Fish> pondFishPool = new List<Fish>();
@@ -495,7 +496,13 @@ public class FishingProgress : MonoBehaviour
             ));
 
             // Delegate all save-related tracking to GameManager
-            GameManager.Instance.RecordFishCatch(currentCaughtFish.fishName);
+            GameManager.Instance.RecordFishCatch(currentCaughtFish.fishName, activeZoneType.ToString());
+
+            FishEncyclopediaUI encyUI = FindObjectOfType<FishEncyclopediaUI>();
+            if (encyUI != null)
+            {
+                encyUI.NotifyFishDiscovered(currentCaughtFish.fishName);
+            }
 
             Debug.Log($"Caught {currentCaughtFish.fishName} at {caughtTime} on {caughtDate}");
 

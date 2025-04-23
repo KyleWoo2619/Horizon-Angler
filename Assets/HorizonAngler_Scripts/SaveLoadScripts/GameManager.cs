@@ -27,23 +27,31 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game saved on quit.");
     }
 
-    public void RecordFishCatch(string fishName)
+    public void RecordFishCatch(string fishName, string zone)
     {
-        string caughtDate = System.DateTime.Now.ToString("MM/dd/yyyy");
-        string caughtTime = System.DateTime.Now.ToString("HH:mm:ss");
+        string date = System.DateTime.Now.ToString("MM/dd/yyyy");
+        string time = System.DateTime.Now.ToString("HH:mm:ss");
 
-        // Update total per-fish caught count
+        // Update total per-fish count
         if (currentSaveData.fishCaught.ContainsKey(fishName))
             currentSaveData.fishCaught[fishName]++;
         else
             currentSaveData.fishCaught[fishName] = 1;
 
         // Update recent catch log
-        SaveData.RecentCatchEntry entry = new SaveData.RecentCatchEntry(fishName, caughtDate, caughtTime);
+        SaveData.RecentCatchEntry entry = new SaveData.RecentCatchEntry(fishName, date, time);
         currentSaveData.recentCatchLog.Insert(0, entry);
         if (currentSaveData.recentCatchLog.Count > 10)
             currentSaveData.recentCatchLog.RemoveAt(10);
-    }
 
-    // WE ALSO NEED TO SAVE THE LEVEL (SCENE) THE PLAYER IS IN HERE SOMEWHERE SOMEHOW
+        // Update encyclopedia entry
+        if (currentSaveData.fishEncyclopedia.ContainsKey(fishName))
+        {
+            currentSaveData.fishEncyclopedia[fishName].UpdateCatch(date, time);
+        }
+        else
+        {
+            currentSaveData.fishEncyclopedia[fishName] = new SaveData.FishRecord(fishName, zone, date, time);
+        }
+    }
 }
