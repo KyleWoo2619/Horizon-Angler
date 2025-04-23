@@ -741,13 +741,13 @@ public class Test2Script : MonoBehaviour
     {
         memoryText.text = "Ready...";
         yield return StartCoroutine(FadeText(memoryText, 0f, 1f, 0.3f));
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.4f);
         yield return StartCoroutine(FadeText(memoryText, 1f, 0f, 0.3f));
         yield return new WaitForSeconds(0.2f);
 
         memoryText.text = "Set...";
         yield return StartCoroutine(FadeText(memoryText, 0f, 1f, 0.3f));
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.4f);
         yield return StartCoroutine(FadeText(memoryText, 1f, 0f, 0.3f));
         yield return new WaitForSeconds(0.2f);
 
