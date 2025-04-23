@@ -103,7 +103,22 @@ public class ObjectiveTextManager : MonoBehaviour
                 break;
 
             case LevelType.Ocean:
-                objectiveText.text = "Strange glowing fish can be found here.";
+                if (saveData.hasTurnedInRod)
+                {
+                    objectiveText.text = "The sea has revealed its truth. There’s nothing more to find — only silence remains.";
+                }
+                else if (saveData.hasCaughtOceanBoss)
+                {
+                    objectiveText.text = "Show the strange vertebrae to the shopkeeper.";
+                }
+                else if (saveData.canFishOceanBoss)
+                {
+                    objectiveText.text = "A monstrous shape lurks in the deep... prepare yourself.";
+                }
+                else
+                {
+                    objectiveText.text = "Strange glowing fish swim in the depths. Tread carefully.";
+                }
                 break;
 
             case LevelType.Boss:

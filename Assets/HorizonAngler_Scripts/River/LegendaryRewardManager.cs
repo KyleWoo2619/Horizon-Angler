@@ -12,7 +12,7 @@ public class LegendaryRewardManager : MonoBehaviour
         string message = source switch
         {
             "River" => "You found a gruesome clump of hair inside the malformed fish...",
-            "Ocean" => "You retrieved a Bone Rod...",
+            "Ocean" => "Out between the monstrous tentacles, you find a worn vertebrae... It seems disturbingly human.",
             _ => "You found a mysterious item!"
         };
 
