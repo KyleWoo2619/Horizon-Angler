@@ -21,6 +21,10 @@ public class ShopInteractionManager : MonoBehaviour
     public float textSpeed = 0.05f;
     private bool waitingForCutscene = false;
 
+    [Header("Cutscenes")]
+    public CutsceneManager boneRodCutsceneManager;
+    public CutsceneManager finalCutsceneManager;
+
     [Header("Legendary Canvas")]
     public GameObject legendaryCanvas;
     public GameObject reelObject;
@@ -33,6 +37,7 @@ public class ShopInteractionManager : MonoBehaviour
 
 
     [Header("Base Dialogue Content")]
+    public string[] firstVisitBaseDialogue;
     public string[] initialBaseDialogue;
     public string[] afterPondBossDialogue;
     public string[] afterRiverBossDialogue;
@@ -42,6 +47,7 @@ public class ShopInteractionManager : MonoBehaviour
     public string[] finalStateDialogue;
 
     [Header("Special Dialogue Content")]
+    public string[] firstVisitSpecialDialogue;
     public string[] scrollDialogue;
     public string[] hairDialogue;
     public string[] boneRodDialogue;
@@ -70,6 +76,12 @@ public class ShopInteractionManager : MonoBehaviour
         {
             Debug.LogError("Save data could not be loaded.");
             return;
+        }
+
+        if (!saveData.arrivedAtShop)
+        {
+            if (rodImage != null) rodImage.enabled = false;
+            if (rodNameText != null) rodNameText.text = "";
         }
 
         // Hide legendary items at start
@@ -120,7 +132,12 @@ public class ShopInteractionManager : MonoBehaviour
         specialButton.SetActive(false);
 
         // Show special button based on game progression
-        if (saveData.hasCaughtPondBoss && !saveData.hasCaughtRiverBoss)
+        if (!saveData.arrivedAtShop)
+        {
+            specialButton.SetActive(true);
+            specialButtonText.text = "Ask him where this place is";
+        }
+        else if (saveData.hasCaughtPondBoss && !saveData.hasCaughtRiverBoss)
         {
             specialButton.SetActive(true);
             specialButtonText.text = "Ask about the strange scroll";
@@ -152,12 +169,16 @@ public class ShopInteractionManager : MonoBehaviour
         }
     }
 
+
     public void OnTalkButton()
     {
-        string[] selectedDialogue = null;
+         string[] selectedDialogue = null;
 
-        // Select dialogue based on game progress
-        if (!saveData.hasCaughtPondBoss)
+        if (!saveData.arrivedAtShop)
+        {
+            selectedDialogue = firstVisitBaseDialogue;
+        }
+        else if (saveData.arrivedAtShop && !saveData.hasCaughtPondBoss)
         {
             selectedDialogue = initialBaseDialogue;
         }
@@ -183,7 +204,7 @@ public class ShopInteractionManager : MonoBehaviour
         }
         else
         {
-            selectedDialogue = finalStateDialogue;
+            selectedDialogue = firstVisitBaseDialogue;
         }
 
         // Choose a random line from the selected dialogue
@@ -202,6 +223,12 @@ public class ShopInteractionManager : MonoBehaviour
     public void OnSpecialButton()
     {
         // Play special dialogue based on game progress
+        if (!saveData.arrivedAtShop)
+        {
+            lastSpecialPlayed = "FirstVisit";
+            StartDialogue(firstVisitSpecialDialogue);
+            return;
+        }
         if (saveData.hasCaughtPondBoss && !saveData.hasCaughtRiverBoss)
         {
             lastSpecialPlayed = "Scroll";
@@ -254,14 +281,6 @@ public class ShopInteractionManager : MonoBehaviour
             Debug.Log("AllCollected has been set to TRUE.");
         }
 
-        if (lastSpecialPlayed == "Vessel" && saveData != null && !saveData.BecameHorizonAngler)
-        {
-            saveData.BecameHorizonAngler = true;
-            SaveManager.Save(saveData);
-            Debug.Log("BecameHorizonAngler has been set to TRUE.");
-        }
-
-
         // Hide shop UI
         shopBaseDialogue.SetActive(false);
         dialogueButton.SetActive(false);
@@ -306,16 +325,34 @@ public class ShopInteractionManager : MonoBehaviour
             shopBaseDialogue.SetActive(true);
             dialogueButton.SetActive(true);
 
-            // Handle end of special dialogues
+            if (lastSpecialPlayed == "FirstVisit" && !saveData.arrivedAtShop)
+            {
+                saveData.arrivedAtShop = true;
+                SaveManager.Save(saveData);
+                Debug.Log("Player has arrived at the shop for the first time.");
+
+                if (rodImage != null && defaultRodSprite != null)
+                {
+                    rodImage.enabled = true;
+                    rodImage.sprite = defaultRodSprite;
+                }
+                if (rodNameText != null)
+                {
+                    rodNameText.text = "Basic Fishing Rod";
+                }
+            }
+
+            // Handle other endings
             if (lastSpecialPlayed == "Scroll" || lastSpecialPlayed == "Hair")
             {
                 UpgradeRodVisuals();
             }
-            
+
             UpdateShopState();
             lastSpecialPlayed = "";
             return;
         }
+
 
         // Zero-based index for matching inspector elements
         int zeroBasedIndex = dialogueIndex - 1;
@@ -338,7 +375,7 @@ public class ShopInteractionManager : MonoBehaviour
                 ShowLegendaryItem(hooksObject);
                 return;
             }
-            else if (zeroBasedIndex == 10)
+            else if (zeroBasedIndex == 9)
             {
                 ShowLegendaryItem(rodObject);
                 return;
@@ -353,6 +390,16 @@ public class ShopInteractionManager : MonoBehaviour
             {
                 waitingForCutscene = true;
                 cutscene.PlayCutscene();
+                return;
+            }
+        }
+
+        if (lastSpecialPlayed == "Final" && dialogueIndex == currentLines.Length - 1)
+        {
+            if (finalCutsceneManager != null)
+            {
+                waitingForCutscene = true;
+                finalCutsceneManager.PlayCutscene();
                 return;
             }
         }

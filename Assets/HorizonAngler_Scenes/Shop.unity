@@ -1597,6 +1597,8 @@ MonoBehaviour:
     type: 3}
   defaultRodSprite: {fileID: 21300000, guid: 6dcd5bf5b2e318e40854586e1d50d1ca, type: 3}
   textSpeed: 0.05
+  boneRodCutsceneManager: {fileID: 1876944557}
+  finalCutsceneManager: {fileID: 2053072089}
   legendaryCanvas: {fileID: 2044168444}
   reelObject: {fileID: 1630135368}
   spineObject: {fileID: 334634775}
@@ -1605,6 +1607,11 @@ MonoBehaviour:
   visualDisplayTime: 5
   legendaryCanvasGroup: {fileID: 2044168449}
   fadeDuration: 0.5
+  firstVisitBaseDialogue:
+  - You feel a pressure in the air.
+  - "* Strange man is staring at you \u2014 unblinking."
+  - You feel very uncomfortable...
+  - '"..."'
   initialBaseDialogue:
   - '"You lost or somethin''? Keep movin''."'
   - "\"Fish don\u2019t bite on questions, kid.\""
@@ -1629,23 +1636,38 @@ MonoBehaviour:
   - "\u201CYou\u2019re gettin\u2019 close. Too close.\u201D"
   - "\u201CHeh... maybe it\u2019s not my choice to stop you.\u201D"
   finalStateDialogue: []
+  firstVisitSpecialDialogue:
+  - "\u201CWhere am I? What is this place?\u201D you ask the man, your voice rushed,
+    uncertain."
+  - '"......"'
+  - '* Shopkeeper just looks at you.'
+  - "* Eyes wide. Still. Like glass \u2014 like a fish left too long under the sun."
+  - '* There''s something behind them. Something not quite anger, not sadness either.'
+  - '* A kind of horror that no longer flinches.'
+  - '"I said, where am I and what is this place?" you repeat, more forceful.'
+  - '* He continues to stare at you. He didn''t seem to blink at all.'
+  - "\"...You really don\u2019t remember anything, do you?\""
+  - '* He exhales. A sound like wind scraping an empty shell.'
+  - '"Take this."'
+  - '* He hands you a rod. The grip feels strangely familiar.'
+  - "\"Go fish. That\u2019s what you're here for, isn\u2019t it?\""
   scrollDialogue:
   - "\u201C...! Where did you find that scroll?\u201D"
   - '* Shopkeeper forcefully takes scroll out of your hand.'
   - "\u201C......\u201D"
   - "\u201CForget about what you saw.\u201D"
   - '* Shopkeeper hands you a new fishing rod.'
-  - '* Despite the strange exchange, a thrill runs through you.'
-  - '* You can''t hide your excitement to fish in the river now.'
+  - Despite the strange exchange, a thrill runs through you.
+  - You can't hide your excitement to fish in the river now.
   hairDialogue:
   - "\u201CThis\u2026 was inside a fish?\u201D"
   - '* Shopkeeper snatches the reel hideen behind gruesome clump, hands trembling.'
   - "\u201CI threw mine away. Burned it, too\u2026 I think. Doesn\u2019t matter.\u201D"
   - "\u201CDon\u2019t ask me about it. Ever.\u201D"
   - "* He hands you a boat key. Doesn\u2019t meet your eyes."
-  - He places the reel behind the counter. But now... water seeps across the floor,
-    soaking the shop table.
-  - '* You can now fish at the Ocean.'
+  - '* He places the reel behind the counter. But now... water seeps across the floor,
+    soaking the shop table.'
+  - You can now fish at the Ocean.
   boneRodDialogue:
   - "\"It came back\u2026 after all this time?\u201D"
   - "* Shopkeeper whispers something you can\u2019t make out."
@@ -1654,10 +1676,10 @@ MonoBehaviour:
   - 
   - "\u201CYou need to go. Go to the pond. While you still can.\u201D"
   handDialogue:
-  - '* The hand twitches the moment it nears the Shopkeeper. Like it remembers him.'
+  - The hand twitches the moment it nears the Shopkeeper. Like it remembers him.
   - "\u201CThat hand... you felt it pullin\u2019, didn\u2019t you?\u201D"
   - '* He reaches behind the counter and pulls out something pristine.'
-  - '*  A reel - cleaned, polished, quiet.'
+  - '* A reel - cleaned, polished, quiet.'
   - '* Without a word, he lifts another shape wrapped in cloth.'
   - '* A spine - Still intact. Restored. Waiting.'
   - "\u201CThe final piece... it waited.\u201D"
@@ -1665,7 +1687,7 @@ MonoBehaviour:
   - "* He brushes off the muck. The hand is already nearly clean. He\u2019s been
     expecting this."
   - "* In silence, he assembles the rod \u2014 with hands that have done this before."
-  - '* The air thickens. The pull is undeniable. This rod was meant for you.'
+  - The air thickens. The pull is undeniable. This rod was meant for you.
   vesselDialogue:
   - '"......"'
   - '"............"'
@@ -1673,14 +1695,26 @@ MonoBehaviour:
   - "\u201CThe last one...failed.\u201D"
   - "\u201CThere\u2019s a name for someone who reels the sun\u2026\u201D"
   - "\u201CMay you yet become the Horizon Angler.\u201D"
-  finalFightDialogue:
-  - '* You return with the remains. The lower half of a man.  '
-  - "\u201CGood job finding your bones.\u201D  "
+  postBossDialogue:
+  - You return with the remains. The lower half of a man.
+  - "\"How strange a fate... To find myself handing my own bones to the past \u2014
+    or is it the future?\""
   - "\u201CWhat do you mean\u2026?\u201D you ask."
   - "\u201CMy name is Pierre Jonah Santiago.\u201D"
-  - "* He almost smiles \u2014 but it doesn\u2019t reach his/my eyes."
-  - "The reflection blinks \u2014 not his, not yours. Just\u2026 there."
-  - He vanishes. Or maybe you do.
+  - "It's an awkwardly familiar name \u2014 one you've known your whole life. It's
+    your name."
+  - 'As you try to make sense of his words, the world starts to misalign. '
+  - A shape begins to layer over your sight atop of shopkeeper.
+  - "A flickering presence \u2014 a reflection, or perhaps another man..."
+  - "He is standing. Or you are. Or someone else is \u2014 behind the skin, inside
+    the voice."
+  - The scene folds strangely.
+  - "A window that wasn\u2019t there now returns a reflection you\u2019ve seen too
+    many times \u2014"
+  - From half-woken mornings bent over a sink, from sidelong glances into darkened
+    glass.
+  - "It blinks. Was it his? Yours? Someone\u2019s? Just... there, blink."
+  - '* He vanishes. Or maybe you do.'
 --- !u!1 &116482744
 GameObject:
   m_ObjectHideFlags: 0
@@ -2900,7 +2934,7 @@ GameObject:
   - component: {fileID: 184353842}
   - component: {fileID: 184353841}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: Spinecutscene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2933,7 +2967,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 184353839}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: cee2c121b23626646b0fe2e1777b23a5, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 9cb6c73241d103d4caae40fc3f833fa3, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -3802,11 +3836,13 @@ MonoBehaviour:
     canFishPondBoss: 0
     canFishRiverBoss: 0
     canFishOceanBoss: 0
+    arrivedAtShop: 0
     hasCaughtPondBoss: 0
     hasCaughtRiverBoss: 0
-    hasCaughtOceanBoss: 0
-    dredgedHand: 1
+    hasCaughtOceanBoss: 1
+    dredgedHand: 0
     AllCollected: 0
+    BecameHorizonAngler: 0
     currentLevel: Shop
 --- !u!1 &257653023
 GameObject:
@@ -5179,54 +5215,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 378751821}
   m_CullTransparentMesh: 1
---- !u!1 &388478087
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 388478089}
-  - component: {fileID: 388478088}
-  m_Layer: 0
-  m_Name: CutsceneManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &388478088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388478087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b37b348c364e0a4bbfc25c20b491dd9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  videoPlayer: {fileID: 184353841}
-  cutsceneRawImage: {fileID: 184353842}
-  cutsceneCanvas: {fileID: 1876944555}
-  rewardUIPanel: {fileID: 0}
---- !u!4 &388478089
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388478087}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 57.427677, y: -18.844233, z: 74.374115}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1939564626}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &390325854
 GameObject:
   m_ObjectHideFlags: 0
@@ -13086,6 +13074,115 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 933094808}
   m_CullTransparentMesh: 1
+--- !u!1 &955393653
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 955393656}
+  - component: {fileID: 955393655}
+  - component: {fileID: 955393654}
+  - component: {fileID: 955393657}
+  m_Layer: 5
+  m_Name: Finalcutscene
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &955393654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955393653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 8400000, guid: 525a5b892bf5c6340bd1de4fe715f030, type: 2}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &955393655
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955393653}
+  m_CullTransparentMesh: 1
+--- !u!224 &955393656
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955393653}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2053072093}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!328 &955393657
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955393653}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 32900000, guid: cee2c121b23626646b0fe2e1777b23a5, type: 3}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 525a5b892bf5c6340bd1de4fe715f030, type: 2}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 5
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 0
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
 --- !u!1 &963492117
 GameObject:
   m_ObjectHideFlags: 0
@@ -21535,6 +21632,7 @@ Transform:
   m_Children:
   - {fileID: 293526206}
   - {fileID: 1876944556}
+  - {fileID: 2053072093}
   - {fileID: 1287373719}
   - {fileID: 2044168445}
   - {fileID: 1733206303}
@@ -21973,8 +22071,9 @@ GameObject:
   - component: {fileID: 1876944555}
   - component: {fileID: 1876944554}
   - component: {fileID: 1876944553}
+  - component: {fileID: 1876944557}
   m_Layer: 5
-  m_Name: CutsceneCanvas
+  m_Name: SpineCutsceneCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22041,7 +22140,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!224 &1876944556
 RectTransform:
@@ -22063,6 +22162,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1876944557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876944552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b37b348c364e0a4bbfc25c20b491dd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  videoPlayer: {fileID: 184353841}
+  cutsceneRawImage: {fileID: 184353842}
+  cutsceneCanvas: {fileID: 1876944555}
+  rewardUIPanel: {fileID: 0}
 --- !u!1 &1880787435
 GameObject:
   m_ObjectHideFlags: 0
@@ -22434,7 +22549,6 @@ Transform:
   - {fileID: 1083294561}
   - {fileID: 1527434285}
   - {fileID: 110701728}
-  - {fileID: 388478089}
   - {fileID: 257613224}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -23930,6 +24044,125 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2049451924}
   m_CullTransparentMesh: 1
+--- !u!1 &2053072088
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2053072093}
+  - component: {fileID: 2053072090}
+  - component: {fileID: 2053072092}
+  - component: {fileID: 2053072091}
+  - component: {fileID: 2053072089}
+  m_Layer: 5
+  m_Name: FinalCutsceneCanvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2053072089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053072088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b37b348c364e0a4bbfc25c20b491dd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  videoPlayer: {fileID: 955393657}
+  cutsceneRawImage: {fileID: 955393654}
+  cutsceneCanvas: {fileID: 2053072090}
+  rewardUIPanel: {fileID: 0}
+--- !u!223 &2053072090
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053072088}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 1
+  m_TargetDisplay: 0
+--- !u!114 &2053072091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053072088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &2053072092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053072088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!224 &2053072093
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053072088}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 955393656}
+  m_Father: {fileID: 1838672384}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &2076304550
 GameObject:
   m_ObjectHideFlags: 0

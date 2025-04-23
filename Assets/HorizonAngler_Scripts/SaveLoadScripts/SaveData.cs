@@ -17,7 +17,7 @@ public class SaveData
     public bool canFishPondBoss = false;
     public bool canFishRiverBoss = false;
     public bool canFishOceanBoss = false;
-
+    public bool arrivedAtShop = false;
     public bool hasCaughtPondBoss = false;
     public bool hasCaughtRiverBoss = false;
     public bool hasCaughtOceanBoss = false;
