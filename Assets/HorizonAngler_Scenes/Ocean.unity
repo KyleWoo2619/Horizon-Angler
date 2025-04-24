@@ -1948,6 +1948,7 @@ MonoBehaviour:
     hasTurnedInRod: 0
     dredgedHand: 0
     AllCollected: 0
+    readyForFight: 0
     BecameHorizonAngler: 0
     lastScene: Pond
     currentLevel: River
@@ -23431,6 +23432,10 @@ MonoBehaviour:
   confirmationText: {fileID: 6667167922303958306}
   yesButton: {fileID: 5519571761154949363}
   noButton: {fileID: 8367669057003600773}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -24560,6 +24565,10 @@ MonoBehaviour:
   confirmationText: {fileID: 5427164547045319092}
   yesButton: {fileID: 874591038379913801}
   noButton: {fileID: 744530418274736204}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -26453,6 +26462,10 @@ MonoBehaviour:
   confirmationText: {fileID: 900535594105514366}
   yesButton: {fileID: 7034000997828677937}
   noButton: {fileID: 1552307854419030716}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -31392,7 +31405,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 110701729}
         m_TargetAssemblyTypeName: LoadScene, Assembly-CSharp
         m_MethodName: LoadingScene
         m_Mode: 5
@@ -39873,7 +39886,7 @@ GameObject:
   - component: {fileID: 775653248610780620}
   - component: {fileID: 6270778167759228602}
   m_Layer: 0
-  m_Name: FishingZone_BossOcean
+  m_Name: FishingZone_BossRiver
   m_TagString: FishingZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40294,6 +40307,10 @@ MonoBehaviour:
   confirmationText: {fileID: 6667167922303958306}
   yesButton: {fileID: 5519571761154949363}
   noButton: {fileID: 8367669057003600773}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}

@@ -7745,6 +7745,7 @@ MonoBehaviour:
     hasTurnedInRod: 0
     dredgedHand: 0
     AllCollected: 0
+    readyForFight: 0
     BecameHorizonAngler: 0
     lastScene: Pond
     currentLevel: River
@@ -20785,7 +20786,7 @@ PrefabInstance:
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: enableSet1
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
@@ -20795,17 +20796,17 @@ PrefabInstance:
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: enableSet3
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: enableSet4
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: enableSet5
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5732645879821577622, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
@@ -31721,6 +31722,10 @@ MonoBehaviour:
   confirmationText: {fileID: 6582608453347298025}
   yesButton: {fileID: 5423991054831105848}
   noButton: {fileID: 8341643742780558414}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -34024,6 +34029,10 @@ MonoBehaviour:
   confirmationText: {fileID: 5516275138670843519}
   yesButton: {fileID: 864618078740039042}
   noButton: {fileID: 975464851261140871}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -35108,6 +35117,10 @@ MonoBehaviour:
   confirmationText: {fileID: 838740728513339061}
   yesButton: {fileID: 7368272472550139642}
   noButton: {fileID: 1321368478245995895}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -43696,7 +43709,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 110701729}
         m_TargetAssemblyTypeName: LoadScene, Assembly-CSharp
         m_MethodName: LoadingScene
         m_Mode: 5
@@ -50451,7 +50464,7 @@ GameObject:
   - component: {fileID: 775653248610780620}
   - component: {fileID: 6270778167759228602}
   m_Layer: 0
-  m_Name: FishingZone_BossRiver
+  m_Name: FishingZone_BossPond
   m_TagString: FishingZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52314,6 +52327,10 @@ MonoBehaviour:
   confirmationText: {fileID: 838740728513339061}
   yesButton: {fileID: 7368272472550139642}
   noButton: {fileID: 1321368478245995895}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}

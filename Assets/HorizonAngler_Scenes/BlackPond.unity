@@ -3713,6 +3713,7 @@ MonoBehaviour:
     hasTurnedInRod: 0
     dredgedHand: 0
     AllCollected: 0
+    readyForFight: 0
     BecameHorizonAngler: 0
     lastScene: Pond
     currentLevel: Pond
@@ -13585,6 +13586,10 @@ MonoBehaviour:
   confirmationText: {fileID: 728539617}
   yesButton: {fileID: 1576106755}
   noButton: {fileID: 1030415757}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -34850,6 +34855,10 @@ MonoBehaviour:
   confirmationText: {fileID: 4862501635135411556}
   yesButton: {fileID: 290783397731993241}
   noButton: {fileID: 179898138206104732}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -35940,7 +35949,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d09dfb111f6103d4ba7bed872fb6f57d, type: 2}
+  - {fileID: 2100000, guid: 44704a45529206f4d8c32000040d35f9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -37134,6 +37143,10 @@ MonoBehaviour:
   confirmationText: {fileID: 6101449479304776178}
   yesButton: {fileID: 4950387663809115171}
   noButton: {fileID: 8950293702459281237}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -39453,6 +39466,10 @@ MonoBehaviour:
   confirmationText: {fileID: 312263801095019950}
   yesButton: {fileID: 7617821985089267169}
   noButton: {fileID: 2134950156754978412}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -54488,6 +54505,10 @@ MonoBehaviour:
   confirmationText: {fileID: 0}
   yesButton: {fileID: 0}
   noButton: {fileID: 0}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
