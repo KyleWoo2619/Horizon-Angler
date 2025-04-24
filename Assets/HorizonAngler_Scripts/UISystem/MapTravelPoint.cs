@@ -32,52 +32,63 @@ public class MapTravelPoint : MonoBehaviour
         SetupButton();
     }
 
-    private void SetupButton()
+    public void SetupButton()
     {
         var save = GameManager.Instance?.currentSaveData;
 
-        if (regionType == RegionType.Shop)
+        if (save != null && save.hasTurnedInRod)
         {
-            SetPinActive(save != null && save.arrivedAtShop);
-        }
-        else if (regionType == RegionType.Pond)
-        {
-            if (save != null && save.hasTurnedInRod)
+            if (regionType == RegionType.BlackPond)
             {
-                gameObject.SetActive(false);
-            }
-            else
-            {
-                SetPinActive(save != null && save.arrivedAtShop);
-            }
-        }
-        else if (regionType == RegionType.BlackPond)
-        {
-            gameObject.SetActive(true); // Always visible after unlocking
-            SetPinActive(save != null && save.hasTurnedInRod);
-        }
-        else if (regionType == RegionType.River)
-        {
-            SetPinActive(save != null && save.hasTurnedInScroll);
-        }
-        else if (regionType == RegionType.Ocean)
-        {
-            SetPinActive(save != null && save.hasTurnedInHair);
-        }
-        else if (regionType == RegionType.Boss)
-        {
-            if (save != null && save.AllCollected)
-            {
+                gameObject.SetActive(true);
                 SetPinActive(true);
             }
-            else
+            else if (regionType == RegionType.Pond)
             {
                 gameObject.SetActive(false);
+            }
+            else if (regionType == RegionType.Shop)
+            {
+                gameObject.SetActive(true);
+                SetPinActive(save.arrivedAtShop);
+            }
+            else
+            {
+                SetPinActive(false);
+            }
+        }
+        else
+        {
+            switch (regionType)
+            {
+                case RegionType.Shop:
+                    SetPinActive(save != null && save.arrivedAtShop);
+                    break;
+                case RegionType.Pond:
+                    SetPinActive(save != null && save.arrivedAtShop);
+                    break;
+                case RegionType.BlackPond:
+                    gameObject.SetActive(false); // Hide until Rod turned in
+                    break;
+                case RegionType.River:
+                    SetPinActive(save != null && save.hasTurnedInScroll);
+                    break;
+                case RegionType.Ocean:
+                    SetPinActive(save != null && save.hasTurnedInHair);
+                    break;
+                case RegionType.Boss:
+                    gameObject.SetActive(save.AllCollected);
+                    SetPinActive(save.AllCollected);
+                    break;
             }
         }
 
+        // Make sure button click listener is always added, regardless of conditions above
+        travelButton.onClick.RemoveAllListeners(); // avoid duplicates
         travelButton.onClick.AddListener(OnTravelButtonClicked);
         confirmationPopup.SetActive(false);
+
+        Debug.Log($"[MapTravelPoint] SetupButton called for: {regionType}");
     }
 
     private void SetPinActive(bool unlocked)

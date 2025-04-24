@@ -5,7 +5,7 @@ using StarterAssets;
 
 public class ObjectiveTextManager : MonoBehaviour
 {
-    public enum LevelType { Tutorial, Pond, River, Ocean, Boss }
+    public enum LevelType { Tutorial, Pond, River, Ocean, BlackPond, Boss }
 
     [Header("Level Type")]
     public LevelType currentLevel;
@@ -121,6 +121,17 @@ public class ObjectiveTextManager : MonoBehaviour
                 }
                 break;
 
+            case LevelType.BlackPond:
+                if (saveData.dredgedHand)
+                {
+                    objectiveText.text = "The skeletal hand trembles as you grab onto it.\nIt's almost as if it wants to go somewhere... and knows the way.";
+                }
+                else
+                {
+                    objectiveText.text = "Something is deeply wrong with this place.\nYour left hand aches for no reason.";
+                }
+                break;
+
             case LevelType.Boss:
                 objectiveText.text = "This is it. Be ready for the final battle.";
                 break;
@@ -155,7 +166,7 @@ public class ObjectiveTextManager : MonoBehaviour
     private IEnumerator FadeObjectiveUpdateSign()
     {
         objectiveUpdateSign.alpha = 1f;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(4f);
 
         float fadeDuration = 1f;
         float elapsed = 0f;

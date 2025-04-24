@@ -25,6 +25,10 @@ public class ShopInteractionManager : MonoBehaviour
     public CutsceneManager boneRodCutsceneManager;
     public CutsceneManager finalCutsceneManager;
 
+    [Header("Lighting References")]
+    public GameObject mainLights;
+    public GameObject emergencyLights;
+
     [Header("Legendary Canvas")]
     public GameObject legendaryCanvas;
     public GameObject reelObject;
@@ -84,6 +88,14 @@ public class ShopInteractionManager : MonoBehaviour
             if (rodNameText != null) rodNameText.text = "";
         }
 
+        if (saveData.hasTurnedInRod)
+        {
+            SetEmergencyLighting();
+        }
+        else
+        {
+            SetNormalLighting();
+        }
         // Hide legendary items at start
         if (legendaryCanvas != null)
         {
@@ -393,6 +405,7 @@ public class ShopInteractionManager : MonoBehaviour
             {
                 saveData.hasTurnedInRod = true;
                 GameManager.Instance.currentSaveData.hasTurnedInRod = true;
+                StartCoroutine(DelayedPinUpdate());
                 Debug.Log("hasTurnedInRod set to TRUE");
             }
 
@@ -420,6 +433,7 @@ public class ShopInteractionManager : MonoBehaviour
             {
                 waitingForCutscene = true;
                 cutscene.PlayCutscene();
+                SetEmergencyLighting();
                 return;
             }
         }
@@ -440,6 +454,16 @@ public class ShopInteractionManager : MonoBehaviour
             StopCoroutine(typingCoroutine);
 
         typingCoroutine = StartCoroutine(TypeLine());
+    }
+
+    private IEnumerator DelayedPinUpdate()
+    {
+        yield return new WaitForSeconds(0.1f); // Small delay ensures all pins have initialized
+
+        foreach (MapTravelPoint pin in FindObjectsOfType<MapTravelPoint>())
+        {
+            pin.SetupButton();  // Now it’s public, so this works
+        }
     }
 
     void ShowLegendaryItem(GameObject itemToShow)
@@ -563,5 +587,17 @@ public class ShopInteractionManager : MonoBehaviour
             else if (lastSpecialPlayed == "Hair" && professionalRodSprite != null)
                 rodImage.sprite = professionalRodSprite;
         }
+    }
+
+    private void SetEmergencyLighting()
+    {
+        if (mainLights != null) mainLights.SetActive(false);
+        if (emergencyLights != null) emergencyLights.SetActive(true);
+    }
+
+    private void SetNormalLighting()
+    {
+        if (mainLights != null) mainLights.SetActive(true);
+        if (emergencyLights != null) emergencyLights.SetActive(false);
     }
 }

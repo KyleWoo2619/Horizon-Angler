@@ -37,6 +37,7 @@ public class InitiateMicrogames : MonoBehaviour
         Pond,
         River,
         Ocean,
+        BlackPond,
         BossPond,
         BossRiver,
         BossOcean

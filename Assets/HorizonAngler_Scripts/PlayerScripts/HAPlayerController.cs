@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -493,6 +494,7 @@ namespace StarterAssets
                     case InitiateMicrogames.FishZoneType.Pond:
                     case InitiateMicrogames.FishZoneType.River:
                     case InitiateMicrogames.FishZoneType.Ocean:
+                    case InitiateMicrogames.FishZoneType.BlackPond:
                         allowedToFish = true;
                         break;
                     case InitiateMicrogames.FishZoneType.BossPond:

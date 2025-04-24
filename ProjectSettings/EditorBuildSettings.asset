@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/HorizonAngler_Scenes/Ocean.unity
     guid: 43c1ae7c8a87cb843bba788b3f0fc350
   - enabled: 1
+    path: Assets/HorizonAngler_Scenes/BlackPond.unity
+    guid: a38b572189d26f94e8c404d9e47f9e00
+  - enabled: 1
     path: Assets/HorizonAngler_Scenes/Boss.unity
     guid: 7e9976041f77c2b408f715c2a65f02db
   m_configObjects:

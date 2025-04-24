@@ -12,8 +12,8 @@ public class LegendaryRewardManager : MonoBehaviour
         string message = source switch
         {
             "River" => "You found a gruesome clump of hair inside the malformed fish...",
-            "Ocean" => "Out between the monstrous tentacles, you find a worn vertebrae... It seems disturbingly human.",
-            _ => "You found a mysterious item!"
+            "Ocean" => "Out between the monstrous tentacles, you find a worn vertebrae...\nIt seems disturbingly human.",
+            "BlackPond" => "The skeletal hand trembles as you grab onto it.\nIt's almost as if it wants to go somewhere... and knows the way."
         };
 
         rewardText.text = message;

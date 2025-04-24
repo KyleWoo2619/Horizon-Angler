@@ -13,6 +13,7 @@ public class FishingProgress : MonoBehaviour
     private HAPlayerController playerController;
     public GameObject BossfishLocation;
     public GameObject TutorialFishLocation;
+    public GameObject BlackPondFishLocation;
     public float progress;
     public Slider progressSlider;
 
@@ -501,18 +502,15 @@ public class FishingProgress : MonoBehaviour
     void OnProgressMax()
     {
         hasCaughtFish = true;
+        var player = FindObjectOfType<HAPlayerController>();
 
         if (activeZoneType == FishZoneType.Tutorial)
         {
-            hasCaughtFish = true;
-            HAPlayerController player = FindObjectOfType<HAPlayerController>();
             player.inFishZone = false;
             player.canFish = false;
             player.EndFishing();
-            
 
             Debug.Log("Tutorial fish caught! Triggering tutorial cutscene...");
-
             CutsceneManager cutsceneManager = FindObjectOfType<CutsceneManager>();
             if (cutsceneManager != null)
             {
@@ -521,10 +519,9 @@ public class FishingProgress : MonoBehaviour
                 {
                     AudioSource musicSource = musicObject.GetComponent<AudioSource>();
                     if (musicSource != null && musicSource.isPlaying)
-                    {
                         musicSource.Stop();
-                    }
                 }
+
                 cutsceneManager.PlayCutscene();
                 cutsceneManager.videoPlayer.loopPointReached += OnTutorialCutsceneFinished;
             }
@@ -532,24 +529,39 @@ public class FishingProgress : MonoBehaviour
             {
                 Debug.LogWarning("CutsceneManager not found for tutorial region!");
             }
-            TutorialFishLocation.SetActive(false);
 
-            
+            TutorialFishLocation.SetActive(false);
             T2S.microgamesActive = false;
             T2S.ClearAll();
-            
+        }
+        else if (activeZoneType == FishZoneType.BlackPond)
+        {
+            player.inFishZone = false;
+            player.canFish = false;
+            player.EndFishing();
+
+            Debug.Log("Black Pond hand caught! Showing legendary canvas and updating save...");
+
+            GameManager.Instance.currentSaveData.dredgedHand = true;
+            SaveManager.Save(GameManager.Instance.currentSaveData);
+
+            var reward = FindObjectOfType<LegendaryRewardManager>();
+            if (reward != null)
+            {
+                reward.ShowReward("BlackPond");
+            }
+
+            BlackPondFishLocation?.SetActive(false);
+            T2S.microgamesActive = false;
+            T2S.ClearAll();
         }
         else
         {
             Debug.Log("Player successfully caught the fish!");
-
-            hasCaughtFish = true;
-
             PickRandomFish();
             Debug.Log($"[FishingProgress] Picked random fish: {currentCaughtFish?.fishName}");
 
             ShowFishCaughtScreen();
-
             T2S.microgamesActive = false;
             T2S.ClearAll();
         }
