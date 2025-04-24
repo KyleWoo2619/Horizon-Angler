@@ -26,6 +26,7 @@ public class SaveData
     public bool hasTurnedInRod = false;
     public bool dredgedHand = false;
     public bool AllCollected = false;
+    public bool readyForFight = false;
     public bool BecameHorizonAngler = false;
     public string lastScene = "Pond";
 

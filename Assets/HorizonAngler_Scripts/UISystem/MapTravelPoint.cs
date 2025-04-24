@@ -6,7 +6,7 @@ using System.Collections;
 
 public class MapTravelPoint : MonoBehaviour
 {
-    public enum RegionType {Pond, River, Ocean, Shop, BlackPond, Boss }
+    public enum RegionType { Pond, River, Ocean, Shop, BlackPond, Boss }
 
     [Header("Region Info")]
     public RegionType regionType;
@@ -18,6 +18,12 @@ public class MapTravelPoint : MonoBehaviour
     public TextMeshProUGUI confirmationText;
     public Button yesButton;
     public Button noButton;
+    
+    [Header("Boss UI")]
+    public CanvasGroup confirmationCanvasGroup; // For fading in confirmation
+    public CanvasGroup blackFadeCanvasGroup; // Black screen for transitions
+    public float dialogFadeDuration = 0.5f; // How fast the dialog fades in
+    public float blackFadeDuration = 1.5f; // How fast the black screen fades in
 
     [Header("Color Settings")]
     public Color lockedColor = Color.gray;
@@ -30,33 +36,77 @@ public class MapTravelPoint : MonoBehaviour
     private void Start()
     {
         SetupButton();
+        
+        // Make sure black fade canvas starts invisible
+        if (blackFadeCanvasGroup != null)
+        {
+            blackFadeCanvasGroup.alpha = 0f;
+            blackFadeCanvasGroup.gameObject.SetActive(false);
+        }
     }
 
     public void SetupButton()
     {
         var save = GameManager.Instance?.currentSaveData;
 
-        if (save != null && save.hasTurnedInRod)
+        // Step 1: Initially disable BlackPond and Boss completely
+        if (regionType == RegionType.BlackPond || regionType == RegionType.Boss)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            // Enable other region buttons and set their interactability
+            gameObject.SetActive(true);
+        }
+
+        // Step 2: When rod is turned in, only show BlackPond and Shop
+        if (save != null && save.hasTurnedInRod && !save.readyForFight)
         {
             if (regionType == RegionType.BlackPond)
             {
+                // Enable BlackPond
                 gameObject.SetActive(true);
                 SetPinActive(true);
             }
-            else if (regionType == RegionType.Pond)
-            {
-                gameObject.SetActive(false);
-            }
             else if (regionType == RegionType.Shop)
             {
+                // Enable Shop
                 gameObject.SetActive(true);
-                SetPinActive(save.arrivedAtShop);
+                SetPinActive(true);
+            }
+            else if (regionType == RegionType.Pond || 
+                    regionType == RegionType.River || 
+                    regionType == RegionType.Ocean)
+            {
+                // Disable all other travel points
+                gameObject.SetActive(false);
+            }
+        }
+        
+        // Step 3: When readyForFight is true, only show Boss and BlackPond (locked)
+        else if (save != null && save.readyForFight)
+        {
+            if (regionType == RegionType.Boss)
+            {
+                // Enable Boss
+                gameObject.SetActive(true);
+                SetPinActive(true);
+            }
+            else if (regionType == RegionType.BlackPond)
+            {
+                // Show BlackPond but locked
+                gameObject.SetActive(true);
+                SetPinActive(false); // Locked
             }
             else
             {
-                SetPinActive(false);
+                // Disable all other travel points
+                gameObject.SetActive(false);
             }
         }
+        
+        // Initial game state - normal regions available based on progression
         else
         {
             switch (regionType)
@@ -67,28 +117,28 @@ public class MapTravelPoint : MonoBehaviour
                 case RegionType.Pond:
                     SetPinActive(save != null && save.arrivedAtShop);
                     break;
-                case RegionType.BlackPond:
-                    gameObject.SetActive(false); // Hide until Rod turned in
-                    break;
                 case RegionType.River:
                     SetPinActive(save != null && save.hasTurnedInScroll);
                     break;
                 case RegionType.Ocean:
                     SetPinActive(save != null && save.hasTurnedInHair);
                     break;
-                case RegionType.Boss:
-                    gameObject.SetActive(save.AllCollected);
-                    SetPinActive(save.AllCollected);
-                    break;
             }
         }
 
-        // Make sure button click listener is always added, regardless of conditions above
-        travelButton.onClick.RemoveAllListeners(); // avoid duplicates
-        travelButton.onClick.AddListener(OnTravelButtonClicked);
-        confirmationPopup.SetActive(false);
+        // Add debug logging to verify state
+        Debug.Log($"[MapTravelPoint] {regionType} - Active: {gameObject.activeSelf}, Interactable: {(travelButton != null ? travelButton.interactable : false)}");
 
-        Debug.Log($"[MapTravelPoint] SetupButton called for: {regionType}");
+        if (travelButton != null)
+        {
+            travelButton.onClick.RemoveAllListeners();
+            travelButton.onClick.AddListener(OnTravelButtonClicked);
+        }
+        
+        if (confirmationPopup != null)
+        {
+            confirmationPopup.SetActive(false);
+        }
     }
 
     private void SetPinActive(bool unlocked)
@@ -104,25 +154,83 @@ public class MapTravelPoint : MonoBehaviour
     {
         if (!travelButton.interactable) return;
 
-        confirmationPopup.SetActive(true);
         string displayName = GetRegionDisplayName(regionType);
         confirmationText.text = regionType == RegionType.Boss
             ? "Are you ready to confront the terror of the Horizon Angler?"
             : $"Would you like to travel to the {displayName}?";
+
+        // Special handling for Boss confirmation
+        if (regionType == RegionType.Boss && confirmationCanvasGroup != null)
+        {
+            // Make confirmation popup visible but transparent
+            confirmationPopup.SetActive(true);
+            confirmationCanvasGroup.alpha = 0f;
+            
+            // Fade it in
+            StartCoroutine(FadeInConfirmation());
+        }
+        else
+        {
+            // Standard behavior for other regions
+            confirmationPopup.SetActive(true);
+        }
 
         yesButton.onClick.RemoveAllListeners();
         noButton.onClick.RemoveAllListeners();
 
         yesButton.onClick.AddListener(() =>
         {
-            confirmationPopup.SetActive(false);
+            // Don't immediately hide confirmation for Boss
+            if (regionType != RegionType.Boss)
+            {
+                confirmationPopup.SetActive(false);
+            }
+            
             TravelToRegion(regionType);
         });
 
         noButton.onClick.AddListener(() =>
         {
-            confirmationPopup.SetActive(false);
+            if (regionType == RegionType.Boss && confirmationCanvasGroup != null)
+            {
+                // For Boss, fade out confirmation
+                StartCoroutine(FadeOutConfirmation());
+            }
+            else
+            {
+                // For other regions, just hide it
+                confirmationPopup.SetActive(false);
+            }
         });
+    }
+
+    private IEnumerator FadeInConfirmation()
+    {
+        float elapsed = 0f;
+        
+        while (elapsed < dialogFadeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime; // Use unscaled time in case game is paused
+            confirmationCanvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / dialogFadeDuration);
+            yield return null;
+        }
+        
+        confirmationCanvasGroup.alpha = 1f;
+    }
+
+    private IEnumerator FadeOutConfirmation()
+    {
+        float elapsed = 0f;
+        
+        while (elapsed < dialogFadeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            confirmationCanvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / dialogFadeDuration);
+            yield return null;
+        }
+        
+        confirmationCanvasGroup.alpha = 0f;
+        confirmationPopup.SetActive(false);
     }
 
     private void TravelToRegion(RegionType region)
@@ -133,12 +241,20 @@ public class MapTravelPoint : MonoBehaviour
 
         if (region == RegionType.Boss)
         {
-            if (bossTravelCanvasGroup != null)
+            // Fade to black and load boss scene
+            if (blackFadeCanvasGroup != null)
             {
+                blackFadeCanvasGroup.gameObject.SetActive(true);
+                StartCoroutine(FadeToBlackAndLoadBoss());
+            }
+            else if (bossTravelCanvasGroup != null) 
+            {
+                // Fallback to the original fade canvas if available
                 StartCoroutine(FadeAndLoadBossScene());
             }
             else
             {
+                // No fade, just load
                 SceneManager.LoadScene("Boss");
             }
             return;
@@ -169,6 +285,45 @@ public class MapTravelPoint : MonoBehaviour
         }
     }
 
+    private IEnumerator FadeToBlackAndLoadBoss()
+    {
+        // Keep confirmation visible during the black fade
+        // Only fade out confirmation near the end of the black fade
+
+        // Begin loading the boss scene asynchronously
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Boss");
+        asyncLoad.allowSceneActivation = false; // Don't transition yet
+        
+        // Fade to black while keeping confirmation visible
+        float elapsed = 0f;
+        while (elapsed < blackFadeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            blackFadeCanvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / blackFadeDuration);
+            
+            // Only start fading out confirmation when we're 75% through the black fade
+            if (elapsed > blackFadeDuration * 0.75f && confirmationCanvasGroup != null)
+            {
+                // Calculate how far we are through the final 25% of the fade
+                float confirmFadeProgress = (elapsed - (blackFadeDuration * 0.75f)) / (blackFadeDuration * 0.25f);
+                confirmationCanvasGroup.alpha = Mathf.Lerp(1f, 0f, confirmFadeProgress);
+            }
+            
+            yield return null;
+        }
+        
+        // Ensure we're fully black and confirmation is hidden
+        blackFadeCanvasGroup.alpha = 1f;
+        if (confirmationCanvasGroup != null)
+            confirmationCanvasGroup.alpha = 0f;
+        
+        // Slight pause at black screen before transition
+        yield return new WaitForSeconds(0.5f);
+        
+        // Allow scene transition
+        asyncLoad.allowSceneActivation = true;
+    }
+
     private IEnumerator FadeAndLoadBossScene()
     {
         float elapsed = 0f;
@@ -178,6 +333,8 @@ public class MapTravelPoint : MonoBehaviour
             bossTravelCanvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
             yield return null;
         }
+        
+        // Load scene once fully faded
         SceneManager.LoadScene("Boss");
     }
 

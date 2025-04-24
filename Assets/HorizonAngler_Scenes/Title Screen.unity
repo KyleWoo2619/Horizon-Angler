@@ -449,6 +449,7 @@ MonoBehaviour:
     hasTurnedInRod: 0
     dredgedHand: 0
     AllCollected: 0
+    readyForFight: 0
     BecameHorizonAngler: 0
     lastScene: Pond
     currentLevel: Pond
@@ -3565,7 +3566,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2123750237}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 3ad4081ad16507e4db56e39c40df0315, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 6779375f2ecacbd4aa91560589debf41, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}

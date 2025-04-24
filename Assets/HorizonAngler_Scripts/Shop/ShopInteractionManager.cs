@@ -409,6 +409,19 @@ public class ShopInteractionManager : MonoBehaviour
                 Debug.Log("hasTurnedInRod set to TRUE");
             }
 
+            if (lastSpecialPlayed == "Hand" && !saveData.AllCollected)
+            {
+                saveData.AllCollected = true;
+                GameManager.Instance.currentSaveData.AllCollected = true;
+                Debug.Log("AllCollected has been set to TRUE.");
+            }
+            else if (lastSpecialPlayed == "Vessel" && !saveData.readyForFight)
+            {
+                saveData.readyForFight = true;
+                GameManager.Instance.currentSaveData.readyForFight = true;
+                Debug.Log("readyForFight has been set to TRUE.");
+            }
+
             SaveManager.Save(saveData);
             UpdateShopState(); // <- updates rod visuals + special button logic
             lastSpecialPlayed = "";
