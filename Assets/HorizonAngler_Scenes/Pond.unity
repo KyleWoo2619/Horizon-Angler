@@ -2232,7 +2232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &175236591
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3623,8 +3623,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentSaveData:
     recentCatchLog: []
-    canFishPondBoss: 0
-    canFishRiverBoss: 0
+    canFishPondBoss: 1
+    canFishRiverBoss: 1
     canFishOceanBoss: 0
     arrivedAtShop: 0
     hasCaughtPondBoss: 0
@@ -3635,6 +3635,7 @@ MonoBehaviour:
     hasTurnedInRod: 0
     dredgedHand: 0
     AllCollected: 0
+    readyForFight: 0
     BecameHorizonAngler: 0
     lastScene: Pond
     currentLevel: Pond
@@ -9125,8 +9126,7 @@ MonoBehaviour:
   m_text: "An ancient scroll, \nBrimming with the spirit of the horizon."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
-  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 00c34e2db7b49f947b6fbeb4fed4213e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -10855,15 +10855,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.003921569, g: 0.49803922, b: 0.6431373, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 9ccc0758ec4ab0743bf56625a7dc9031, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -11717,6 +11717,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 318604119375973995, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1884041702945486774, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: m_IsActive
@@ -11731,6 +11736,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2646157428908835531, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2731201872062085465, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3036115461952541860, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
@@ -11756,6 +11771,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 63
+      objectReference: {fileID: 0}
+    - target: {fileID: 4176593094274177269, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4203438925118910524, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
@@ -11848,10 +11868,20 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4287674308
       objectReference: {fileID: 0}
+    - target: {fileID: 6849730129797209955, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7577730178744753171, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: m_Color.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7681761287645142358, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8913369646684201009, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
@@ -28099,6 +28129,61 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7152489878631070528, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.177
+      objectReference: {fileID: 0}
+    - target: {fileID: 7152489878631070528, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.228
+      objectReference: {fileID: 0}
+    - target: {fileID: 7152489878631070528, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 7152489878631070528, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.63585883
+      objectReference: {fileID: 0}
+    - target: {fileID: 7152489878631070528, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.11143963
+      objectReference: {fileID: 0}
+    - target: {fileID: 7152489878631070528, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.014787561
+      objectReference: {fileID: 0}
+    - target: {fileID: 7152489878631070528, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.7635746
+      objectReference: {fileID: 0}
+    - target: {fileID: 7152489878631070528, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 9.457
+      objectReference: {fileID: 0}
+    - target: {fileID: 7152489878631070528, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -8.828
+      objectReference: {fileID: 0}
+    - target: {fileID: 7152489878631070528, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -101.161
+      objectReference: {fileID: 0}
+    - target: {fileID: 7496645146458579450, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
         type: 3}
       propertyPath: T2S
@@ -29326,7 +29411,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1918772151
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33174,6 +33259,10 @@ MonoBehaviour:
   confirmationText: {fileID: 4862501635135411556}
   yesButton: {fileID: 290783397731993241}
   noButton: {fileID: 179898138206104732}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -35470,6 +35559,10 @@ MonoBehaviour:
   confirmationText: {fileID: 6101449479304776178}
   yesButton: {fileID: 4950387663809115171}
   noButton: {fileID: 8950293702459281237}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -37789,6 +37882,10 @@ MonoBehaviour:
   confirmationText: {fileID: 312263801095019950}
   yesButton: {fileID: 7617821985089267169}
   noButton: {fileID: 2134950156754978412}
+  confirmationCanvasGroup: {fileID: 0}
+  blackFadeCanvasGroup: {fileID: 0}
+  dialogFadeDuration: 0.5
+  blackFadeDuration: 1.5
   lockedColor: {r: 1, g: 1, b: 1, a: 1}
   unlockedColor: {r: 1, g: 1, b: 1, a: 1}
   bossTravelCanvasGroup: {fileID: 0}
@@ -44323,7 +44420,7 @@ MonoBehaviour:
       - m_Target: {fileID: 8189905365184478873}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
         m_MethodName: SetResolution
-        m_Mode: 3
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -51539,7 +51636,7 @@ GameObject:
   - component: {fileID: 775653248610780620}
   - component: {fileID: 6270778167759228602}
   m_Layer: 0
-  m_Name: FishingZone_BlackPond
+  m_Name: FishingZone_BossPond
   m_TagString: FishingZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51557,7 +51654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd23de6a668295342a290c728523a5f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneType: 4
+  zoneType: 5
 --- !u!1 &6270778167768123572
 GameObject:
   m_ObjectHideFlags: 0
@@ -52066,7 +52163,7 @@ MonoBehaviour:
       - m_Target: {fileID: 8189905365184478873}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
         m_MethodName: SetQuality
-        m_Mode: 3
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -56183,7 +56280,7 @@ MonoBehaviour:
       - m_Target: {fileID: 8189905365184478873}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
         m_MethodName: SetBrightness
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -59021,6 +59118,7 @@ GameObject:
   - component: {fileID: 5818474532770481192}
   - component: {fileID: 8189905365184478873}
   - component: {fileID: 6210834175978800740}
+  - component: {fileID: 9100509309796613146}
   m_Layer: 0
   m_Name: MenuController
   m_TagString: Untagged
@@ -59028,6 +59126,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &9100509309796613146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9100509309796613145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b17ca301353ac6469515bd6bef06124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canUse: 0
+  menuController: {fileID: 8189905365184478873}
+  volumeTextValue: {fileID: 0}
+  volumeSlider: {fileID: 0}
+  brightnessSlider: {fileID: 0}
+  brightnessTextValue: {fileID: 0}
+  qualityDropdown: {fileID: 0}
+  fullScreenToggle: {fileID: 6750897016634744998}
+  ControllerSenTextValue: {fileID: 0}
+  ControllerSenSlider: {fileID: 0}
+  invertYToggle: {fileID: 0}
 --- !u!1 &9102703321195873279
 GameObject:
   m_ObjectHideFlags: 0

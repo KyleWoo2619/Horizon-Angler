@@ -3193,6 +3193,11 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 318604119375973995, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 333856904829137975, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: m_Sprite
@@ -4071,6 +4076,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 2.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4176593094274177269, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4203438925118910524, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
@@ -35256,7 +35266,7 @@ MonoBehaviour:
       - m_Target: {fileID: 8755659128184539721}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
         m_MethodName: SetResolution
-        m_Mode: 3
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -38985,7 +38995,7 @@ MonoBehaviour:
       - m_Target: {fileID: 8755659128184539721}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
         m_MethodName: SetQuality
-        m_Mode: 3
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -39886,7 +39896,7 @@ GameObject:
   - component: {fileID: 775653248610780620}
   - component: {fileID: 6270778167759228602}
   m_Layer: 0
-  m_Name: FishingZone_BossRiver
+  m_Name: FishingZone_BossOcean
   m_TagString: FishingZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39904,7 +39914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd23de6a668295342a290c728523a5f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneType: 6
+  zoneType: 7
 --- !u!1 &6270778169604894248
 GameObject:
   m_ObjectHideFlags: 0
@@ -45919,6 +45929,7 @@ GameObject:
   - component: {fileID: 6383120047841964280}
   - component: {fileID: 8755659128184539721}
   - component: {fileID: 6781131144649306804}
+  - component: {fileID: 8755659128184539722}
   m_Layer: 0
   m_Name: MenuController
   m_TagString: Untagged
@@ -46424,6 +46435,29 @@ MonoBehaviour:
   _newGameLevel: Title Screen
   noSavedGameDialog: {fileID: 0}
   resolutionDropdown: {fileID: 4454297578477544813}
+--- !u!114 &8755659128184539722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8530304914855135433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b17ca301353ac6469515bd6bef06124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canUse: 0
+  menuController: {fileID: 8755659128184539721}
+  volumeTextValue: {fileID: 0}
+  volumeSlider: {fileID: 0}
+  brightnessSlider: {fileID: 0}
+  brightnessTextValue: {fileID: 0}
+  qualityDropdown: {fileID: 0}
+  fullScreenToggle: {fileID: 6168307572328125558}
+  ControllerSenTextValue: {fileID: 0}
+  ControllerSenSlider: {fileID: 0}
+  invertYToggle: {fileID: 0}
 --- !u!222 &8761207704517952677
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -46528,7 +46562,7 @@ MonoBehaviour:
       - m_Target: {fileID: 8755659128184539721}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
         m_MethodName: SetBrightness
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

@@ -316,13 +316,6 @@ public class ShopInteractionManager : MonoBehaviour
         dialogueIndex = 0;
         textComponent.text = string.Empty;
 
-        if (lastSpecialPlayed == "Hand" && saveData != null && !saveData.AllCollected)
-        {
-            saveData.AllCollected = true;
-            SaveManager.Save(saveData);
-            Debug.Log("AllCollected has been set to TRUE.");
-        }
-
         // Hide shop UI
         shopBaseDialogue.SetActive(false);
         dialogueButton.SetActive(false);

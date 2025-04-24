@@ -8,7 +8,7 @@ public class LegacyPauseManager : MonoBehaviour
     public GameObject pauseMenuUI;
 
     [Header("Input Action")]
-    public InputAction pauseAction; // This will show '+' in inspector and allow rebinding like your screenshot
+    public InputAction pauseAction;
 
     private bool isPaused = false;
 
@@ -36,19 +36,28 @@ public class LegacyPauseManager : MonoBehaviour
 
         if (pauseMenuUI != null)
             pauseMenuUI.SetActive(isPaused);
+
+        Cursor.visible = isPaused;
+        Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
     public void ResumeGame()
     {
         isPaused = false;
         Time.timeScale = 1f;
+
         if (pauseMenuUI != null)
             pauseMenuUI.SetActive(false);
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void QuitToMainMenu(string sceneName = "Title Screen")
     {
         Time.timeScale = 1f;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene(sceneName);
     }
 }

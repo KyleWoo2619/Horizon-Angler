@@ -53,11 +53,14 @@ public class MenuController : MonoBehaviour
 
     private void Start()
     {
+        // Force Full HD resolution at startup
+        Screen.SetResolution(1920, 1080, true); // true = fullscreen
+
+        // Continue building the resolution dropdown
         resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
 
         List<string> options = new List<string>();
-
         int currentResolutionIndex = 0;
 
         for (int i = 0; i < resolutions.Length; i++)
@@ -65,7 +68,7 @@ public class MenuController : MonoBehaviour
             string option = resolutions[i].width + " x " + resolutions[i].height;
             options.Add(option);
 
-            if(resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
+            if (resolutions[i].width == 1920 && resolutions[i].height == 1080)
             {
                 currentResolutionIndex = i;
             }
@@ -73,8 +76,11 @@ public class MenuController : MonoBehaviour
 
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.value = currentResolutionIndex;
-        resolutionDropdown.RefreshShownValue(); 
+        resolutionDropdown.RefreshShownValue();
+
+        Application.targetFrameRate = 120;
     }
+
 
     public void SetResolution(int resolutionIndex)
     {

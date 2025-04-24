@@ -124,7 +124,7 @@ public class ObjectiveTextManager : MonoBehaviour
             case LevelType.BlackPond:
                 if (saveData.dredgedHand)
                 {
-                    objectiveText.text = "The skeletal hand trembles as you grab onto it.\nIt's almost as if it wants to go somewhere... and knows the way.";
+                    objectiveText.text = "You feel a strong, unshakable urge to take the hand to the shopkeeper.\nAs if it’s meant to be returned there.";
                 }
                 else
                 {

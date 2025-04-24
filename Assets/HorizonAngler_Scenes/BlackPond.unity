@@ -12186,6 +12186,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 318604119375973995, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1884041702945486774, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: m_IsActive
@@ -12225,6 +12230,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 63
+      objectReference: {fileID: 0}
+    - target: {fileID: 4176593094274177269, guid: c54f203b250873843a8adca15123f5e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4203438925118910524, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
@@ -46005,7 +46015,7 @@ MonoBehaviour:
       - m_Target: {fileID: 8189905365184478873}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
         m_MethodName: SetResolution
-        m_Mode: 3
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -53749,7 +53759,7 @@ MonoBehaviour:
       - m_Target: {fileID: 8189905365184478873}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
         m_MethodName: SetQuality
-        m_Mode: 3
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -57894,7 +57904,7 @@ MonoBehaviour:
       - m_Target: {fileID: 8189905365184478873}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
         m_MethodName: SetBrightness
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -60732,6 +60742,7 @@ GameObject:
   - component: {fileID: 5818474532770481192}
   - component: {fileID: 8189905365184478873}
   - component: {fileID: 6210834175978800740}
+  - component: {fileID: 9100509309796613146}
   m_Layer: 0
   m_Name: MenuController
   m_TagString: Untagged
@@ -60739,6 +60750,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &9100509309796613146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9100509309796613145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b17ca301353ac6469515bd6bef06124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canUse: 0
+  menuController: {fileID: 8189905365184478873}
+  volumeTextValue: {fileID: 0}
+  volumeSlider: {fileID: 0}
+  brightnessSlider: {fileID: 0}
+  brightnessTextValue: {fileID: 0}
+  qualityDropdown: {fileID: 0}
+  fullScreenToggle: {fileID: 6750897016634744998}
+  ControllerSenTextValue: {fileID: 0}
+  ControllerSenSlider: {fileID: 0}
+  invertYToggle: {fileID: 0}
 --- !u!1 &9102703321195873279
 GameObject:
   m_ObjectHideFlags: 0
