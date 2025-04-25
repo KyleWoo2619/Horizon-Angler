@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [AddComponentMenu("FusionWater/_Examples/BoatController")]
-public class BoatController : MonoBehaviour
+public class BoatController2 : MonoBehaviour
 {
     public float moveSpeed = 10f;
     public float turnSpeed = 10f;

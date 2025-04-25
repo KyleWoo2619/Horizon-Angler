@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Rock_lambert3_BaseColor_sRGB.1001
+  m_Name: Dock_lambert8_AlbedoTransparency_sRGB.1001 Variant
   m_Shader: {fileID: -6465566751694194690, guid: e41f54357d4385b419f3c5b621d62ba6,
     type: 3}
-  m_Parent: {fileID: 2100000, guid: e747feed01abf8c4db853536a701a7ac, type: 2}
+  m_Parent: {fileID: 2100000, guid: 90bf845f3f1a2d544aa9a4bd411d4bbd, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -27,9 +27,9 @@ Material:
     m_Ints: []
     m_Floats: []
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 0.4198113, b: 0.4198113, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &6180787676793232917
+--- !u!114 &1009971752842320656
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
