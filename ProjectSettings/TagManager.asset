@@ -22,7 +22,7 @@ TagManager:
   - FishNavMesh
   - NavBlockers
   - Exclude
-  - 
+  - exclude2
   - 
   - 
   - 
