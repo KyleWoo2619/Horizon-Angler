@@ -1,53 +1,56 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class BoatController : MonoBehaviour
 {
-  public PropellerBoats ship;
-  bool forward = true;
+    public PropellerBoats ship;
+    public bool isFishing = false;
 
-  void Update()
-  {
-
-    if (Input.GetKey(KeyCode.Q))
-      ship.RudderLeft();
-    if (Input.GetKey(KeyCode.D))
-      ship.RudderRight();
-
-    if (forward)
+    private void Update()
     {
-      if (Input.GetKey(KeyCode.Z))
-        ship.ThrottleUp();
-      else if (Input.GetKey(KeyCode.S))
-      {
-        ship.ThrottleDown();
-        ship.Brake();
-      }
-    }
-    else
-    {
-      if (Input.GetKey(KeyCode.S))
-        ship.ThrottleUp();
-      else if (Input.GetKey(KeyCode.Z))
-      {
-        ship.ThrottleDown();
-        ship.Brake();
-      }
+        if (isFishing || ship == null) return;
+
+        HandleSteering();
+        HandleThrottle();
     }
 
-    if (!Input.GetKey(KeyCode.Z) && !Input.GetKey(KeyCode.S))
-      ship.ThrottleDown();
-
-    if (ship.engine_rpm == 0 && Input.GetKeyDown(KeyCode.S) && forward)
+    void HandleSteering()
     {
-      forward = false;
-      ship.Reverse();
+        if (Input.GetKey(KeyCode.A))
+            ship.RudderLeft();
+        else if (Input.GetKey(KeyCode.D))
+            ship.RudderRight();
     }
-    else if (ship.engine_rpm == 0 && Input.GetKeyDown(KeyCode.Z) && !forward)
-    {
-      forward = true;
-      ship.Reverse();
-    }
-  }
 
+    void HandleThrottle()
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            // W key - apply forward thrust
+            ship.ThrottleUp();
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            // S key - apply reverse thrust or brake if moving forward
+            if (ship.engine_rpm > 0)
+            {
+                // If moving forward, brake first
+                ship.Brake();
+            }
+            else
+            {
+                // Otherwise, increase reverse thrust
+                ship.ThrottleDown();
+            }
+        }
+        else
+        {
+            // No keys pressed - always apply brake
+            ship.Brake();
+        }
+    }
+
+    public void SetFishingState(bool fishing)
+    {
+        isFishing = fishing;
+    }
 }

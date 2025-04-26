@@ -46511,17 +46511,17 @@ PrefabInstance:
     - target: {fileID: 114233348017685360, guid: e1e9f48d71f586e48b0ab82651cd8eb4,
         type: 3}
       propertyPath: centerOfMassOffset.y
-      value: -3.51
+      value: -3.04
       objectReference: {fileID: 0}
     - target: {fileID: 114233348017685360, guid: e1e9f48d71f586e48b0ab82651cd8eb4,
         type: 3}
       propertyPath: centerOfMassOffset.z
-      value: -2.14
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 114669315090722434, guid: e1e9f48d71f586e48b0ab82651cd8eb4,
         type: 3}
       propertyPath: engine_max_rpm
-      value: 200
+      value: 1200
       objectReference: {fileID: 0}
     - target: {fileID: 114669315090722434, guid: e1e9f48d71f586e48b0ab82651cd8eb4,
         type: 3}
