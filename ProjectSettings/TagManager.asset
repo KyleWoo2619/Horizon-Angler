@@ -12,6 +12,8 @@ TagManager:
   - Rod
   - Music
   - Boundary
+  - BossTriggerZone
+  - bossFish
   layers:
   - Default
   - TransparentFX
