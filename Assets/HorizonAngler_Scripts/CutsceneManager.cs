@@ -9,20 +9,12 @@ public class CutsceneManager : MonoBehaviour
     public RawImage cutsceneRawImage;
     public Canvas cutsceneCanvas;
 
-    [Header("Post-Cutscene UI")]     // <-- New
-    public GameObject rewardUIPanel; // <-- Drag your "You got item!" UI here
-    private bool rewardUIActive = false; 
-    private float rewardInputDelay = 0.5f; 
-    private float rewardTimer = 0f;
-
     private PlayerInput playerInput;
     private bool isCutscenePlaying = false;
 
     private void Start()
     {
         cutsceneRawImage.gameObject.SetActive(false);
-        if (rewardUIPanel != null)
-            rewardUIPanel.SetActive(false); // Make sure it's hidden initially
 
         videoPlayer.loopPointReached += OnCutsceneFinished;
 
@@ -46,19 +38,7 @@ public class CutsceneManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (rewardUIActive)
-        {
-            rewardTimer += Time.unscaledDeltaTime;  // Important! Cutscene is paused so use unscaled time
-            if (rewardTimer > rewardInputDelay && Keyboard.current.anyKey.wasPressedThisFrame)
-            {
-                HideRewardUI();
-            }
-        }
-    }
-
-    public void PlayCutscene()
+    private void PlayCutscene()
     {
         if (isCutscenePlaying) return;
 
@@ -77,28 +57,5 @@ public class CutsceneManager : MonoBehaviour
         isCutscenePlaying = false;
 
         Debug.Log("Cutscene Finished!");
-
-        ShowRewardUI(); // <-- NEW
-    }
-
-    private void ShowRewardUI()   // <-- NEW
-    {
-        if (rewardUIPanel != null)
-        {
-            rewardUIPanel.SetActive(true);
-            rewardUIActive = true;
-            rewardTimer = 0f;
-            Time.timeScale = 0f;  // Pause game again while showing reward
-        }
-    }
-
-    private void HideRewardUI()   // <-- NEW
-    {
-        if (rewardUIPanel != null)
-        {
-            rewardUIPanel.SetActive(false);
-            rewardUIActive = false;
-            Time.timeScale = 1f;  // Resume game
-        }
     }
 }
