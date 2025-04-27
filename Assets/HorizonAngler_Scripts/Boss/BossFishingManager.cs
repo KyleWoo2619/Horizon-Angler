@@ -174,6 +174,7 @@ public class BossFishingManager : MonoBehaviour
     private void OnSplineCompleted(int phaseIndex)
     {
         if (!isFightActive) return;
+        if (boundaryWarning != null && boundaryWarning.isDeathSequencePlaying) return;
         
         Debug.Log($"BossFishingManager received spline completion event for phase {phaseIndex}");
         
@@ -689,5 +690,36 @@ public class BossFishingManager : MonoBehaviour
             bossAnimator.Play("AnglerFight");
             Debug.Log("Boss Animator: Playing AnglerFight Animation");
         }
+    }
+
+    public void DisableFishingUI()
+    {
+        if (minigameManager != null)
+        {
+            if (minigameManager.MGCanvas != null)
+                minigameManager.MGCanvas.SetActive(false);
+
+            if (minigameManager.CCanvas != null)
+                minigameManager.CCanvas.SetActive(false);
+
+            if (minigameManager.CTC != null)
+                minigameManager.CTC.SetActive(false);
+
+            if (minigameManager.WFB != null)
+                minigameManager.WFB.SetActive(false);
+
+            if (minigameManager.FTB != null)
+                minigameManager.FTB.SetActive(false);
+
+            minigameManager.fishingStarted = false;
+        }
+
+        if (minigameController != null)
+        {
+            minigameController.ClearAll();
+            minigameController.StopAllCoroutines();
+        }
+
+        Debug.Log("Disabled all Fishing UI and Minigame during Death.");
     }
 }

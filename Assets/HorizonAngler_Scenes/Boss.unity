@@ -10804,6 +10804,7 @@ MonoBehaviour:
   blackoutFadeOutSpeed: 1
   boundaryFadeSpeed: 2
   deathSequenceDelay: 1.5
+  isDeathSequencePlaying: 0
 --- !u!1 &471168422
 GameObject:
   m_ObjectHideFlags: 0

@@ -29,7 +29,7 @@ public class ForbiddenDirectionWarning : MonoBehaviour
 
     private float darknessTimer = 0f;
     private bool insideBoundary = false;
-    private bool isDeathSequencePlaying = false;
+    public bool isDeathSequencePlaying = false;
     private BossFishingManager bossFishingManager;
 
     void Start()
@@ -122,6 +122,8 @@ public class ForbiddenDirectionWarning : MonoBehaviour
 
         if (bossFishingManager != null)
             bossFishingManager.OnBoundaryDeathTriggered();
+            bossFishingManager.ForceStopAllMicrogames();  // <--- ADD THIS
+            bossFishingManager.DisableFishingUI();
 
         StartCoroutine(ExecuteDeathSequence());
     }
