@@ -243,49 +243,6 @@ public class BossZoneTrigger : MonoBehaviour
         }
     }
     
-    private IEnumerator ManualDocking()
-    {
-        float dockingDuration = 3.0f;
-        float elapsedTime = 0f;
-        
-        Vector3 startPosition = playerBoat.transform.position;
-        Quaternion startRotation = playerBoat.transform.rotation;
-
-        Vector3 targetPosition = dockingTargetPoint.position;
-        Quaternion targetRotation = dockingTargetPoint.rotation;
-
-        Rigidbody rb = playerBoat.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true; // Freeze physics while docking
-        }
-
-        while (elapsedTime < dockingDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.SmoothStep(0, 1, elapsedTime / dockingDuration);
-
-            // Move and rotate simultaneously
-            playerBoat.transform.position = Vector3.Lerp(startPosition, targetPosition, t);
-            playerBoat.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
-
-            yield return null;
-        }
-
-        // Final exact snap
-        playerBoat.transform.position = targetPosition;
-        playerBoat.transform.rotation = targetRotation;
-
-        Debug.Log("Manual docking completed: Boat aligned to target position and rotation.");
-
-        if (rb != null)
-        {
-            rb.isKinematic = false; // Restore physics if needed
-        }
-    }
-    
     private IEnumerator RotateBoatToTargetY()
     {
         if (playerBoat == null || dockingTargetPoint == null)

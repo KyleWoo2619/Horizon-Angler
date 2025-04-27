@@ -8,6 +8,8 @@ public class CutsceneManager : MonoBehaviour
     public VideoPlayer videoPlayer;
     public RawImage cutsceneRawImage;
     public Canvas cutsceneCanvas;
+    public RawImage CreditImage;
+    public Canvas creditCanvas;
 
     [Header("Post-Cutscene UI")]     // <-- New
     public GameObject rewardUIPanel; // <-- Drag your "You got item!" UI here
@@ -17,6 +19,10 @@ public class CutsceneManager : MonoBehaviour
 
     private PlayerInput playerInput;
     private bool isCutscenePlaying = false;
+
+    private bool playingCreditsAfterVictory = false;
+    private LoadingManager loadingManager; // For loading shop after credits
+    private bool isCreditPlaying = false;
 
     private void Start()
     {
@@ -44,6 +50,8 @@ public class CutsceneManager : MonoBehaviour
         {
             Debug.LogError("Player GameObject not found! Make sure Player is tagged correctly.");
         }
+
+        loadingManager = FindObjectOfType<LoadingManager>();
     }
 
     private void Update()
@@ -73,18 +81,36 @@ public class CutsceneManager : MonoBehaviour
     // In CutsceneManager.cs, update the OnCutsceneFinished method:
     private void OnCutsceneFinished(VideoPlayer vp)
     {
+        if (playingCreditsAfterVictory)
+        {
+            Debug.Log("Victory Cutscene finished, now starting Credits Cutscene");
+
+            playingCreditsAfterVictory = false; // Reset flag
+            PlayCreditCutscene();
+            return; // Stop here, don't do reward UI yet
+        }
+
+        if (isCreditPlaying)
+        {
+            Debug.Log("Credits Cutscene finished, loading Shop scene...");
+            if (loadingManager != null)
+                loadingManager.LoadSceneWithLoadingScreen("Shop");
+            else
+                Debug.LogError("LoadingManager not found!");
+
+            return;
+        }
+
         cutsceneRawImage.gameObject.SetActive(false);
         isCutscenePlaying = false;
         Debug.Log("Cutscene Finished!");
         
-        // Don't resume time yet - we'll wait for the reward UI
+        // Resume normal flow if no credits
         ShopInteractionManager shopManager = FindObjectOfType<ShopInteractionManager>();
         if (shopManager != null)
         {
             shopManager.ResumeDialogueAfterCutscene();
         }
-        
-        // Show reward UI after cutscene
         ShowRewardUI();
     }
 
@@ -123,32 +149,39 @@ public class CutsceneManager : MonoBehaviour
     // Add this alternative method for direct play from other scripts
     public void PlayVictoryCutscene()
     {
-        Debug.Log("PlayVictoryCutscene method called directly");
-        
-        // Ensure RawImage is active
-        if (cutsceneRawImage != null && !cutsceneRawImage.gameObject.activeInHierarchy)
-        {
-            cutsceneRawImage.gameObject.SetActive(true);
-        }
-        
-        // Ensure canvas is active
-        if (cutsceneCanvas != null && !cutsceneCanvas.gameObject.activeInHierarchy)
-        {
+        if (cutsceneCanvas != null)
             cutsceneCanvas.gameObject.SetActive(true);
-        }
-        
-        // Check if we have a video assigned
-        if (videoPlayer.clip == null)
+        if (cutsceneRawImage != null)
+            cutsceneRawImage.gameObject.SetActive(true);
+
+        if (videoPlayer != null)
         {
-            Debug.LogError("No video clip assigned to video player!");
-            return;
+            playingCreditsAfterVictory = true; // Set flag
+            videoPlayer.Play();
         }
-        
-        // Try to play
-        videoPlayer.Play();
-        Time.timeScale = 0f;
-        isCutscenePlaying = true;
-        
-        Debug.Log($"Victory cutscene started playing: {videoPlayer.isPlaying}");
     }
+
+    public void PlayCreditCutscene()
+    {
+        isCreditPlaying = true;
+
+        // --- Hide Victory Cutscene UI ---
+        if (cutsceneCanvas != null)
+            cutsceneCanvas.gameObject.SetActive(false);
+        if (cutsceneRawImage != null)
+            cutsceneRawImage.gameObject.SetActive(false);
+
+        // --- Show Credit Cutscene UI ---
+        if (creditCanvas != null)
+            creditCanvas.gameObject.SetActive(true);
+        if (CreditImage != null)
+            CreditImage.gameObject.SetActive(true);
+
+        if (videoPlayer != null)
+        {
+            videoPlayer.Play();
+        }
+    }
+
+
 }

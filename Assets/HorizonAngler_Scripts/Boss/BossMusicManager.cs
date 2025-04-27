@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BossMusicManager : MonoBehaviour
@@ -7,6 +8,7 @@ public class BossMusicManager : MonoBehaviour
     public AudioSource firstPhaseAudio;
     public AudioSource secondPhaseAudio;
     public AudioSource finalPhaseAudio;
+    public RandomAmbiencePlayer RandomAmbiencePlayer;
     
     [Header("Ambient & Effect Sounds")]
     public AudioSource ambientSound;           // Plays once when entering trigger zone
@@ -284,4 +286,50 @@ public class BossMusicManager : MonoBehaviour
         // We'll play it after the first spline completes
         PlayAmbientSound();
     }
+
+    public void FadeOutAllMusic()
+    {
+        StartCoroutine(FadeOutAllMusicCoroutine());
+    }
+
+    private IEnumerator FadeOutAllMusicCoroutine()
+    {
+        AudioSource[] allMusicSources = FindObjectsOfType<AudioSource>();
+
+        RandomAmbiencePlayer.gameObject.SetActive(false);
+
+        float fadeDuration = 2.0f;
+        float elapsed = 0f;
+
+        // Store original volumes
+        Dictionary<AudioSource, float> originalVolumes = new Dictionary<AudioSource, float>();
+        foreach (var source in allMusicSources)
+        {
+            if (source.isPlaying)
+                originalVolumes[source] = source.volume;
+        }
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / fadeDuration;
+
+            foreach (var source in originalVolumes.Keys)
+            {
+                if (source != null)
+                    source.volume = Mathf.Lerp(originalVolumes[source], 0f, t);
+            }
+
+            yield return null;
+        }
+
+        foreach (var source in originalVolumes.Keys)
+        {
+            if (source != null)
+                source.Stop();
+        }
+
+        Debug.Log("All music sources faded out and stopped");
+    }
+
 }

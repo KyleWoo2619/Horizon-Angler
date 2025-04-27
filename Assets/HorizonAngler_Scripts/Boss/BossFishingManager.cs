@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections.Generic;
 using UnityEngine.Video;
+using UnityEngine.AI;
 
 public class BossFishingManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class BossFishingManager : MonoBehaviour
     public BossSplinePhaseManager splineManager;
     public BossMusicManager musicManager;
     public ForbiddenDirectionWarning boundaryWarning;
+    public GameObject AllSounds;
 
     [Header("Player Boat References")]
     public BoatController boatController;
@@ -25,6 +27,11 @@ public class BossFishingManager : MonoBehaviour
     private float boatReactivationTimer = 0f;
     private float maxReactivationTime = 10f; 
 
+    [Header("Lightning Attack VFX")]
+    public GameObject lightningVFX1;
+    public GameObject lightningVFX2;
+    public AudioSource lightningAudio; // You can set this to an AudioSource on one of the lightning VFXs
+
     [Header("Boss Zones")]
     public GameObject firstBossZone;
     public GameObject secondBossZone;
@@ -33,6 +40,8 @@ public class BossFishingManager : MonoBehaviour
     [Header("Boss Fight Settings")]
     public GameObject bossModel;
     public Animator bossAnimator;
+    public CutsceneManager cutsceneManager;
+    public CanvasGroup BlackoutCanvas;
     
     private int currentPhase = 0;
     private bool isFightActive = false;
@@ -213,6 +222,8 @@ public class BossFishingManager : MonoBehaviour
         if (fishingProgress != null)
             fishingProgress.Initialize();
 
+        SetBossAnimationFight();
+
         yield return new WaitForSeconds(0.5f);
         ConfigureBossMinigames();
 
@@ -266,28 +277,33 @@ public class BossFishingManager : MonoBehaviour
     {
         Debug.Log("Boss Fight Success - FORCIBLY disabling all microgames");
         ForceStopAllMicrogames();
-        Debug.Log("Boss Fight Success! Current Phase: " + currentPhase);
+        Debug.Log("Boss Fight Success! Current Boss Manager Phase: " + currentPhase);
 
-        // Increment phase
+        // Increment internal boss manager phase
         currentPhase++;
 
-        if (currentPhase < 3)
+        if (splineManager != null && splineManager.currentPhase >= 5)
         {
-            // Instead of moving immediately, STUN first
-            StartCoroutine(PlayStunnedThenNextPhase());
+            // Boss spline finished all 5 splines, and we just won the FINAL minigame
+            Debug.Log("Final boss minigame success! Boss will sink and trigger ending.");
+            StartCoroutine(PlayStunnedThenSink());
         }
         else
         {
-            Debug.Log("Final boss phase completed! Attempting to reactivate boat controls...");
-            
-            // Play stun first, then sink
-            StartCoroutine(PlayStunnedThenSink());
+            // Otherwise normal progress to next phase
+            StartCoroutine(PlayStunnedThenNextPhase());
         }
     }
 
     private IEnumerator PlayStunnedThenNextPhase()
     {
         Debug.Log("Playing stunned animation before next phase");
+
+        if (lightningVFX1 != null) lightningVFX1.SetActive(true);
+        if (lightningVFX2 != null) lightningVFX2.SetActive(true);
+
+        // Play sound
+        if (lightningAudio != null) lightningAudio.Play();
 
         if (bossAnimator != null)
         {
@@ -301,6 +317,9 @@ public class BossFishingManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(2.0f); // Wait for stun animation to finish
+
+        if (lightningVFX1 != null) lightningVFX1.SetActive(false);
+        if (lightningVFX2 != null) lightningVFX2.SetActive(false);
 
         if (bossAnimator != null)
         {
@@ -319,9 +338,15 @@ public class BossFishingManager : MonoBehaviour
     {
         Debug.Log("Playing stunned animation before sinking");
 
+         if (lightningVFX1 != null) lightningVFX1.SetActive(true);
+        if (lightningVFX2 != null) lightningVFX2.SetActive(true);
+
+        // Play sound
+        if (lightningAudio != null) lightningAudio.Play();
+
         if (bossAnimator != null)
         {
-            bossAnimator.Play("AnglerStunned");
+            bossAnimator.Play("AnglerDeath");
         }
 
         if (musicManager != null)
@@ -331,12 +356,10 @@ public class BossFishingManager : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
-        if (bossAnimator != null)
-        {
-            bossAnimator.Play("IdleState");
-        }
-
         ActivateBoatControls();
+
+        if (lightningVFX1 != null) lightningVFX1.SetActive(false);
+        if (lightningVFX2 != null) lightningVFX2.SetActive(false);
 
         if (bossModel != null)
         {
@@ -468,133 +491,72 @@ public class BossFishingManager : MonoBehaviour
     private IEnumerator SinkBossAndPlayCutscene()
     {
         Debug.Log("SinkBossAndPlayCutscene started");
-        ForceStopAllMicrogames();
-        
-        // Disable the third boss zone after winning
+
+        // Make sure third boss zone is disabled
         if (thirdBossZone != null)
         {
             thirdBossZone.SetActive(false);
             Debug.Log("Deactivated third boss zone after victory");
         }
-        else
-        {
-            Debug.LogWarning("thirdBossZone reference is null!");
-        }
-        
-        // Check boss model
-        if (bossModel == null)
-        {
-            Debug.LogError("Boss model is null! Cannot sink boss. Check your boss model reference.");
-            PlayVictoryCutscene(); // Try to play cutscene anyway
-            yield break;
-        }
-        
-        Debug.Log($"Starting boss sink. Initial position: {bossModel.transform.position}");
-        
-        // Try to disable any components that might interfere with position
+
+        // Force stop microgames
+        ForceStopAllMicrogames();
+
+        // Freeze boss physics
         Rigidbody bossRb = bossModel.GetComponent<Rigidbody>();
         if (bossRb != null)
         {
             bossRb.isKinematic = true;
-            Debug.Log("Set boss Rigidbody to kinematic");
         }
-        
-        // Disable any scripts on the boss that might be controlling its position
-        MonoBehaviour[] bossScripts = bossModel.GetComponents<MonoBehaviour>();
-        List<MonoBehaviour> disabledScripts = new List<MonoBehaviour>();
-        
-        foreach (MonoBehaviour script in bossScripts)
-        {
-            // Don't disable this script
-            if (script is BossFishingManager)
-                continue;
-                
-            if (script.enabled)
-            {
-                script.enabled = false;
-                disabledScripts.Add(script);
-                Debug.Log($"Temporarily disabled script: {script.GetType().Name}");
-            }
-        }
-        
-        // Store initial state
-        float sinkDuration = 5.0f;
-        float sinkDepth = -15.0f;  // Negative to sink DOWN
+
+        // Sinking animation
+        float sinkDuration = 7.0f;
+        float sinkDepth = -80.0f;
         float elapsedTime = 0f;
+
         Vector3 startPosition = bossModel.transform.position;
         Vector3 endPosition = new Vector3(startPosition.x, startPosition.y + sinkDepth, startPosition.z);
-        
-        Debug.Log($"Sink parameters: Start Y={startPosition.y}, Target Y={endPosition.y}, Duration={sinkDuration}s");
-        
-        // Play sound if available
-        AudioSource bossAudio = bossModel.GetComponent<AudioSource>();
-        if (bossAudio != null && bossAudio.clip != null)
-        {
-            bossAudio.Play();
-            Debug.Log("Playing boss audio");
-        }
-        
-        // Sinking animation
+
+        if (BlackoutCanvas != null)
+            BlackoutCanvas.alpha = 0f;
+
         while (elapsedTime < sinkDuration)
         {
             elapsedTime += Time.deltaTime;
-            float t = elapsedTime / sinkDuration;
-            float smoothT = Mathf.SmoothStep(0, 1, t);
-            
-            // Store original position before change for logging
-            Vector3 beforePos = bossModel.transform.position;
-            
-            // Apply position change
-            Vector3 newPosition = Vector3.Lerp(startPosition, endPosition, smoothT);
-            bossModel.transform.position = newPosition;
-            
-            // Check if position actually changed
-            if (Vector3.Distance(beforePos, bossModel.transform.position) < 0.01f)
-            {
-                Debug.LogWarning($"Boss position didn't change! Something is preventing movement. " +
-                                $"Attempted to set Y={newPosition.y}, but Y={bossModel.transform.position.y}");
-            }
-            
-            // Add rotation
-            bossModel.transform.Rotate(0, 10 * Time.deltaTime, 0);
-            
-            // Progress logging
-            if (Mathf.Floor(elapsedTime * 2) > Mathf.Floor((elapsedTime - Time.deltaTime) * 2))
-            {
-                Debug.Log($"Boss sinking: Current Y={bossModel.transform.position.y}, Target Y={endPosition.y}, " +
-                        $"Progress={t*100:F1}%, Distance moved={Vector3.Distance(startPosition, bossModel.transform.position)}");
-            }
-            
+            float t = Mathf.SmoothStep(0, 1, elapsedTime / sinkDuration);
+            bossModel.transform.position = Vector3.Lerp(startPosition, endPosition, t);
+            bossModel.transform.Rotate(-2 * Time.deltaTime, 0, 0);
             yield return null;
+
+            if (BlackoutCanvas != null)
+            {
+                BlackoutCanvas.alpha = t; // Simple linear fade
+            }
         }
-        
-        // Force final position
-        Debug.Log($"Sink animation complete. Setting final position Y={endPosition.y}");
+
         bossModel.transform.position = endPosition;
-        
-        // Re-enable scripts we disabled
-        foreach (MonoBehaviour script in disabledScripts)
+        if (BlackoutCanvas != null)
+            BlackoutCanvas.alpha = 1f;
+
+        Debug.Log("Boss sunk. Now starting cutscene...");
+
+        // Fade out music
+        if (musicManager != null)
         {
-            script.enabled = true;
-            Debug.Log($"Re-enabled script: {script.GetType().Name}");
+            musicManager.FadeOutAllMusic();
+            Debug.Log("Fading out all music for cutscene transition");
         }
-        
-        Debug.Log($"Boss final position: {bossModel.transform.position}");
-        
-        // Wait before cutscene
-        Debug.Log("Waiting 2 seconds before playing cutscene...");
-        yield return new WaitForSeconds(2.0f);
-        
-        // Direct cutscene call
-        Debug.Log("Now calling PlayVictoryCutscene()...");
+
+        // Actually play the cutscene here
         PlayVictoryCutscene();
+        AllSounds.SetActive(false);
     }
+
+
 
     private void PlayVictoryCutscene()
     {
         Debug.Log("PlayVictoryCutscene called");
-        
-        CutsceneManager cutsceneManager = FindObjectOfType<CutsceneManager>(true);
         
         if (cutsceneManager != null)
         {
@@ -607,6 +569,7 @@ public class BossFishingManager : MonoBehaviour
                 cutsceneManager.gameObject.SetActive(true);
             }
             
+            musicManager.FadeOutAllMusic();
             // Try the new direct method
             Debug.Log("Calling cutsceneManager.PlayVictoryCutscene()");
             cutsceneManager.PlayVictoryCutscene();
@@ -717,5 +680,14 @@ public class BossFishingManager : MonoBehaviour
         
         // Force stop all microgames
         ForceStopAllMicrogames();
+    }
+
+    private void SetBossAnimationFight()
+    {
+        if (bossAnimator != null)
+        {
+            bossAnimator.Play("AnglerFight");
+            Debug.Log("Boss Animator: Playing AnglerFight Animation");
+        }
     }
 }
