@@ -119,4 +119,36 @@ public class CutsceneManager : MonoBehaviour
     {
         return isCutscenePlaying;
     }
+
+    // Add this alternative method for direct play from other scripts
+    public void PlayVictoryCutscene()
+    {
+        Debug.Log("PlayVictoryCutscene method called directly");
+        
+        // Ensure RawImage is active
+        if (cutsceneRawImage != null && !cutsceneRawImage.gameObject.activeInHierarchy)
+        {
+            cutsceneRawImage.gameObject.SetActive(true);
+        }
+        
+        // Ensure canvas is active
+        if (cutsceneCanvas != null && !cutsceneCanvas.gameObject.activeInHierarchy)
+        {
+            cutsceneCanvas.gameObject.SetActive(true);
+        }
+        
+        // Check if we have a video assigned
+        if (videoPlayer.clip == null)
+        {
+            Debug.LogError("No video clip assigned to video player!");
+            return;
+        }
+        
+        // Try to play
+        videoPlayer.Play();
+        Time.timeScale = 0f;
+        isCutscenePlaying = true;
+        
+        Debug.Log($"Victory cutscene started playing: {videoPlayer.isPlaying}");
+    }
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BossZoneTrigger : MonoBehaviour
@@ -25,9 +26,9 @@ public class BossZoneTrigger : MonoBehaviour
     
     private Collider triggerCollider;
     private Renderer triggerRenderer;
-    private bool hasTriggered = false;
+    public bool hasTriggered {get; private set;}= false;
     private Camera mainCamera;
-    private GameObject playerBoat;
+    public GameObject playerBoat;
     private Vector3 originalBoatPosition;
     private Quaternion originalBoatRotation;
     private Transform originalCameraTransform;
@@ -113,13 +114,13 @@ public class BossZoneTrigger : MonoBehaviour
     
     private IEnumerator DockingSequence()
     {
-        // Disable player controls
+        // Disable player controls using flags instead of disabling components
         if (boatController != null)
-            boatController.enabled = false;
-            
+            boatController.controlsActive = false;
+                
         if (propellerBoats != null)
-            propellerBoats.enabled = false;
-            
+            propellerBoats.controlsActive = false;
+                
         // Make the boat kinematic to prevent physics issues
         Rigidbody rb = playerBoat.GetComponent<Rigidbody>();
         if (rb != null)
@@ -132,6 +133,7 @@ public class BossZoneTrigger : MonoBehaviour
         // Begin docking if forced docking is available
         if (boatDocking != null && dockingTargetPoint != null)
         {
+            Debug.Log("Beginning docking sequence to point: " + dockingTargetPoint.position);
             boatDocking.BeginDocking(dockingTargetPoint);
             
             // Wait until docking is complete
@@ -139,15 +141,18 @@ public class BossZoneTrigger : MonoBehaviour
             {
                 yield return null;
             }
+            
+            Debug.Log("Docking completed, now rotating boat");
+            
+            if (boatDocking != null)
+            {
+                boatDocking.EndDocking();
+                Debug.Log("Boat docking fully ended. Now safe to rotate");
+            }
+            
+            // Make sure this is called AFTER docking has completed
+            yield return StartCoroutine(RotateBoatToTargetY());
         }
-        else
-        {
-            // Alternative manual docking if BoatForcedDocking is not available
-            yield return StartCoroutine(ManualDocking());
-        }
-        
-        // Smoothly rotate boat towards docking Y rotation
-        yield return StartCoroutine(RotateBoatToTargetY());
 
         // Store camera reference if main camera exists
         if (mainCamera != null)
@@ -159,7 +164,6 @@ public class BossZoneTrigger : MonoBehaviour
         if (boatCameraFollow != null)
         {
             boatCameraFollow.followEnabled = false;
-            boatCameraFollow.enabled = false;  // Complete disable
         }
 
         // Now safely move camera manually
@@ -246,45 +250,148 @@ public class BossZoneTrigger : MonoBehaviour
         
         Vector3 startPosition = playerBoat.transform.position;
         Quaternion startRotation = playerBoat.transform.rotation;
-        
+
+        Vector3 targetPosition = dockingTargetPoint.position;
+        Quaternion targetRotation = dockingTargetPoint.rotation;
+
+        Rigidbody rb = playerBoat.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true; // Freeze physics while docking
+        }
+
         while (elapsedTime < dockingDuration)
         {
             elapsedTime += Time.deltaTime;
-            float t = elapsedTime / dockingDuration;
-            t = Mathf.SmoothStep(0, 1, t); // Smooth easing
-            
-            playerBoat.transform.position = Vector3.Lerp(startPosition, dockingTargetPoint.position, t);
-            playerBoat.transform.rotation = Quaternion.Slerp(startRotation, dockingTargetPoint.rotation, t);
-            
+            float t = Mathf.SmoothStep(0, 1, elapsedTime / dockingDuration);
+
+            // Move and rotate simultaneously
+            playerBoat.transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+            playerBoat.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+
             yield return null;
         }
-        
-        // Set final position and rotation
-        playerBoat.transform.position = dockingTargetPoint.position;
-        playerBoat.transform.rotation = dockingTargetPoint.rotation;
+
+        // Final exact snap
+        playerBoat.transform.position = targetPosition;
+        playerBoat.transform.rotation = targetRotation;
+
+        Debug.Log("Manual docking completed: Boat aligned to target position and rotation.");
+
+        if (rb != null)
+        {
+            rb.isKinematic = false; // Restore physics if needed
+        }
     }
     
     private IEnumerator RotateBoatToTargetY()
     {
-        Quaternion startRot = playerBoat.transform.rotation;
-        Quaternion targetRot = Quaternion.Euler(
-            startRot.eulerAngles.x,
-            dockingTargetPoint.rotation.eulerAngles.y,
-            startRot.eulerAngles.z);
+        if (playerBoat == null || dockingTargetPoint == null)
+        {
+            Debug.LogError("Missing playerBoat or dockingTargetPoint for rotation!");
+            yield break;
+        }
 
+        Debug.Log($"Starting rotation adjustment - Current Y: {playerBoat.transform.rotation.eulerAngles.y}, Target Y: {dockingTargetPoint.rotation.eulerAngles.y}");
+        
+        // Get current and target Y rotation
+        float startYRotation = playerBoat.transform.rotation.eulerAngles.y;
+        float targetYRotation = dockingTargetPoint.rotation.eulerAngles.y;
+        
+        // Store the rigidbody and temporarily disable it
+        Rigidbody rb = playerBoat.GetComponent<Rigidbody>();
+        bool wasKinematic = false;
+        if (rb != null)
+        {
+            wasKinematic = rb.isKinematic;
+            rb.isKinematic = true;
+        }
+        
+        // Find water physics components and temporarily disable them
+        MonoBehaviour[] allComponents = playerBoat.GetComponents<MonoBehaviour>();
+        List<MonoBehaviour> disabledComponents = new List<MonoBehaviour>();
+        
+        foreach (MonoBehaviour comp in allComponents)
+        {
+            // Skip this component and essential components
+            if (comp is BossZoneTrigger || comp is BoatForcedDocking)
+                continue;
+                
+            // Check for typical boat physics component names
+            string compName = comp.GetType().Name.ToLower();
+            if (compName.Contains("float") || compName.Contains("water") || 
+                compName.Contains("buoy") || compName.Contains("wave") || 
+                compName.Contains("physics"))
+            {
+                if (comp.enabled)
+                {
+                    comp.enabled = false;
+                    disabledComponents.Add(comp);
+                    Debug.Log("Temporarily disabled: " + comp.GetType().Name);
+                }
+            }
+        }
+        
         float elapsed = 0f;
-        float rotateDuration = 1.5f;
+        float rotateDuration = 1.0f;
 
+        // Force-rotate the boat
         while (elapsed < rotateDuration)
         {
             elapsed += Time.deltaTime;
-            playerBoat.transform.rotation = Quaternion.Slerp(startRot, targetRot, elapsed / rotateDuration);
+            float t = Mathf.SmoothStep(0, 1, elapsed / rotateDuration);
+            
+            // Calculate new Y rotation
+            float newYRotation = Mathf.LerpAngle(startYRotation, targetYRotation, t);
+            
+            // Get current X and Z rotation
+            Vector3 currentEuler = playerBoat.transform.rotation.eulerAngles;
+            
+            // Apply rotation (only changing Y)
+            Quaternion newRotation = Quaternion.Euler(currentEuler.x, newYRotation, currentEuler.z);
+            playerBoat.transform.rotation = newRotation;
+            
+            Debug.Log($"Rotating: Current={newYRotation}, Target={targetYRotation}, Progress={t * 100}%");
             yield return null;
         }
-
-        playerBoat.transform.rotation = targetRot;
+        
+        // Final exact rotation
+        Vector3 finalEuler = playerBoat.transform.rotation.eulerAngles;
+        playerBoat.transform.rotation = Quaternion.Euler(finalEuler.x, targetYRotation, finalEuler.z);
+        
+        Debug.Log($"Final rotation applied: {playerBoat.transform.rotation.eulerAngles.y}");
+        
+        // Wait a frame to ensure the rotation is applied
+        yield return null;
+        
+        // Double-check and enforce rotation if needed
+        if (Mathf.Abs(Mathf.DeltaAngle(playerBoat.transform.rotation.eulerAngles.y, targetYRotation)) > 1f)
+        {
+            Debug.LogWarning("Rotation didn't stick! Forcing exact rotation...");
+            Vector3 enforceEuler = playerBoat.transform.rotation.eulerAngles;
+            playerBoat.transform.rotation = Quaternion.Euler(enforceEuler.x, targetYRotation, enforceEuler.z);
+        }
+        
+        // Wait one more frame to verify
+        yield return null;
+        Debug.Log($"Verified final Y rotation: {playerBoat.transform.rotation.eulerAngles.y}");
+        
+        // Re-enable the previously disabled components
+        foreach (MonoBehaviour comp in disabledComponents)
+        {
+            comp.enabled = true;
+            Debug.Log("Re-enabled: " + comp.GetType().Name);
+        }
+        
+        // Restore rigidbody state
+        if (rb != null)
+        {
+            rb.isKinematic = wasKinematic;
+        }
     }
-    
+
     private IEnumerator MoveCameraToTarget()
     {
         if (mainCamera == null)
@@ -339,12 +446,12 @@ public class BossZoneTrigger : MonoBehaviour
             playerBoat.transform.position = originalBoatPosition;
             playerBoat.transform.rotation = originalBoatRotation;
             
-            // Re-enable boat controls
+            // Re-enable boat controls using flags
             if (boatController != null)
-                boatController.enabled = true;
-                
+                boatController.controlsActive = true;
+                    
             if (propellerBoats != null)
-                propellerBoats.enabled = true;
+                propellerBoats.controlsActive = true;
             
             // End forced docking
             if (boatDocking != null)
@@ -437,4 +544,54 @@ public class BossZoneTrigger : MonoBehaviour
             Gizmos.DrawRay(bossCameraTarget.position, bossCameraTarget.forward * 2f);
         }
     }
-}
+
+    public void ReactivateBoatControls()
+    {
+        Debug.Log("BossZoneTrigger.ReactivateBoatControls called");
+        
+        if (playerBoat != null)
+        {
+            Debug.Log("Reactivating boat controls using direct reference from BossZoneTrigger");
+            
+            // Re-enable boat controls using flags
+            if (boatController != null)
+            {
+                boatController.controlsActive = true;
+                Debug.Log("Set BoatController.controlsActive = true");
+            }
+                    
+            if (propellerBoats != null)
+            {
+                propellerBoats.controlsActive = true;
+                Debug.Log("Set PropellerBoats.controlsActive = true");
+            }
+            
+            // End forced docking
+            if (boatDocking != null)
+            {
+                boatDocking.EndDocking();
+                Debug.Log("Ended forced docking");
+            }
+            
+            // Reset rigidbody
+            Rigidbody rb = playerBoat.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = false;
+                Debug.Log("Set Rigidbody isKinematic to false");
+            }
+            
+            // Re-enable camera follow
+            if (boatCameraFollow != null)
+            {
+                boatCameraFollow.enabled = true;
+                boatCameraFollow.followEnabled = true;
+                Debug.Log("Re-enabled BoatCameraFollow");
+            }
+        }
+        else
+        {
+            Debug.LogError("Cannot reactivate boat controls - no playerBoat reference");
+        }
+    }
+    }

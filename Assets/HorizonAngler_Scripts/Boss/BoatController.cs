@@ -4,10 +4,11 @@ public class BoatController : MonoBehaviour
 {
     public PropellerBoats ship;
     public bool isFishing = false;
+    public bool controlsActive = true;
 
     private void Update()
     {
-        if (isFishing || ship == null) return;
+        if (isFishing || ship == null || !controlsActive) return;
 
         HandleSteering();
         HandleThrottle();

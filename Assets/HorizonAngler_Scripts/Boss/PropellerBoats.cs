@@ -15,6 +15,8 @@ public class PropellerBoats : MonoBehaviour
     public float acceleration_cst = 1.0F;
     public float drag = 0.01F;
 
+    public bool controlsActive = true;
+
     float angle;
     Quaternion[] rudderBaseRotation;
 
@@ -35,6 +37,9 @@ public class PropellerBoats : MonoBehaviour
 
     void Update()
     {
+        
+        if (!controlsActive)return;
+        
         float frame_rpm = engine_rpm * Time.deltaTime;
 
         for (int i = 0; i < propellers.Length; i++)

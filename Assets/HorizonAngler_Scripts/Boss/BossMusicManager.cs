@@ -29,6 +29,7 @@ public class BossMusicManager : MonoBehaviour
     private bool isTransitioning = false;
     private Coroutine fadeCoroutine;
     private int lastProcessedPhase = -1;
+    private AudioSource currentlyPlayingMusic = null;
     
     public void CheckAudioSetup()
     {
@@ -45,23 +46,33 @@ public class BossMusicManager : MonoBehaviour
 
     void Start()
     {
-        // Ensure all audio sources start muted
+        // Ensure all audio sources start muted and stopped
+        InitializeAudioSources();
+        CheckAudioSetup();
+    }
+    
+    private void InitializeAudioSources()
+    {
+        // Initialize music tracks
         if (firstPhaseAudio != null)
         {
             firstPhaseAudio.volume = 0;
             firstPhaseAudio.playOnAwake = false;
+            firstPhaseAudio.Stop();
         }
         
         if (secondPhaseAudio != null)
         {
             secondPhaseAudio.volume = 0;
             secondPhaseAudio.playOnAwake = false;
+            secondPhaseAudio.Stop();
         }
         
         if (finalPhaseAudio != null)
         {
             finalPhaseAudio.volume = 0;
             finalPhaseAudio.playOnAwake = false;
+            finalPhaseAudio.Stop();
         }
         
         if (ambientSound != null)
@@ -77,8 +88,6 @@ public class BossMusicManager : MonoBehaviour
             jumpscareSound.playOnAwake = false;
             jumpscareSound.loop = false;  // One-shot sound
         }
-
-        CheckAudioSetup();
     }
     
     // This method is called at the end of each phase
@@ -98,8 +107,9 @@ public class BossMusicManager : MonoBehaviour
     {
         Debug.Log("OnSplinePhaseStart called with phase: " + phaseIndex);
         
-        // Play jumpscare sound at specific phase starts (1-indexed for clarity)
-        if (phaseIndex == 0 || phaseIndex == 2 || phaseIndex == 4)  // First, third, fifth splines (0, 2, 4 in zero-indexed)
+        // Play jumpscare sound at specific phase starts (boss appears)
+        // Using zero-indexed values (0, 2, 4 = first, third, fifth splines)
+        if (phaseIndex == 0 || phaseIndex == 2 || phaseIndex == 4)
         {
             PlayJumpscareSound();
         }
@@ -109,65 +119,99 @@ public class BossMusicManager : MonoBehaviour
     {
         if (isTransitioning) return;
         
+        Debug.Log($"Handling music transition for phase: {phaseIndex}");
+        
+        // Stop any existing fade coroutine
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+            fadeCoroutine = null;
+        }
+        
         switch (phaseIndex)
         {
-            case 0: // First spline completed - first song should be playing
-                if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-                fadeCoroutine = StartCoroutine(FadeAudioSource(firstPhaseAudio, firstPhaseAudio.volume, firstSongVolume, fadeInDuration));
+            case 0: // First spline completed - start first song
+                Debug.Log("First spline completed - starting first phase music");
+                FadeOutCurrentMusic();
+                StartCoroutine(DelayedStartMusic(firstPhaseAudio, firstSongVolume, fadeOutDuration * 0.5f));
                 break;
                 
             case 1: // Second spline completed - fade out first song
-                if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-                fadeCoroutine = StartCoroutine(FadeAudioSource(firstPhaseAudio, firstPhaseAudio.volume, 0f, fadeOutDuration));
+                Debug.Log("Second spline completed - fading out first phase music");
+                if (firstPhaseAudio != null && firstPhaseAudio.isPlaying)
+                {
+                    fadeCoroutine = StartCoroutine(FadeAudioSource(firstPhaseAudio, firstPhaseAudio.volume, 0f, fadeOutDuration));
+                }
                 break;
                 
-            case 2: // Third spline completed - second song should be playing
-                if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-                StartSecondSong();
+            case 2: // Third spline completed - transition to second song
+                Debug.Log("Third spline completed - transitioning to second phase music");
+                FadeOutCurrentMusic();
+                StartCoroutine(DelayedStartMusic(secondPhaseAudio, secondSongVolume, fadeOutDuration * 0.5f));
                 break;
                 
             case 3: // Fourth spline completed - fade out second song
-                if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-                fadeCoroutine = StartCoroutine(FadeAudioSource(secondPhaseAudio, secondPhaseAudio.volume, 0f, fadeOutDuration));
+                Debug.Log("Fourth spline completed - fading out second phase music");
+                if (secondPhaseAudio != null && secondPhaseAudio.isPlaying)
+                {
+                    fadeCoroutine = StartCoroutine(FadeAudioSource(secondPhaseAudio, secondPhaseAudio.volume, 0f, fadeOutDuration));
+                }
                 break;
                 
-            case 4: // Final spline completed - final song should be playing
-                if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-                StartFinalSong();
+            case 4: // Fifth spline completed - transition to final song
+                Debug.Log("Fifth spline completed - transitioning to final phase music");
+                FadeOutCurrentMusic();
+                StartCoroutine(DelayedStartMusic(finalPhaseAudio, finalSongVolume, fadeOutDuration * 0.5f));
                 break;
         }
     }
+
+    // Helper method to fade out whatever music is currently playing
+    private void FadeOutCurrentMusic()
+    {
+        // Check all music sources and fade out any that are playing
+        if (firstPhaseAudio != null && firstPhaseAudio.isPlaying && firstPhaseAudio.volume > 0)
+        {
+            fadeCoroutine = StartCoroutine(FadeAudioSource(firstPhaseAudio, firstPhaseAudio.volume, 0f, fadeOutDuration));
+        }
+        
+        if (secondPhaseAudio != null && secondPhaseAudio.isPlaying && secondPhaseAudio.volume > 0)
+        {
+            fadeCoroutine = StartCoroutine(FadeAudioSource(secondPhaseAudio, secondPhaseAudio.volume, 0f, fadeOutDuration));
+        }
+        
+        if (finalPhaseAudio != null && finalPhaseAudio.isPlaying && finalPhaseAudio.volume > 0)
+        {
+            fadeCoroutine = StartCoroutine(FadeAudioSource(finalPhaseAudio, finalPhaseAudio.volume, 0f, fadeOutDuration));
+        }
+    }
+
+    // Helper method for delayed song start
+    private IEnumerator DelayedStartMusic(AudioSource audio, float targetVolume, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        if (audio != null)
+        {
+            // Update the current playing music reference
+            currentlyPlayingMusic = audio;
+            
+            // Ensure it's not already playing
+            if (!audio.isPlaying)
+            {
+                audio.Play();
+                Debug.Log($"Started playing {audio.gameObject.name}");
+            }
+            
+            fadeCoroutine = StartCoroutine(FadeAudioSource(audio, 0f, targetVolume, fadeInDuration));
+        }
+    }
     
+    // Public methods for starting specific songs - used by InitiateBossMusic
     public void StartFirstSong()
     {
-        Debug.Log("Starting first song - Audio source exists: " + (firstPhaseAudio != null) + 
-                 ", Already playing: " + (firstPhaseAudio != null && firstPhaseAudio.isPlaying) +
-                 ", Target volume: " + firstSongVolume);
-        
-        if (firstPhaseAudio != null && !firstPhaseAudio.isPlaying)
-        {
-            firstPhaseAudio.Play();
-            Debug.Log("First song started playing");
-            fadeCoroutine = StartCoroutine(FadeAudioSource(firstPhaseAudio, 0f, firstSongVolume, fadeInDuration));
-        }
-    }
-    
-    public void StartSecondSong()
-    {
-        if (secondPhaseAudio != null && !secondPhaseAudio.isPlaying)
-        {
-            secondPhaseAudio.Play();
-            fadeCoroutine = StartCoroutine(FadeAudioSource(secondPhaseAudio, 0f, secondSongVolume, fadeInDuration));
-        }
-    }
-    
-    public void StartFinalSong()
-    {
-        if (finalPhaseAudio != null && !finalPhaseAudio.isPlaying)
-        {
-            finalPhaseAudio.Play();
-            fadeCoroutine = StartCoroutine(FadeAudioSource(finalPhaseAudio, 0f, finalSongVolume, fadeInDuration));
-        }
+        Debug.Log("StartFirstSong called - but NOT starting first song yet (will start after first spline)");
+        // We'll no longer start the first song here - it starts after the first spline completes
     }
     
     public void PlayAmbientSound()
@@ -235,7 +279,9 @@ public class BossMusicManager : MonoBehaviour
     // This method should be called from BossZoneTrigger when player enters zone
     public void InitiateBossMusic()
     {
-        Debug.Log("InitiateBossMusic called");
-        StartFirstSong();
+        Debug.Log("InitiateBossMusic called - only playing ambient sound, music will start after first spline");
+        // We're not starting the first song right away anymore
+        // We'll play it after the first spline completes
+        PlayAmbientSound();
     }
 }
