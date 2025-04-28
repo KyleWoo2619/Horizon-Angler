@@ -552,6 +552,17 @@ namespace StarterAssets
                 {
                     fishingPromptUI.SetActive(allowedToFish);
                 }
+
+                if (allowedToFish && !isFishing)
+                {
+                    fishingPromptUI.SetActive(allowedToFish);
+                    
+                    // NEW CODE: When player interacts with the fishing spot
+                    if (InitiateMicrogames.Instance != null)
+                    {
+                        InitiateMicrogames.Instance.CCanvas.SetActive(false); // Hide initially
+                    }
+                }
             }
         }
         

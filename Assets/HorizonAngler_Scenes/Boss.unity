@@ -14650,6 +14650,22 @@ MonoBehaviour:
   moveSpeed: 11
   rotateSpeed: 5
   isDocking: 0
+--- !u!114 &576679796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217275780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06bd616d87cbc03478cd80aff969c3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  desiredCenterOfMass: {x: 0, y: -3.04, z: -2.11}
+  applyAntiRollForces: 0
+  antiRollForce: 10
+  waterLevel: 0
 --- !u!4 &579895673 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 1e68f9afcb1378e409eab829e13fc9a1,
@@ -55494,6 +55510,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5423154, guid: e1e9f48d71f586e48b0ab82651cd8eb4, type: 3}
+      propertyPath: m_ImplicitCom
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5423154, guid: e1e9f48d71f586e48b0ab82651cd8eb4, type: 3}
+      propertyPath: m_CenterOfMass.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5423154, guid: e1e9f48d71f586e48b0ab82651cd8eb4, type: 3}
+      propertyPath: m_CenterOfMass.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6439156, guid: e1e9f48d71f586e48b0ab82651cd8eb4, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -55635,6 +55663,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 576679794}
+    - targetCorrespondingSourceObject: {fileID: 153044, guid: e1e9f48d71f586e48b0ab82651cd8eb4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 576679796}
   m_SourcePrefab: {fileID: 100100000, guid: e1e9f48d71f586e48b0ab82651cd8eb4, type: 3}
 --- !u!1 &2109391748
 GameObject:

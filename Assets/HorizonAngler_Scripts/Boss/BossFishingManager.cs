@@ -692,9 +692,15 @@ public class BossFishingManager : MonoBehaviour
     {
         if (bossAnimator != null)
         {
-            bossAnimator.Play("AnglerFight");
+            StartCoroutine(DelayedFightAnimation());
             Debug.Log("Boss Animator: Playing AnglerFight Animation");
         }
+    }
+
+    IEnumerator DelayedFightAnimation()
+    {
+        yield return new WaitForSeconds(3f);
+        bossAnimator.Play("AnglerFight");
     }
 
     public void DisableFishingUI()

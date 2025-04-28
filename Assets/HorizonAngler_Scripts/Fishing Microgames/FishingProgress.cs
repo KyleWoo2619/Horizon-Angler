@@ -503,6 +503,10 @@ public class FishingProgress : MonoBehaviour
     void OnProgressMax()
     {
         hasCaughtFish = true;
+        if (FishingAudioManager.Instance != null)
+        {
+            FishingAudioManager.Instance.StopFishingSound();
+        }
         var player = FindObjectOfType<HAPlayerController>();
 
         if (activeZoneType == FishZoneType.Tutorial)
@@ -651,6 +655,14 @@ public class FishingProgress : MonoBehaviour
 
     void OnProgressMin()
     {
+        if (FishingAudioManager.Instance != null)
+        {
+            FishingAudioManager.Instance.StopFishingSound();
+        }
+        if (FishingAudioManager.Instance != null)
+        {
+            FishingAudioManager.Instance.PlayFailSound();
+        }
         InitiateMicrogames.Instance.MGCanvas.SetActive(false);
         InitiateMicrogames.Instance.CCanvas.SetActive(false);
         basicLoseScreen.SetActive(true);
@@ -733,6 +745,13 @@ public class FishingProgress : MonoBehaviour
 
         // Show the appropriate screen based on fish type
         // Inside ShowFishCaughtScreen method
+        if (FishingAudioManager.Instance != null)
+        {
+            if (IsBossFish(currentCaughtFish.fishName))
+                FishingAudioManager.Instance.PlayBossSound();
+            else
+                FishingAudioManager.Instance.PlaySuccessSound();
+        }
         if (IsBossFish(currentCaughtFish.fishName))
         {
             Debug.Log($"[FishingProgress] Boss fish caught! Showing boss catch screen for {activeZoneType}");

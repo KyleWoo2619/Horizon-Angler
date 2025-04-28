@@ -4737,7 +4737,7 @@ PrefabInstance:
         type: 3}
       propertyPath: OWM
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2024421473}
     - target: {fileID: 8542477031035791375, guid: c54f203b250873843a8adca15123f5e3,
         type: 3}
       propertyPath: EPressed
@@ -4995,10 +4995,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 458232821}
-    - targetCorrespondingSourceObject: {fileID: 2265543397045136579, guid: c54f203b250873843a8adca15123f5e3,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 458232820}
   m_SourcePrefab: {fileID: 100100000, guid: c54f203b250873843a8adca15123f5e3, type: 3}
 --- !u!4 &458232804 stripped
 Transform:
@@ -5048,40 +5044,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 458232803}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &458232817 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2265543397045136579, guid: c54f203b250873843a8adca15123f5e3,
-    type: 3}
-  m_PrefabInstance: {fileID: 458232803}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &458232818 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8461644658698518039, guid: c54f203b250873843a8adca15123f5e3,
     type: 3}
   m_PrefabInstance: {fileID: 458232803}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &458232820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 458232817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a3dbd601cfdba94da146f645e17655a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rod: {fileID: 0}
-  progressSlider: {fileID: 0}
-  progressFillImage: {fileID: 0}
-  rotationSpeed: 100
-  friction: 1
-  inputAcceleration: 50
-  idleJerkCooldown: 2.5
-  progressGainRate: 0.15
-  progressLossMultiplier: 0.75
-  progressLossOnHit: 20
 --- !u!114 &458232821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6989,6 +6957,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 677887962}
   m_CullTransparentMesh: 1
+--- !u!1 &678386961
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 678386962}
+  - component: {fileID: 678386963}
+  m_Layer: 0
+  m_Name: FishingAudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &678386962
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678386961}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1939564626}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &678386963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678386961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 742ac468ddeb61e47922c44668d5abbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  castingSound: {fileID: 8300000, guid: 03f5335b67be1d741a9586fdc78f207b, type: 3}
+  reelInSound: {fileID: 8300000, guid: 92dfec71096356040b93ef107b43598e, type: 3}
+  waterSplashSound: {fileID: 8300000, guid: 615324065b04e1a419478562765583d4, type: 3}
+  successSound: {fileID: 8300000, guid: 02cfae953b69d694792a11ee701ef2f9, type: 3}
+  failSound: {fileID: 0}
+  bossSound: {fileID: 8300000, guid: 80c9bbc67fab1fb46be4d3aa104b7ec1, type: 3}
+  waterOutSplashSound: {fileID: 8300000, guid: f2df1bb632eea424bb65f52f2ac52fec, type: 3}
+  castVolume: 0.7
+  fishingVolume: 0.5
+  resultVolume: 0.8
+  waterOutVolume: 0.7
 --- !u!1 &708100340
 GameObject:
   m_ObjectHideFlags: 0
@@ -13006,18 +13029,33 @@ PrefabInstance:
     - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
         type: 3}
       propertyPath: caughtPondBoss
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
         type: 3}
       propertyPath: canFishPondBoss
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: caughtRiverBoss
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: currentZoneType
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
         type: 3}
       propertyPath: fishingPromptUI
       value: 
       objectReference: {fileID: 1488855773}
+    - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: canFishRiverBoss
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
         type: 3}
       propertyPath: shopCameraTarget
@@ -14350,6 +14388,7 @@ Transform:
   - {fileID: 311818111}
   - {fileID: 257613224}
   - {fileID: 264781260}
+  - {fileID: 678386962}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1981813862
@@ -14457,6 +14496,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1981813862}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2024421473 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1317004352282293021, guid: c54f203b250873843a8adca15123f5e3,
+    type: 3}
+  m_PrefabInstance: {fileID: 458232803}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73d5c17ca4fb7f941b5b432b0670a026, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2040743518
 GameObject:
   m_ObjectHideFlags: 0

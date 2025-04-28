@@ -194,6 +194,10 @@ public class InitiateMicrogames : MonoBehaviour
         {
             casted = true;
             StartCoroutine(Bait());
+            if (FishingAudioManager.Instance != null)
+            {
+                StartCoroutine(DelayedCastSound());
+            }
         }
     }
 
@@ -227,6 +231,11 @@ public class InitiateMicrogames : MonoBehaviour
         
         if (playerController != null);
             playerController.PlayFighting();
+            
+        if (FishingAudioManager.Instance != null)
+        {
+            FishingAudioManager.Instance.StartFishingSound();
+        }
 
         CCanvas.SetActive(false);
         MGCanvas.SetActive(true);
@@ -266,6 +275,11 @@ public class InitiateMicrogames : MonoBehaviour
         CCanvas.SetActive(false);
     }
     
+    private IEnumerator DelayedCastSound()
+    {
+        yield return new WaitForSeconds(0.9f);
+        FishingAudioManager.Instance.PlayCastSound();
+    }
     public void FullFishingReset()
     {
         Debug.Log("[Fishing Reset] Fully resetting fishing system.");

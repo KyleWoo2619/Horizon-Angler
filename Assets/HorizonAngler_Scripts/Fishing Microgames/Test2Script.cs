@@ -453,8 +453,8 @@ public class Test2Script : MonoBehaviour
         foreach (string axis in knownAxes)
         {
             float val = Input.GetAxis(axis);
-            if (Mathf.Abs(val) > 0.1f)
-                Debug.Log(axis + " = " + val);
+            // if (Mathf.Abs(val) > 0.1f)
+            //     Debug.Log(axis + " = " + val);
         }
 
     }

@@ -16,7 +16,7 @@ public class CutsceneManager : MonoBehaviour
     
     private PlayerInput playerInput;
     private bool isCutscenePlaying = false;
-    private bool playingCreditsAfterVictory = false;
+    public bool playingCreditsAfterVictory = false;
     private bool isCreditPlaying = false;
     private bool rewardUIActive = false;
     private float rewardTimer = 0f;
@@ -26,8 +26,8 @@ public class CutsceneManager : MonoBehaviour
     private float creditsCutsceneMaxDuration = 68f; // Adjusted to your video length
     private float creditsTimer = 0f;
     private bool isMonitoringCredits = false;
-    private bool hasCompletedBossFight = false; // Track if this is after boss fight
-    private bool returnToTitleAfterCredits = false;
+    public bool hasCompletedBossFight = false; // Track if this is after boss fight
+    public bool returnToTitleAfterCredits = false;
 
     private void Start()
     {
@@ -502,5 +502,58 @@ public class CutsceneManager : MonoBehaviour
 
         if (loadingManager != null)
             loadingManager.LoadSceneWithLoadingScreen("Shop");
+    }
+
+    public void HideRewardUIAfterPondBoss()
+    {
+        if (rewardUIPanel != null)
+        {
+            CanvasGroup rewardGroup = rewardUIPanel.GetComponent<CanvasGroup>();
+
+            if (rewardGroup != null)
+            {
+                StartCoroutine(FadeOutRewardUIOnly(rewardGroup, 1.0f)); // 1 second fade-out
+            }
+            else
+            {
+                rewardUIPanel.SetActive(false);
+                rewardUIActive = false;
+                Time.timeScale = 1f;
+
+                // Disable cutscene canvas manually
+                if (cutsceneCanvas != null)
+                    cutsceneCanvas.gameObject.SetActive(false);
+                if (cutsceneRawImage != null)
+                    cutsceneRawImage.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private IEnumerator FadeOutRewardUIOnly(CanvasGroup canvasGroup, float duration)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            canvasGroup.alpha = 1f - t;
+            yield return null;
+        }
+
+        canvasGroup.alpha = 0f;
+        yield return null;
+
+        rewardUIPanel.SetActive(false);
+        rewardUIActive = false;
+        Time.timeScale = 1f;
+
+        // Disable cutscene canvas after fade
+        if (cutsceneCanvas != null)
+            cutsceneCanvas.gameObject.SetActive(false);
+        if (cutsceneRawImage != null)
+            cutsceneRawImage.gameObject.SetActive(false);
+
+        Debug.Log("Reward UI after PondBoss faded out. Stayed in scene without loading shop.");
     }
 }

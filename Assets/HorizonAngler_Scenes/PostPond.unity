@@ -258,6 +258,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 16414763}
   m_CullTransparentMesh: 1
+--- !u!1 &21817917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 21817918}
+  - component: {fileID: 21817919}
+  m_Layer: 0
+  m_Name: FishingAudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &21817918
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21817917}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1939564626}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &21817919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21817917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 742ac468ddeb61e47922c44668d5abbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  castingSound: {fileID: 8300000, guid: 03f5335b67be1d741a9586fdc78f207b, type: 3}
+  reelInSound: {fileID: 8300000, guid: 92dfec71096356040b93ef107b43598e, type: 3}
+  waterSplashSound: {fileID: 8300000, guid: 615324065b04e1a419478562765583d4, type: 3}
+  successSound: {fileID: 8300000, guid: 02cfae953b69d694792a11ee701ef2f9, type: 3}
+  failSound: {fileID: 0}
+  bossSound: {fileID: 8300000, guid: 80c9bbc67fab1fb46be4d3aa104b7ec1, type: 3}
+  waterOutSplashSound: {fileID: 8300000, guid: f2df1bb632eea424bb65f52f2ac52fec, type: 3}
+  castVolume: 0.7
+  fishingVolume: 0.5
+  resultVolume: 0.8
+  waterOutVolume: 0.7
 --- !u!1 &53171961
 GameObject:
   m_ObjectHideFlags: 0
@@ -35079,6 +35134,7 @@ Transform:
   - {fileID: 105687294}
   - {fileID: 937609488}
   - {fileID: 1868447364}
+  - {fileID: 21817918}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1944119027

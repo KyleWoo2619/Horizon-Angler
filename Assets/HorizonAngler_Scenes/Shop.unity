@@ -735,6 +735,7 @@ MonoBehaviour:
     type: 3}
   defaultRodSprite: {fileID: 21300000, guid: 6dcd5bf5b2e318e40854586e1d50d1ca, type: 3}
   textSpeed: 0.05
+  shopkeeperAnimator: {fileID: 573978359}
   boneRodCutsceneManager: {fileID: 1876944557}
   finalCutsceneManager: {fileID: 2053072089}
   loadingScreen: {fileID: 1824913928}
@@ -779,87 +780,97 @@ MonoBehaviour:
   finalStateDialogue:
   - '"You''ve done it..."'
   firstVisitSpecialDialogue:
-  - "\u201CWhere am I? What is this place?\u201D you ask the man, your voice rushed,
-    uncertain."
+  - "\u201CWhere am I? What is this place?\u201D you ask the Shopkeeper, your voice
+    rushed and uncertain."
   - '"......"'
-  - '* Shopkeeper just looks at you.'
-  - "* Eyes wide. Still. Like glass \u2014 like a fish left too long under the sun."
-  - '* There''s something behind them. Something not quite anger, not sadness either.'
-  - '* A kind of horror that no longer flinches.'
-  - '"I said, where am I and what is this place?" you repeat, more forceful.'
-  - '* He continues to stare at you. He didn''t seem to blink at all.'
+  - '* The Shopkeeper only stares at you; eyes wide, still and unmoving.'
+  - Like glass - or a fish left too long under the sun.
+  - '* There''s something behind his eyes, Not quite anger, nor sadness, but...'
+  - A kind of horror that no longer flinches.
+  - '"I said, where am I and what is this place?" you repeat, more forcefully this
+    time.'
+  - '* He only continues to stare at you. He doesn''t seem to blink at all.'
   - "\"...You really don\u2019t remember anything, do you?\""
-  - '* He exhales. A sound like wind scraping an empty shell.'
+  - '* He exhales. His breath is coarse and raspy; a sound like the wind scraping
+    against the side of an old ship.'
   - '"Take this."'
-  - '* He hands you a rod. The grip feels strangely familiar.'
+  - '* He hands you a rod - its grip feels strangely familiar - along with a worn,
+    leather-bound book.'
+  - Inside, you glimpse what looks like a rough map of the island.
   - "\"Go fish. That\u2019s what you're here for, isn\u2019t it?\""
   scrollDialogue:
-  - "\u201C...! Where did you find that scroll?\u201D"
-  - '* Shopkeeper forcefully takes scroll out of your hand.'
+  - "\u201C...! Where did you find that scroll!?\u201D"
+  - '* The shopkeeper forcefully wrenches the scroll from your hand.'
   - "\u201C......\u201D"
-  - "\u201CForget about what you saw.\u201D"
+  - "\u201CForget what you saw.\u201D"
   - '* Shopkeeper hands you a new fishing rod.'
-  - Despite the strange exchange, a thrill runs through you.
-  - You can't hide your excitement to fish in the river now.
+  - In spite of the shopkeeper's strange behavior and foreboding words, a thrill
+    courses through you.
+  - This new rod should withstand the currents of the island's river.
   hairDialogue:
-  - "\u201CThis\u2026 was inside a fish?\u201D"
-  - '* Shopkeeper snatches the reel hideen behind gruesome clump, hands trembling.'
-  - "\u201CI threw mine away. Burned it, too\u2026 I think. Doesn\u2019t matter.\u201D"
-  - "\u201CDon\u2019t ask me about it. Ever.\u201D"
-  - "* He hands you a boat key. Doesn\u2019t meet your eyes."
-  - '* He places the reel behind the counter. But now... water seeps across the floor,
-    soaking the shop table.'
-  - You can now fish at the Ocean.
+  - "\u201CYou found this\u2026 inside a fish?\u201D"
+  - '* With trembling hands, the shopkeeper snatches the gruesome clump of hair from
+    you.'
+  - '* He pulls the mass of hair apart to reveal a fishing reel.'
+  - '"I threw mine away. Burned it, too... I think. Don''t ask me about it. Ever."'
+  - '* He quickly places the soaking-wet reel behind the counter, trailing water
+    on the floor.'
+  - '* He hands you a boat key and keeps his gaze from meeting yours.'
+  - With access to the shopkeeper's boat, you can now fish in the ocean.
   boneRodDialogue:
   - "\"It came back\u2026 after all this time?\u201D"
-  - "* Shopkeeper whispers something you can\u2019t make out."
+  - '* The shopkeeper mutters something to himself, though you can''t make it out.'
   - "\u201CYou\u2026 you brought it back.\u201D"
-  - '* As he takes the spine, you feel the land tremble. The lights go out.'
+  - '* As he takes the spine, you feel the earth beneath you quake. The lights go
+    out.'
   - 
   - You hear a deafening, otherworldly roar echo across the sky.
-  - "\u201CWhat... what was that?\u201D You ask afraidly."
-  - '* The shopkeeper''s eyes go wide. He stumbles backward, clutching the counter.'
+  - '"What... what was that?" you ask, your quivering voice giving away your terror.'
+  - '* Eyes wide, the shopkeeper stumbles backward, clutching the counter to stay
+    standing.'
   - "\u201CYou need to go. Go to the pond. While you still can.\u201D"
   handDialogue:
-  - The hand twitches the moment it nears the Shopkeeper. Like it remembers him.
+  - The hand twitches the moment it nears the shopkeeper, as if it remembers him.
   - "\u201CThat hand... you felt it pullin\u2019, didn\u2019t you?\u201D"
-  - '* He reaches behind the counter and pulls out something pristine.'
-  - '* A reel - cleaned, polished, quiet.'
+  - '* He reaches behind the counter and pulls out a pristine object.'
+  - It's the reel you found amidst the clump of hair - now clean and polished to
+    the point of sparkling.
   - '* Without a word, he lifts another shape wrapped in cloth.'
-  - '* A spine - Still intact. Restored. Waiting.'
+  - A spine - Still intact. Restored. Waiting.
   - "\u201CThe final piece... it waited.\u201D"
-  - '* He takes the hand without pause, like it''s always belonged to him.'
-  - "* He brushes off the muck. The hand is already nearly clean. He\u2019s been
-    expecting this."
-  - "* In silence, he assembles the rod \u2014 with hands that have done this before."
+  - '* He takes the hand without hesitation, as if it was something he let you borrow.'
+  - '* He brushes away the muck, revealing that the hand is almost entirely clean.
+    He''s been expecting this.'
+  - '* In silence, he assembles the rod - his hands have done this before.'
   - The air thickens. The pull is undeniable. This rod was meant for you.
   vesselDialogue:
   - '"......"'
   - '"............"'
-  - "\u201CThe rod\u2019s complete. But are you?\u201D"
-  - "\u201CThe last one...failed.\u201D"
+  - '"The rod''s complete... but are you?"'
+  - "\u201CThe last one... failed.\u201D"
   - "\u201CThere\u2019s a name for someone who reels the sun\u2026\u201D"
   - "\u201CMay you yet become the Horizon Angler.\u201D"
   postBossDialogue:
-  - You return with the remains. The lower half of a man.
-  - "\"How strange a fate... To find myself handing my own bones to the past \u2014
-    or is it the future?\""
-  - "\u201CWhat do you mean\u2026?\u201D you ask."
+  - You return with the remains - the lower half of a man.
+  - '"How strange is fate... for us to wind up handling our own bones like this?"'
+  - "\u201CWhat do you mean... our bones?\u201D you ask."
   - "\u201CMy name is Pierre Jonah Santiago.\u201D"
-  - "It's an awkwardly familiar name \u2014 one you've known your whole life. It's
-    your name."
-  - 'As you try to make sense of his words, the world starts to misalign. '
-  - '* A shape begins to layer over your sight atop of shopkeeper.'
+  - It's a startlingly familiar name - one you've known your whole life. It's your
+    name.
+  - As you try to make sense of his words, the world seems to warp around you.
+  - '* A hazy figure begins to fade in between you and Pierre.'
   - "A flickering presence \u2014 a reflection, or perhaps another man..."
-  - "He is standing. Or you are. Or someone else is \u2014 behind the skin, inside
-    the voice."
-  - The scene folds strangely.
-  - "A window that wasn\u2019t there now returns a reflection you\u2019ve seen too
-    many times \u2014"
+  - '* He is standing. Or you are. Or someone else is - behind the counter, as if
+    waiting for you to remember.'
+  - The scene folds unnaturally.
+  - A window that wasn't there before greets you with a reflection you've seen too
+    many times -
   - From half-woken mornings bent over a sink, from sidelong glances into darkened
     glass.
-  - "It blinks. Was it his? Yours? Someone\u2019s? Just... there, blink."
-  - '* He vanishes. Or maybe you do.'
+  - It blinks. * Is the reflection his? Yours? Someone else's? It just... blinks.
+  - As if adjusting to the light of the sun after emerging from a cave.
+  - He vanishes. * Or maybe you do.
+  - 
 --- !u!1 &152186503
 GameObject:
   m_ObjectHideFlags: 0
@@ -5516,6 +5527,12 @@ PrefabInstance:
 --- !u!4 &573978358 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1892a741d8ae7b44b86ffbd90bcea42f,
+    type: 3}
+  m_PrefabInstance: {fileID: 573978357}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &573978359 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 1892a741d8ae7b44b86ffbd90bcea42f,
     type: 3}
   m_PrefabInstance: {fileID: 573978357}
   m_PrefabAsset: {fileID: 0}

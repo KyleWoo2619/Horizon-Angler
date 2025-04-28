@@ -20,6 +20,9 @@ public class ShopInteractionManager : MonoBehaviour
     [Header("Dialogue Settings")]
     public float textSpeed = 0.05f;
     private bool waitingForCutscene = false;
+    [Header("Animation")]
+    public Animator shopkeeperAnimator;
+    private string currentAnimation = "";
 
     [Header("Cutscenes")]
     public CutsceneManager boneRodCutsceneManager;
@@ -505,6 +508,7 @@ public class ShopInteractionManager : MonoBehaviour
                 waitingForCutscene = true;
                 cutscene.PlayCutscene();
                 SetEmergencyLighting();
+                Time.timeScale = 1f;
                 return;
             }
         }
@@ -543,6 +547,43 @@ public class ShopInteractionManager : MonoBehaviour
             StopCoroutine(typingCoroutine);
 
         typingCoroutine = StartCoroutine(TypeLine());
+
+        if (lastSpecialPlayed == "FirstVisit")
+        {
+            if (dialogueIndex == 11) PlayShopkeeperAnimation("Upgrade");
+        }
+        else if (lastSpecialPlayed == "Scroll")
+        {
+            if (dialogueIndex == 0) PlayShopkeeperAnimation("Surprised");
+            else if (dialogueIndex == 1) PlayShopkeeperAnimation("Demand");
+            else if (dialogueIndex == 4) PlayShopkeeperAnimation("Upgrade");
+        }
+        else if (lastSpecialPlayed == "Hair")
+        {
+            if (dialogueIndex == 0) PlayShopkeeperAnimation("Surprised");
+            else if (dialogueIndex == 1) PlayShopkeeperAnimation("Demand");
+            else if (dialogueIndex == 3) PlayShopkeeperAnimation("Scared");
+            else if (dialogueIndex == 5) PlayShopkeeperAnimation("Upgrade");
+        }
+        else if (lastSpecialPlayed == "BoneRod")
+        {
+            if (dialogueIndex == 0) PlayShopkeeperAnimation("Scared");
+            else if (dialogueIndex == 8) PlayShopkeeperAnimation("LeanIn");
+        }
+        else if (lastSpecialPlayed == "Hand")
+        {
+            if (dialogueIndex == 2) PlayShopkeeperAnimation("Upgrade");
+            else if (dialogueIndex == 4) PlayShopkeeperAnimation("Upgrade");
+            else if (dialogueIndex == 7) PlayShopkeeperAnimation("Demand");
+        }
+        else if (lastSpecialPlayed == "Vessel")
+        {
+            if (dialogueIndex == 4) PlayShopkeeperAnimation("LeanIn");
+        }
+        else if (lastSpecialPlayed == "Final")
+        {
+            if (dialogueIndex == 1) PlayShopkeeperAnimation("LeanIn");
+        }
     }
 
     private IEnumerator DelayedPinUpdate()
@@ -776,5 +817,21 @@ public class ShopInteractionManager : MonoBehaviour
     {
         if (mainLights != null) mainLights.SetActive(true);
         if (emergencyLights != null) emergencyLights.SetActive(false);
+    }
+
+    private void PlayShopkeeperAnimation(string animationTrigger)
+    {
+        if (shopkeeperAnimator == null)
+            return;
+
+        if (currentAnimation == animationTrigger)
+        {
+            // Same animation already playing, do nothing
+            return;
+        }
+
+        // Play new animation
+        shopkeeperAnimator.Play(animationTrigger);
+        currentAnimation = animationTrigger;
     }
 }
