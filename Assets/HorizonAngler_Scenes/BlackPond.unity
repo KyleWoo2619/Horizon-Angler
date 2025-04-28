@@ -6190,6 +6190,9 @@ MonoBehaviour:
   creditCanvas: {fileID: 0}
   rewardUIPanel: {fileID: 891242728}
   loadingManager: {fileID: 0}
+  playingCreditsAfterVictory: 0
+  hasCompletedBossFight: 0
+  returnToTitleAfterCredits: 0
 --- !u!4 &388478089
 Transform:
   m_ObjectHideFlags: 0
@@ -17668,7 +17671,7 @@ MonoBehaviour:
   reelInSound: {fileID: 8300000, guid: 92dfec71096356040b93ef107b43598e, type: 3}
   waterSplashSound: {fileID: 8300000, guid: 615324065b04e1a419478562765583d4, type: 3}
   successSound: {fileID: 8300000, guid: 02cfae953b69d694792a11ee701ef2f9, type: 3}
-  failSound: {fileID: 0}
+  failSound: {fileID: 8300000, guid: 735fadc0ff2226044bad0d5c2363b8ed, type: 3}
   bossSound: {fileID: 8300000, guid: 80c9bbc67fab1fb46be4d3aa104b7ec1, type: 3}
   waterOutSplashSound: {fileID: 8300000, guid: f2df1bb632eea424bb65f52f2ac52fec, type: 3}
   castVolume: 0.7
@@ -30427,6 +30430,11 @@ PrefabInstance:
       propertyPath: foundScrollButton
       value: 
       objectReference: {fileID: 1712381059}
+    - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
+        type: 3}
+      propertyPath: FootstepAudioVolume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8593358395550002963, guid: 751bbb8b0f0d2e54aba8402dba32da1e,
         type: 3}
       propertyPath: shopInteractPromptUI
