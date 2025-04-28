@@ -541,6 +541,11 @@ public class BossFishingManager : MonoBehaviour
 
         Debug.Log("Boss sunk. Now starting cutscene...");
 
+        // Save Horizon Angler Achievement
+        GameManager.Instance.currentSaveData.BecameHorizonAngler = true;
+        SaveManager.Save(GameManager.Instance.currentSaveData);
+        Debug.Log("Saved BecameHorizonAngler = true");
+
         // Fade out music
         if (musicManager != null)
         {
@@ -548,7 +553,7 @@ public class BossFishingManager : MonoBehaviour
             Debug.Log("Fading out all music for cutscene transition");
         }
 
-        // Actually play the cutscene here
+        // Play victory cutscene
         PlayVictoryCutscene();
         AllSounds.SetActive(false);
     }

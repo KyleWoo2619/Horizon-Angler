@@ -24,7 +24,7 @@ public class LegendaryRewardManager : MonoBehaviour
     {
         rewardCanvas.gameObject.SetActive(true);
         yield return FadeCanvasGroup(rewardCanvas, 0, 1, 0.5f);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         yield return FadeCanvasGroup(rewardCanvas, 1, 0, 0.5f);
         rewardCanvas.gameObject.SetActive(false);
     }

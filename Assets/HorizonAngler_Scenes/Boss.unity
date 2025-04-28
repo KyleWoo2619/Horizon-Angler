@@ -43456,6 +43456,53 @@ Transform:
   - {fileID: 5621875267313709649}
   m_Father: {fileID: 241829976}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1681027713
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1681027714}
+  - component: {fileID: 1681027715}
+  m_Layer: 0
+  m_Name: ResolutionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1681027714
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681027713}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 945.4274, y: 457.1588, z: -157.35446}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1939564626}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1681027715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681027713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf0e1bbc452b5f4ead0d5d48120be29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetWidth: 1920
+  targetHeight: 1080
+  fullscreen: 1
 --- !u!1 &1683463354
 GameObject:
   m_ObjectHideFlags: 0
@@ -50603,6 +50650,7 @@ Transform:
   - {fileID: 450353986}
   - {fileID: 468854150}
   - {fileID: 1412745420}
+  - {fileID: 1681027714}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1951578131
@@ -55388,7 +55436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 406738, guid: e1e9f48d71f586e48b0ab82651cd8eb4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.87
+      value: -0.7
       objectReference: {fileID: 0}
     - target: {fileID: 406738, guid: e1e9f48d71f586e48b0ab82651cd8eb4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -55522,6 +55570,11 @@ PrefabInstance:
         type: 3}
       propertyPath: offset.z
       value: 2.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 114865002392747242, guid: e1e9f48d71f586e48b0ab82651cd8eb4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2363090, guid: e1e9f48d71f586e48b0ab82651cd8eb4, type: 3}
