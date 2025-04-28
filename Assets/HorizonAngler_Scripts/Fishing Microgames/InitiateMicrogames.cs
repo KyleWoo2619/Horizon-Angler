@@ -40,7 +40,8 @@ public class InitiateMicrogames : MonoBehaviour
         BlackPond,
         BossPond,
         BossRiver,
-        BossOcean
+        BossOcean,
+        PostPond
     }
     public static InitiateMicrogames Instance { get; private set; }
     [Header("Inspector Microgame Set Overrides")]

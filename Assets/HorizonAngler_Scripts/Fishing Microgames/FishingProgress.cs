@@ -87,6 +87,7 @@ public class FishingProgress : MonoBehaviour
     public List<Fish> bossPondFishPool = new List<Fish>();
     public List<Fish> bossRiverFishPool = new List<Fish>();
     public List<Fish> bossOceanFishPool = new List<Fish>();
+    public List<Fish> postPondFishPool = new List<Fish>();
 
     private List<Fish> activeFishPool;
 
@@ -534,6 +535,36 @@ public class FishingProgress : MonoBehaviour
             T2S.microgamesActive = false;
             T2S.ClearAll();
         }
+        else if (activeZoneType == FishZoneType.PostPond)
+        {
+            player.inFishZone = false;
+            player.canFish = false;
+            player.EndFishing();
+
+            Debug.Log("PostPond fish caught! Triggering PostPond cutscene...");
+
+            CutsceneManager cutsceneManager = FindObjectOfType<CutsceneManager>();
+            if (cutsceneManager != null)
+            {
+                GameObject musicObject = GameObject.FindWithTag("Music");
+                if (musicObject != null)
+                {
+                    AudioSource musicSource = musicObject.GetComponent<AudioSource>();
+                    if (musicSource != null && musicSource.isPlaying)
+                        musicSource.Stop();
+                }
+
+                cutsceneManager.PlayCutscene();
+                cutsceneManager.videoPlayer.loopPointReached += OnPostPondCutsceneFinished;
+            }
+            else
+            {
+                Debug.LogWarning("CutsceneManager not found for PostPond region!");
+            }
+
+            T2S.microgamesActive = false;
+            T2S.ClearAll();
+        }
         else if (activeZoneType == FishZoneType.BlackPond)
         {
             player.inFishZone = false;
@@ -577,7 +608,47 @@ public class FishingProgress : MonoBehaviour
         // Load the new scene
         UnityEngine.SceneManagement.SceneManager.LoadScene("PostTutorial"); // replace with actual scene name
     }
+
+    private void OnPostPondCutsceneFinished(VideoPlayer vp)
+    {
+        Debug.Log("PostPond getting-eaten cutscene finished. Now playing Credits cutscene...");
+
+        // Unsubscribe to prevent multiple calls
+        vp.loopPointReached -= OnPostPondCutsceneFinished;
+
+        CutsceneManager cutsceneManager = FindObjectOfType<CutsceneManager>();
+        if (cutsceneManager != null)
+        {
+            // Use the new timer-based method
+            cutsceneManager.PlayPostPondFinalCreditsThenTitle();
+        }
+        else
+        {
+            Debug.LogWarning("CutsceneManager not found when trying to play Credits after PostPond!");
+            
+            // Fallback: load title screen directly if no cutscene manager
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Title Screen");
+        }
+    }
     
+    private void OnCreditsCutsceneFinished(VideoPlayer vp)
+    {
+        Debug.Log("Credits cutscene finished. Loading Title Screen...");
+
+        vp.loopPointReached -= OnCreditsCutsceneFinished;
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Title Screen");
+    }
+
+    private void OnPostPondCreditCutsceneFinished(VideoPlayer vp)
+    {
+        Debug.Log("PostPond credit cutscene finished. Loading Title Screen...");
+
+        vp.loopPointReached -= OnPostPondCreditCutsceneFinished;
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Title Screen");
+    }
+
     void OnProgressMin()
     {
         InitiateMicrogames.Instance.MGCanvas.SetActive(false);
@@ -631,6 +702,9 @@ public class FishingProgress : MonoBehaviour
                 break;
             case FishZoneType.BossOcean:
                 activeFishPool = bossOceanFishPool;
+                break;
+            case FishZoneType.PostPond:
+                activeFishPool = postPondFishPool;
                 break;
             default:
                 activeFishPool = pondFishPool;

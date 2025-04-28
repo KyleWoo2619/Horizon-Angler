@@ -115,9 +115,11 @@ public class PropellerBoats : MonoBehaviour
 
     void OnDrawGizmos()
     {
+    #if UNITY_EDITOR
         if (propellers != null && propellers.Length > 0)
         {
-            Handles.Label(propellers[0].position, engine_rpm.ToString());
+            UnityEditor.Handles.Label(propellers[0].position, engine_rpm.ToString());
         }
+    #endif
     }
 }

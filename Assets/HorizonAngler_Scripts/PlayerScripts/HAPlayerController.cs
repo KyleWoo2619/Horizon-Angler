@@ -495,6 +495,7 @@ namespace StarterAssets
                     case InitiateMicrogames.FishZoneType.River:
                     case InitiateMicrogames.FishZoneType.Ocean:
                     case InitiateMicrogames.FishZoneType.BlackPond:
+                    case InitiateMicrogames.FishZoneType.PostPond:
                         allowedToFish = true;
                         break;
                     case InitiateMicrogames.FishZoneType.BossPond:

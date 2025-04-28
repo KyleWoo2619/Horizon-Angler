@@ -573,7 +573,7 @@ public class BossFishingManager : MonoBehaviour
             musicManager.FadeOutAllMusic();
             // Try the new direct method
             Debug.Log("Calling cutsceneManager.PlayVictoryCutscene()");
-            cutsceneManager.PlayVictoryCutscene();
+            cutsceneManager.PlayVictoryCutsceneSimple();
         }
         else
         {

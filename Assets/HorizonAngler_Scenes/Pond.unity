@@ -5703,7 +5703,10 @@ MonoBehaviour:
   videoPlayer: {fileID: 184353841}
   cutsceneRawImage: {fileID: 184353842}
   cutsceneCanvas: {fileID: 1876944555}
+  CreditImage: {fileID: 0}
+  creditCanvas: {fileID: 0}
   rewardUIPanel: {fileID: 891242728}
+  loadingManager: {fileID: 0}
 --- !u!4 &388478089
 Transform:
   m_ObjectHideFlags: 0

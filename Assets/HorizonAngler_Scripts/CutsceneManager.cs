@@ -27,6 +27,7 @@ public class CutsceneManager : MonoBehaviour
     private float creditsTimer = 0f;
     private bool isMonitoringCredits = false;
     private bool hasCompletedBossFight = false; // Track if this is after boss fight
+    private bool returnToTitleAfterCredits = false;
 
     private void Start()
     {
@@ -113,21 +114,41 @@ public class CutsceneManager : MonoBehaviour
 
     private void OnCutsceneFinished(VideoPlayer vp)
     {
-        Debug.Log($"OnCutsceneFinished called. playingCreditsAfterVictory: {playingCreditsAfterVictory}, isCreditPlaying: {isCreditPlaying}");
+        Debug.Log($"OnCutsceneFinished called. playingCreditsAfterVictory: {playingCreditsAfterVictory}, isCreditPlaying: {isCreditPlaying}, returnToTitleAfterCredits: {returnToTitleAfterCredits}");
         
         if (playingCreditsAfterVictory)
         {
             Debug.Log("Victory Cutscene finished, now starting Credits Cutscene");
             playingCreditsAfterVictory = false;
-            PlayCreditCutscene();
+            
+            // This is for boss fight - play credits first, then show reward UI later
+            PlayCreditCutscene(false); // Don't return to title after credits
             return;
         }
 
         if (isCreditPlaying)
         {
             Debug.Log("Credits Cutscene finished via event callback");
-            ShowRewardUIAfterCredits();
-            return;
+
+            isMonitoringCredits = false;
+            isCreditPlaying = false;
+            isCutscenePlaying = false;
+
+            if (returnToTitleAfterCredits)
+            {
+                Debug.Log("Credits finished after PostPond - Going to Title Screen");
+                Time.timeScale = 1f;
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Title Screen");
+                return;
+            }
+            else
+            {
+                Debug.Log("Credits finished after Boss - Showing Reward UI to go to Shop");
+                // Set this flag to track that we've completed a boss fight
+                hasCompletedBossFight = true;
+                ShowRewardUIAfterCredits();
+                return;
+            }
         }
 
         cutsceneRawImage.gameObject.SetActive(false);
@@ -139,7 +160,21 @@ public class CutsceneManager : MonoBehaviour
         {
             shopManager.ResumeDialogueAfterCutscene();
         }
-        ShowRewardUI();
+        else
+        {
+            // For PostPond cutscene, if we've just watched the getting-eaten cutscene
+            FishingProgress fishingProgress = FindObjectOfType<FishingProgress>();
+            if (fishingProgress != null && fishingProgress.activeZoneType == InitiateMicrogames.FishZoneType.PostPond)
+            {
+                Debug.Log("PostPond regular cutscene finished - playing credits");
+                PlayCreditCutscene(true); // This is a key change - pass true for returnToTitleAfterCredits
+            }
+            else
+            {
+                // Regular cutscene (non-boss, non-postpond)
+                ShowRewardUI();
+            }
+        }
     }
     
     private void ShowRewardUIAfterCredits()
@@ -235,6 +270,7 @@ public class CutsceneManager : MonoBehaviour
             videoPlayer.loopPointReached -= OnCutsceneFinished;
             videoPlayer.loopPointReached += OnCutsceneFinished;
             
+            // This is a critical flag that triggers the credits to play after this cutscene
             playingCreditsAfterVictory = true;
             videoPlayer.Play();
             Time.timeScale = 0f; // Make sure game is paused
@@ -244,12 +280,121 @@ public class CutsceneManager : MonoBehaviour
         }
     }
 
-    public void PlayCreditCutscene()
+    public void PlayPostPondFinalCreditsThenTitle()
+    {
+        Debug.Log("PlayPostPondFinalCreditsThenTitle called - will go directly to title screen afterward");
+        
+        // Make sure we disable any previous UI elements
+        if (cutsceneCanvas != null)
+            cutsceneCanvas.gameObject.SetActive(false);
+        if (cutsceneRawImage != null)
+            cutsceneRawImage.gameObject.SetActive(false);
+        
+        // Show Credit Cutscene UI
+        if (creditCanvas != null)
+            creditCanvas.gameObject.SetActive(true);
+        if (CreditImage != null)
+            CreditImage.gameObject.SetActive(true);
+        
+        // Clear previous event handlers
+        if (videoPlayer != null)
+        {
+            videoPlayer.loopPointReached -= OnCutsceneFinished;
+            
+            // Still try to set up the direct event handler (might work in some cases)
+            videoPlayer.loopPointReached += OnPostPondCreditsComplete;
+            
+            // Play the credits
+            videoPlayer.Play();
+            isCutscenePlaying = true;
+            
+            // Start the timer coroutine - this is our guaranteed fallback
+            StartCoroutine(PostPondCreditsTimer(68f)); // 68 seconds matches your creditsCutsceneMaxDuration
+            
+            Debug.Log("PostPond credits started with timer fallback, will go to title screen when complete");
+        }
+    }
+
+    private IEnumerator PostPondCreditsTimer(float duration)
+    {
+        float timer = 0f;
+        
+        while (timer < duration)
+        {
+            timer += Time.unscaledDeltaTime; // Use unscaledDeltaTime to work even if game is paused
+            
+            // Log progress occasionally
+            if (timer % 10f < Time.unscaledDeltaTime)
+            {
+                Debug.Log($"PostPond credits timer: {timer:F1}s / {duration:F1}s");
+            }
+            
+            yield return null;
+        }
+        
+        Debug.Log("PostPond credits timer complete - loading title screen now");
+        
+        // Reset all relevant flags
+        isCreditPlaying = false;
+        isCutscenePlaying = false;
+        isMonitoringCredits = false;
+        
+        // Reset time scale
+        Time.timeScale = 1f;
+        
+        // Load title screen
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Title Screen");
+    }
+
+    // Special handler for PostPond credits completion that goes straight to title screen
+    private void OnPostPondCreditsComplete(VideoPlayer vp)
+    {
+        Debug.Log("OnPostPondCreditsComplete called - loading title screen directly");
+        
+        // Remove event handler to prevent multiple calls
+        vp.loopPointReached -= OnPostPondCreditsComplete;
+        
+        // Reset time scale
+        Time.timeScale = 1f;
+        
+        // Stop all coroutines to prevent the timer from also triggering the scene load
+        StopAllCoroutines();
+        
+        // Go directly to title screen
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Title Screen");
+    }
+
+        public void PlayVictoryCutsceneSimple()
+    {
+        if (cutsceneCanvas != null)
+            cutsceneCanvas.gameObject.SetActive(true);
+        if (cutsceneRawImage != null)
+            cutsceneRawImage.gameObject.SetActive(true);
+
+        if (videoPlayer != null)
+        {
+            // Important: do NOT trigger credits after
+            playingCreditsAfterVictory = false;
+            isCreditPlaying = false;
+
+            videoPlayer.loopPointReached -= OnCutsceneFinished;
+            videoPlayer.loopPointReached += OnCutsceneFinished;
+
+            videoPlayer.Play();
+            Time.timeScale = 0f;
+            isCutscenePlaying = true;
+
+            Debug.Log("Playing simple victory cutscene only (no credits)");
+        }
+    }
+
+    public void PlayCreditCutscene(bool goToTitleScreen = false)
     {
         Debug.Log("PlayCreditCutscene called");
-        
+
         isCreditPlaying = true;
         isCutscenePlaying = true;
+        returnToTitleAfterCredits = goToTitleScreen; // <-- ADD THIS
 
         // Hide Victory Cutscene UI
         if (cutsceneCanvas != null)
@@ -265,11 +410,9 @@ public class CutsceneManager : MonoBehaviour
 
         if (videoPlayer != null)
         {
-            // Force a clean event hook
             videoPlayer.loopPointReached -= OnCutsceneFinished;
             videoPlayer.loopPointReached += OnCutsceneFinished;
             
-            // Start monitoring with safety timer
             isMonitoringCredits = true;
             creditsTimer = 0f;
             

@@ -2,10 +2,11 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using StarterAssets;
+using Unity.VisualScripting;
 
 public class ObjectiveTextManager : MonoBehaviour
 {
-    public enum LevelType { Tutorial, Pond, River, Ocean, BlackPond, Boss }
+    public enum LevelType { Tutorial, Pond, River, Ocean, BlackPond, Boss, PostPond }
 
     [Header("Level Type")]
     public LevelType currentLevel;
@@ -62,6 +63,10 @@ public class ObjectiveTextManager : MonoBehaviour
         {
             case LevelType.Tutorial:
                 objectiveText.text = "It's your day off. Time to relax and do what you love — go fish at the pond and enjoy the quiet.";
+                break;
+
+            case LevelType.PostPond:
+                objectiveText.text = "Only the endless waters remain. Lose yourself in them.";
                 break;
 
             case LevelType.Pond:

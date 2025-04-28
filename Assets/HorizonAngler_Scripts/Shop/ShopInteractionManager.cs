@@ -24,6 +24,7 @@ public class ShopInteractionManager : MonoBehaviour
     [Header("Cutscenes")]
     public CutsceneManager boneRodCutsceneManager;
     public CutsceneManager finalCutsceneManager;
+    public GameObject loadingScreen;
 
     [Header("Lighting References")]
     public GameObject mainLights;
@@ -38,7 +39,6 @@ public class ShopInteractionManager : MonoBehaviour
     public float visualDisplayTime = 5f;
     [SerializeField] public CanvasGroup legendaryCanvasGroup;
     [SerializeField] private float fadeDuration = 0.5f;
-
 
     [Header("Base Dialogue Content")]
     public string[] firstVisitBaseDialogue;
@@ -58,6 +58,10 @@ public class ShopInteractionManager : MonoBehaviour
     public string[] handDialogue;
     public string[] vesselDialogue;
     public string[] postBossDialogue;
+
+    // New variables for scene preloading
+    private AsyncOperation preloadedSceneOperation;
+    private bool scenePreloadComplete = false;
 
     private SaveData saveData;
     private string[] currentLines;
@@ -193,7 +197,6 @@ public class ShopInteractionManager : MonoBehaviour
             specialButton.SetActive(true);
             specialButtonText.text = "Ask about the spine.";
         }
-
         else if (saveData.dredgedHand && !saveData.AllCollected)
         {
             specialButton.SetActive(true);
@@ -211,10 +214,9 @@ public class ShopInteractionManager : MonoBehaviour
         }
     }
 
-
     public void OnTalkButton()
     {
-         string[] selectedDialogue = null;
+        string[] selectedDialogue = null;
 
         if (!saveData.arrivedAtShop)
         {
@@ -300,7 +302,70 @@ public class ShopInteractionManager : MonoBehaviour
         {
             lastSpecialPlayed = "Final";
             StartDialogue(postBossDialogue);
+            // Start preloading the scene when final dialogue is triggered
+            PrepareLoadingScreenDuringCutscene();
         }
+    }
+
+    // New method to prepare loading screen and preload next scene
+    public void PrepareLoadingScreenDuringCutscene()
+    {
+        Debug.Log("Preparing loading screen while cutscene is playing");
+        
+        // Make sure we have a reference to the loading screen
+        if (loadingScreen == null)
+        {
+            loadingScreen = GameObject.Find("FinalLoadingScreen");
+            if (loadingScreen == null)
+            {
+                Debug.LogError("Could not find FinalLoadingScreen in scene!");
+                return;
+            }
+        }
+        
+        // Make sure loading screen has a canvas with proper sorting order
+        Canvas loadingCanvas = loadingScreen.GetComponent<Canvas>();
+        if (loadingCanvas == null)
+        {
+            loadingCanvas = loadingScreen.AddComponent<Canvas>();
+            loadingCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        }
+        loadingCanvas.sortingOrder = 5; // High enough to be on top after cutscene ends
+        
+        // Make sure it has a canvas group
+        CanvasGroup loadingGroup = loadingScreen.GetComponent<CanvasGroup>();
+        if (loadingGroup == null)
+        {
+            loadingGroup = loadingScreen.AddComponent<CanvasGroup>();
+        }
+        
+        // Set it to be invisible initially but active
+        loadingScreen.SetActive(true);
+        loadingGroup.alpha = 0f;
+        
+        // Start preloading the next scene
+        StartCoroutine(PreloadNextScene());
+    }
+
+    // New method to preload next scene
+    private IEnumerator PreloadNextScene()
+    {
+        // Start loading the next scene asynchronously
+        Debug.Log("Preloading PostPond scene");
+        AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("PostPond");
+        asyncLoad.allowSceneActivation = false; // Don't activate until we're ready
+        
+        // Store this for later use
+        preloadedSceneOperation = asyncLoad;
+        
+        while (!asyncLoad.isDone && asyncLoad.progress < 0.9f)
+        {
+            Debug.Log($"Preloading progress: {asyncLoad.progress * 100:F0}%");
+            yield return null;
+        }
+        
+        Debug.Log("Preloading complete - scene ready to activate when needed");
+        scenePreloadComplete = true;
     }
 
     void StartDialogue(string[] lines)
@@ -450,6 +515,24 @@ public class ShopInteractionManager : MonoBehaviour
             if (finalCutsceneManager != null)
             {
                 waitingForCutscene = true;
+                
+                // Make sure cutscene canvas is on top temporarily
+                Canvas cutsceneCanvas = finalCutsceneManager.cutsceneCanvas.GetComponent<Canvas>();
+                if (cutsceneCanvas != null)
+                {
+                    cutsceneCanvas.sortingOrder = 10; // Higher than loading screen
+                }
+                
+                // Same for credit canvas
+                if (finalCutsceneManager.creditCanvas != null)
+                {
+                    Canvas creditCanvas = finalCutsceneManager.creditCanvas.GetComponent<Canvas>();
+                    if (creditCanvas != null)
+                    {
+                        creditCanvas.sortingOrder = 10;
+                    }
+                }
+                
                 finalCutsceneManager.PlayCutscene();
                 return;
             }
@@ -468,7 +551,7 @@ public class ShopInteractionManager : MonoBehaviour
 
         foreach (MapTravelPoint pin in FindObjectsOfType<MapTravelPoint>())
         {
-            pin.SetupButton();  // Now it’s public, so this works
+            pin.SetupButton();  // Now it's public, so this works
         }
     }
 
@@ -570,8 +653,96 @@ public class ShopInteractionManager : MonoBehaviour
 
     public void ResumeDialogueAfterCutscene()
     {
-        waitingForCutscene = false;
-        NextLine();
+        if (lastSpecialPlayed == "Final")
+        {
+            Debug.Log("Final Cutscene ended - starting final loading screen.");
+            StartCoroutine(StartFinalLoadingSequence());
+        }
+        else
+        {
+            waitingForCutscene = false;
+            NextLine();
+        }
+    }
+
+    private IEnumerator StartFinalLoadingSequence()
+    {
+        Debug.Log("StartFinalLoadingSequence called");
+        
+        // Make sure game time is running
+        Time.timeScale = 1f;
+        
+        // Ensure loading screen is prepared
+        if (loadingScreen == null || !loadingScreen.activeInHierarchy)
+        {
+            Debug.LogError("Loading screen not properly prepared! Attempting to recover...");
+            PrepareLoadingScreenDuringCutscene();
+            yield return new WaitForSeconds(0.5f);
+        }
+        
+        // Get the canvas group
+        CanvasGroup loadingGroup = loadingScreen.GetComponent<CanvasGroup>();
+        if (loadingGroup == null)
+        {
+            Debug.LogError("No CanvasGroup on loading screen! Adding one...");
+            loadingGroup = loadingScreen.AddComponent<CanvasGroup>();
+        }
+        
+        // Make sure loading screen canvas is on top now that cutscene is finished
+        Canvas loadingCanvas = loadingScreen.GetComponent<Canvas>();
+        if (loadingCanvas != null)
+        {
+            loadingCanvas.sortingOrder = 15; // Higher than cutscene now
+            Debug.Log($"Set loading screen canvas sorting order to {loadingCanvas.sortingOrder}");
+        }
+        
+        // Instantly show the loading screen
+        loadingGroup.alpha = 1f;
+        Debug.Log("Loading screen is now visible");
+        
+        // Wait for the dramatic text to be visible
+        Debug.Log("Displaying final text for 5 seconds...");
+        yield return new WaitForSecondsRealtime(5f);
+        
+        // Wait for preloading to complete if it hasn't already
+        if (!scenePreloadComplete && preloadedSceneOperation != null)
+        {
+            Debug.Log("Waiting for scene preloading to complete...");
+            while (preloadedSceneOperation.progress < 0.9f)
+            {
+                Debug.Log($"Loading progress: {preloadedSceneOperation.progress * 100:F0}%");
+                yield return null;
+            }
+        }
+        else if (preloadedSceneOperation == null)
+        {
+            // If no preload was started for some reason, start loading now
+            Debug.Log("No preloaded scene found, starting async load now");
+            preloadedSceneOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("PostPond");
+            preloadedSceneOperation.allowSceneActivation = false;
+            
+            while (preloadedSceneOperation.progress < 0.9f)
+            {
+                Debug.Log($"Loading progress: {preloadedSceneOperation.progress * 100:F0}%");
+                yield return null;
+            }
+        }
+        
+        // Set a static flag so the PostPond scene knows to fade in from black
+        // (You'll need to add a static class to store this flag)
+        TransitionManager.ShouldFadeInNextScene = true;
+        
+        // Finally activate the new scene without fading out
+        if (preloadedSceneOperation != null)
+        {
+            Debug.Log("Activating preloaded PostPond scene");
+            preloadedSceneOperation.allowSceneActivation = true;
+        }
+        else
+        {
+            Debug.LogError("No preloaded scene operation! Loading scene directly.");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("PostPond");
+        }
     }
 
     void UpgradeRodVisuals()
