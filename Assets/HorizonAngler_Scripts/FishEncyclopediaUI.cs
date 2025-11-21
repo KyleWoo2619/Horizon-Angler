@@ -42,9 +42,9 @@ public class FishEncyclopediaUI : MonoBehaviour
         fishOrder = new List<string>
         {
             "Blue Gill Fish", "Koifish", "Largemouth Bass", "Mullet",
-            "Trout", "Pike", "Perch", "River Eel",
-            "Lionfish", "Mackerel", "Swordfish", "Manta Ray",
-            "Sun-Infused Croakmaw", "River Boss", "Ocean Boss", "Final Boss"
+            "Arapaima", "Catfish", "Flounder", "Piranha",
+            "Lantern Fish", "Sea Bass", "Snapper", "Vampire Squid",
+            "Sun-Infused Croakmaw", "Solar-Spined Riftmaw", "Sun-Eclipsed Embermaw", "Horizon Angler"
         };
     }
 

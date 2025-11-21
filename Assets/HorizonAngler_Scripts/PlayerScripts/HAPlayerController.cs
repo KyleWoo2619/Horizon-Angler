@@ -162,7 +162,6 @@ namespace StarterAssets
         {
             caughtPondBoss = GameManager.Instance.currentSaveData.hasCaughtPondBoss;
             hasTurnedInScroll = GameManager.Instance.currentSaveData.hasTurnedInScroll;
-            _hasAnimator = TryGetComponent(out _animator);
 
             GroundedCheck();
             ApplyGravity();
@@ -449,7 +448,12 @@ namespace StarterAssets
             if (_hasAnimator)
             {
                 _animator.SetBool("Fishing", false);
+                
+                // Reset animation blend so idle plays correctly
+                _animationBlend = 0f;
                 _animator.SetFloat(_animIDSpeed, 0f);
+                _animator.SetFloat(_animIDMotionSpeed, 0f);
+                
                 _animator.Play("Idle Walk Blend", 0, 0f);
             }
 
@@ -674,7 +678,14 @@ namespace StarterAssets
         public void PlayFishingIdle()
         {
             if (_animator)
+            {
+                Debug.Log("[HAPlayerController] Playing FishingIdle animation");
                 _animator.Play("FishingIdle", 0, 0f);
+            }
+            else
+            {
+                Debug.LogWarning("[HAPlayerController] Cannot play FishingIdle - Animator is null!");
+            }
         }
 
         public void PlayCasting()

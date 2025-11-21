@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using StarterAssets;
@@ -61,6 +62,7 @@ public class FishingProgress : MonoBehaviour
     [Header("Fish Caught UI")]
     public Image fishCaughtImage;
     public TextMeshProUGUI fishCaughtText;
+    public TextMeshProUGUI fishCaughtDescriptionText;
 
     [Header("Caught Screen Variants")]
     public GameObject basicWinScreen;
@@ -75,6 +77,26 @@ public class FishingProgress : MonoBehaviour
         public string description;
     }
 
+    private static readonly Dictionary<string, string> DefaultFishDescriptions = new Dictionary<string, string>
+    {
+        { "Blue Gill Fish", "A small freshwater fish with shimmering blue cheeks. Loves hiding around reeds and lily pads." },
+        { "Koifish", "An ornamental pond dweller with vivid patterns. Moves slowly, unbothered by the chaos around it." },
+        { "Largemouth Bass", "A powerful ambush predator that strikes from the shadows of logs and weeds." },
+        { "Mullet", "A sleek, silver fish that cruises in schools near the surface, always ready to dart away." },
+        { "Arapaima", "A massive river giant that gulps air at the surface. Its armored scales shrug off most bites." },
+        { "Catfish", "A whiskered bottom-feeder that prowls muddy currents in search of scraps and unlucky prey." },
+        { "Flounder", "A flat, bottom-dwelling fish that lies buried in sand, watching the world with both eyes on one side." },
+        { "Piranha", "A sharp-toothed pack hunter. One is harmless; hundreds turn the river red in seconds." },
+        { "Lantern Fish", "A tiny deep-sea wanderer whose glowing lure flickers like a star in the dark." },
+        { "Sea Bass", "A sturdy ocean hunter that patrols rocky reefs, striking at anything that turns its back." },
+        { "Snapper", "A reef fish with powerful jaws and a bad habit of biting first and asking questions never." },
+        { "Vampire Squid", "A strange deep-sea drifter with webbed arms and ghostly glow, feeding on whatever the darkness offers." },
+        { "Sun-Infused Croakmaw", "A once-ordinary pond guardian bathed in stray sunlight, now radiating heat with every breath." },
+        { "Solar-Spined Riftmaw", "A river tyrant whose glowing dorsal spines carve burning scars through the currents." },
+        { "Sun-Eclipsed Embermaw", "A deep-sea monster that swallowed a dying sun; its body smolders beneath layers of ash-black scales." },
+        { "Horizon Angler", "A mythic predator that waits where water meets sky, hooking anything that dares chase the light of dawn." }
+    };
+
     private int GetNormalFishCaughtCount(FishZoneType zoneType)
     {
         // Count the number of non-boss fish caught in the specified zone
@@ -88,6 +110,37 @@ public class FishingProgress : MonoBehaviour
     public List<Fish> bossRiverFishPool = new List<Fish>();
     public List<Fish> bossOceanFishPool = new List<Fish>();
     public List<Fish> postPondFishPool = new List<Fish>();
+
+    private IEnumerable<List<Fish>> EnumerateFishPools()
+    {
+        yield return pondFishPool;
+        yield return riverFishPool;
+        yield return oceanFishPool;
+        yield return bossPondFishPool;
+        yield return bossRiverFishPool;
+        yield return bossOceanFishPool;
+        yield return postPondFishPool;
+    }
+
+    private void ApplyDefaultFishDescriptions()
+    {
+        foreach (var pool in EnumerateFishPools())
+        {
+            if (pool == null)
+                continue;
+
+            foreach (var fish in pool)
+            {
+                if (fish == null)
+                    continue;
+
+                if (string.IsNullOrWhiteSpace(fish.description) && DefaultFishDescriptions.TryGetValue(fish.fishName, out var descriptionText))
+                {
+                    fish.description = descriptionText;
+                }
+            }
+        }
+    }
 
     private List<Fish> activeFishPool;
 
@@ -141,6 +194,7 @@ public class FishingProgress : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        ApplyDefaultFishDescriptions();
     }
 
     void Start()
@@ -689,7 +743,7 @@ public class FishingProgress : MonoBehaviour
             return;
         }
 
-        int index = Random.Range(0, activeFishPool.Count);
+        int index = UnityEngine.Random.Range(0, activeFishPool.Count);
         currentCaughtFish = activeFishPool[index];
     }
 
@@ -767,8 +821,19 @@ public class FishingProgress : MonoBehaviour
         }
 
         // Update the fish information display
-        if (fishCaughtImage != null) fishCaughtImage.sprite = currentCaughtFish.fishSprite;
-        if (fishCaughtText != null) fishCaughtText.text = $"Caught {currentCaughtFish.fishName}!";
+        if (fishCaughtImage != null)
+            fishCaughtImage.sprite = currentCaughtFish.fishSprite;
+
+        if (fishCaughtText != null)
+            fishCaughtText.text = $"Caught {currentCaughtFish.fishName}!";
+
+        if (fishCaughtDescriptionText != null)
+        {
+            bool hasDescription = !string.IsNullOrWhiteSpace(currentCaughtFish.description);
+            fishCaughtDescriptionText.text = hasDescription
+                ? currentCaughtFish.description
+                : "This catch still needs a description.";
+        }
 
         // Record the catch in the fishing log
         string time = System.DateTime.Now.ToString("HH:mm:ss");

@@ -440,7 +440,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 1, g: 0, b: 0, a: 1}
     m_PressedColor: {r: 0.4811321, g: 0, b: 0, a: 1}
     m_SelectedColor: {r: 1, g: 0, b: 0, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -733,6 +733,8 @@ MonoBehaviour:
   upgradedRodSprite: {fileID: 21300000, guid: 2d160c3c4e2d6d84487ceba0cc887afe, type: 3}
   professionalRodSprite: {fileID: 21300000, guid: 7e85710c77463734bae89936c66e0199,
     type: 3}
+  horizonPiercerRodSprite: {fileID: 21300000, guid: 12250487ddd23ed429e8f5da4a46f77c,
+    type: 3}
   defaultRodSprite: {fileID: 21300000, guid: 6dcd5bf5b2e318e40854586e1d50d1ca, type: 3}
   textSpeed: 0.05
   shopkeeperAnimator: {fileID: 573978359}
@@ -777,6 +779,10 @@ MonoBehaviour:
   afterAllCollectedDialogue:
   - "\u201CYou\u2019re gettin\u2019 close. Too close.\u201D"
   - "\u201CHeh... maybe it\u2019s not my choice to stop you.\u201D"
+  afterReadyForFightDialogue:
+  - "\u201CKeep your line steady\u2026 it\u2019ll try to break more than that.\u201D"
+  - "\u201CThat rod\u2026 it\u2019s callin\u2019 to something deep.\u201D"
+  - "\u201CBring it home, kid. Whatever\u2019s waitin\u2019 out there.\u201D"
   finalStateDialogue:
   - '"You''ve done it..."'
   firstVisitSpecialDialogue:
@@ -6963,6 +6969,142 @@ VideoPlayer:
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
+--- !u!1 &961478615
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 961478617}
+  - component: {fileID: 961478616}
+  m_Layer: 0
+  m_Name: FishingProgress
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &961478616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961478615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbbb2f6460f671044ac69c29c4ba0996, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BossfishLocation: {fileID: 0}
+  TutorialFishLocation: {fileID: 0}
+  BlackPondFishLocation: {fileID: 0}
+  progress: 0
+  progressSlider: {fileID: 0}
+  T2S: {fileID: 0}
+  baseDecayRate: 3
+  minDecayMultiplier: 1
+  maxDecayMultiplier: 2
+  memorySetupActive: 0
+  passiveProgressRate: 1
+  fishCaughtImage: {fileID: 0}
+  fishCaughtText: {fileID: 0}
+  fishCaughtDescriptionText: {fileID: 0}
+  basicWinScreen: {fileID: 0}
+  basicLoseScreen: {fileID: 0}
+  bossCatchScreen: {fileID: 0}
+  pondFishPool:
+  - fishName: Blue Gill Fish
+    fishSprite: {fileID: 21300000, guid: d903291c348a84044b9d6a7544a0f921, type: 3}
+    description: A small freshwater fish with shimmering blue cheeks. Loves hiding
+      around reeds and lily pads.
+  - fishName: Koifish
+    fishSprite: {fileID: 21300000, guid: da6bb0eb87fbaf4428be2e332267e8ed, type: 3}
+    description: An ornamental pond dweller with vivid patterns. Moves slowly, unbothered
+      by the chaos around it.
+  - fishName: Largemouth Bass
+    fishSprite: {fileID: 21300000, guid: 2de568d309f6f594188383515f985f8b, type: 3}
+    description: A powerful ambush predator that strikes from the shadows of logs
+      and weeds.
+  - fishName: Mullet
+    fishSprite: {fileID: 21300000, guid: 0e71a58c209a6024e9dea3126b53db71, type: 3}
+    description: A sleek, silver fish that cruises in schools near the surface, always
+      ready to dart away.
+  riverFishPool:
+  - fishName: Arapaima
+    fishSprite: {fileID: 21300000, guid: f5356a8600ed28745990cdcd388a1479, type: 3}
+    description: A massive river giant that gulps air at the surface. Its armored
+      scales shrug off most bites.
+  - fishName: Catfish
+    fishSprite: {fileID: 21300000, guid: 57bd79b1ea7f95e4fb7e56036097a155, type: 3}
+    description: A whiskered bottom-feeder that prowls muddy currents in search of
+      scraps and unlucky prey.
+  - fishName: Flounder
+    fishSprite: {fileID: 21300000, guid: 332c43172bd5887419a0b77a6ab65828, type: 3}
+    description: A flat, bottom-dwelling fish that lies buried in sand, watching
+      the world with both eyes on one side.
+  - fishName: Piranha
+    fishSprite: {fileID: 21300000, guid: 6cebaea6a281b16458e65e2a5354cce8, type: 3}
+    description: "A sharp-toothed pack hunter. One is harmless\u2014hundreds turn
+      the river red in seconds."
+  oceanFishPool:
+  - fishName: Lantern Fish
+    fishSprite: {fileID: 21300000, guid: 4a66cfb7c16748a4b882e6a25e730501, type: 3}
+    description: A tiny deep-sea wanderer whose glowing lure flickers like a star
+      in the dark.
+  - fishName: Sea Bass
+    fishSprite: {fileID: 21300000, guid: f0f8a8ebe8d4e1047aad95c990b15007, type: 3}
+    description: A sturdy ocean hunter that patrols rocky reefs, striking at anything
+      that turns its back.
+  - fishName: Snapper
+    fishSprite: {fileID: 21300000, guid: 0f82d8cfa74f5a84d82173644506475f, type: 3}
+    description: A reef fish with powerful jaws and a bad habit of biting first and
+      asking questions never.
+  - fishName: Vampire Squid
+    fishSprite: {fileID: 21300000, guid: 1f34e5e083d5ff24ba06dbbabe9448ef, type: 3}
+    description: A strange deep-sea drifter with webbed arms and ghostly glow, feeding
+      on whatever the darkness offers.
+  bossPondFishPool:
+  - fishName: Sun-Infused Croakmaw
+    fishSprite: {fileID: 21300000, guid: 5f84ed579ef17b84eaa3df7c9a0b2e79, type: 3}
+    description: A once-ordinary pond guardian bathed in stray sunlight, now radiating
+      heat with every breath.
+  bossRiverFishPool:
+  - fishName: Solar-Spined Riftmaw
+    fishSprite: {fileID: 21300000, guid: 500d31fa16f04274ba4e9104f7c6221e, type: 3}
+    description: A river tyrant whose glowing dorsal spines carve burning scars through
+      the currents.
+  bossOceanFishPool:
+  - fishName: Sun-Eclipsed Embermaw
+    fishSprite: {fileID: 21300000, guid: 2a030a0a545a7b34094603870b3130da, type: 3}
+    description: A deep-sea monster that swallowed a dying sun; its body smolders
+      beneath layers of ash-black scales.
+  postPondFishPool: []
+  fishCaughtScreenActive: 0
+  fishingLog: []
+  progressMaxHandled: 0
+  notificationCanvas: {fileID: 0}
+  notificationText: {fileID: 0}
+  notificationTextShadow: {fileID: 0}
+  notificationGroup: {fileID: 0}
+  activeZoneType: 0
+--- !u!4 &961478617
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961478615}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 595.6407, y: 282.43335, z: 0.000006931601}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &961620186
 GameObject:
   m_ObjectHideFlags: 0
@@ -11350,6 +11492,9 @@ MonoBehaviour:
   creditCanvas: {fileID: 0}
   rewardUIPanel: {fileID: 0}
   loadingManager: {fileID: 0}
+  playingCreditsAfterVictory: 0
+  hasCompletedBossFight: 0
+  returnToTitleAfterCredits: 0
 --- !u!1 &1879365982
 GameObject:
   m_ObjectHideFlags: 0
@@ -13100,6 +13245,9 @@ MonoBehaviour:
   creditCanvas: {fileID: 0}
   rewardUIPanel: {fileID: 0}
   loadingManager: {fileID: 0}
+  playingCreditsAfterVictory: 0
+  hasCompletedBossFight: 0
+  returnToTitleAfterCredits: 0
 --- !u!223 &2053072090
 Canvas:
   m_ObjectHideFlags: 0
@@ -13572,17 +13720,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2101480709}
-  m_LocalRotation: {x: -0, y: -0, z: 0.3065261, w: 0.9518623}
+  m_LocalRotation: {x: -0, y: -0, z: 0.2211128, w: 0.9752483}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 561825946}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 35.7}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 25.549}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.607666, y: -6.973816}
-  m_SizeDelta: {x: 470.4906, y: 470.4906}
+  m_AnchoredPosition: {x: 5, y: -22}
+  m_SizeDelta: {x: 397.8315, y: 425.5524}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2101480711
 MonoBehaviour:
@@ -14461,8 +14609,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 9
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -14486,7 +14635,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35.8
+  m_fontSize: 32.25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -15170,8 +15319,9 @@ MonoBehaviour:
   m_text: This is generic text about the non-existent fish that is currently displayed.
     This is being used to test how the text looks.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -15195,7 +15345,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.75
+  m_fontSize: 31.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -15275,8 +15425,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Ocean
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -15306,7 +15457,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 36
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -16620,8 +16771,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 4/11/2025 11:59PM
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -16645,7 +16797,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.25
+  m_fontSize: 21.35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -17583,8 +17735,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1 Caught
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -19844,7 +19997,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 167}
-  m_SizeDelta: {x: 400, y: 400}
+  m_SizeDelta: {x: 400, y: 277.77}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &1989616504881298294
 RectTransform:
@@ -20173,8 +20326,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 4/22/2025 11:59PM
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -20198,7 +20352,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.05
+  m_fontSize: 20.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -20448,8 +20602,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'First Caught:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -20473,13 +20628,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24.15
+  m_fontSize: 21.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 36
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -23562,8 +23717,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Fish Name Goes Here
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -23587,13 +23743,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 35.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 36
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -27879,8 +28035,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Most Recent Catch:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -27904,13 +28061,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.75
+  m_fontSize: 17.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 17
   m_fontSizeMax: 36
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -28722,8 +28879,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 4/22/2025 11:59PM
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -28747,7 +28905,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.05
+  m_fontSize: 20.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -29133,8 +29291,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Ocean
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -29164,7 +29323,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 36
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -29320,7 +29479,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5908930912757037861
 RectTransform:
   m_ObjectHideFlags: 0
@@ -29973,10 +30132,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: < Prev
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -30447,8 +30607,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Characteristics:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -30472,13 +30633,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.3
+  m_fontSize: 21.25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 36
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -30763,8 +30924,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: FISH NOT FOUND
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -31209,8 +31371,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Fish Name Goes Here
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -31234,13 +31397,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 35.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 36
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -32359,8 +32522,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -32384,7 +32548,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35.8
+  m_fontSize: 32.25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -32526,8 +32690,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: FISH NOT FOUND
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -32960,7 +33125,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 167}
-  m_SizeDelta: {x: 400, y: 400}
+  m_SizeDelta: {x: 400, y: 277.77}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7226014066638624707
 MonoBehaviour:
@@ -33498,7 +33663,7 @@ MonoBehaviour:
   prevButton: {fileID: 4760916217905146538}
   encyclopediaAlertIcon: {fileID: 2761724342969926077}
   nextButtonAlertIcon: {fileID: 9078467356164138772}
-  unknownFishSprite: {fileID: 0}
+  unknownFishSprite: {fileID: 21300000, guid: 8ac8468e37a27814ba7a21e38069c395, type: 3}
 --- !u!114 &7575091923360941895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34238,10 +34403,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Next >
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -34618,8 +34784,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'First Caught:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -34643,13 +34810,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24.15
+  m_fontSize: 21.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 36
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -36242,8 +36409,9 @@ MonoBehaviour:
   m_text: This is generic text about the non-existent fish that is currently displayed.
     This is being used to test how the text looks.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -36267,7 +36435,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.75
+  m_fontSize: 31.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -36402,8 +36570,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Most Recent Catch:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -36427,13 +36596,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.75
+  m_fontSize: 17.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 17
   m_fontSizeMax: 36
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -36740,8 +36909,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1 Caught
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -36980,8 +37150,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 4/11/2025 11:59PM
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -37005,7 +37176,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.25
+  m_fontSize: 21.35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -37155,8 +37326,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Characteristics:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 82d4394e20dc72c4da6624496ce3ec2f, type: 2}
+  m_sharedMaterial: {fileID: 3448583220185377246, guid: 82d4394e20dc72c4da6624496ce3ec2f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -37180,13 +37352,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.3
+  m_fontSize: 21.25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 36
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -38040,3 +38212,4 @@ SceneRoots:
   - {fileID: 1939564626}
   - {fileID: 1053910926}
   - {fileID: 2111972072}
+  - {fileID: 961478617}

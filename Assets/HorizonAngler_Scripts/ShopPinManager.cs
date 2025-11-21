@@ -17,70 +17,100 @@ public class ShopPinManager : MonoBehaviour
         SetupPin();
     }
 
+    private void OnEnable()
+    {
+        // Refresh pin state whenever this becomes active (e.g., returning from dialogue)
+        if (GameManager.Instance != null)
+        {
+            SetupPin();
+        }
+    }
+
     public void SetupPin()
     {
         var save = GameManager.Instance?.currentSaveData;
 
-        // Hide Boss and BlackPond by default
-        if (regionType == RegionType.Boss || regionType == RegionType.BlackPond)
-        {
-            gameObject.SetActive(false);
-        }
-        else
-        {
-            gameObject.SetActive(true);
-        }
-
         if (save != null)
         {
+            // Special handling for BlackPond visibility through Image component
+            if (regionType == RegionType.BlackPond)
+            {
+                if (!save.hasTurnedInRod)
+                {
+                    // Completely hide BlackPond until rod is turned in
+                    if (pinImage != null)
+                        pinImage.enabled = false;
+                    if (travelButton != null)
+                        travelButton.interactable = false;
+                    return;
+                }
+                else if (save.readyForFight)
+                {
+                    // Show as decorative when readyForFight
+                    if (pinImage != null)
+                        pinImage.enabled = true;
+                    SetPinDecorative();
+                    return;
+                }
+                else
+                {
+                    // Show as normal interactive pin after rod turned in but before readyForFight
+                    if (pinImage != null)
+                        pinImage.enabled = true;
+                    SetPinActive(true);
+                    return;
+                }
+            }
+
             if (save.readyForFight)
             {
+                // During readyForFight: Only Boss is functional, others hidden
                 if (regionType == RegionType.Boss)
                 {
                     gameObject.SetActive(true);
                     SetPinActive(true);
                 }
-                else if (regionType == RegionType.BlackPond)
-                {
-                    gameObject.SetActive(true);
-                    SetPinActive(false); // Show but locked
-                }
-                else
+                else // Shop, Pond, River, Ocean
                 {
                     gameObject.SetActive(false);
                 }
             }
             else if (save.hasTurnedInRod)
             {
-                if (regionType == RegionType.BlackPond)
+                if (regionType == RegionType.Shop)
                 {
-                    gameObject.SetActive(true);
-                    SetPinActive(true);
-                }
-                else if (regionType == RegionType.Shop)
-                {
-                    gameObject.SetActive(true);
                     SetPinActive(true);
                 }
                 else
                 {
-                    gameObject.SetActive(false);
+                    SetPinActive(false); // Hide other regions
                 }
             }
             else
             {
-                switch (regionType)
+                // Default state based on region type
+                if (regionType == RegionType.Boss)
                 {
-                    case RegionType.Shop:
-                    case RegionType.Pond:
-                        SetPinActive(save.arrivedAtShop);
-                        break;
-                    case RegionType.River:
-                        SetPinActive(save.hasTurnedInScroll);
-                        break;
-                    case RegionType.Ocean:
-                        SetPinActive(save.hasTurnedInHair);
-                        break;
+                    SetPinActive(false); // Keep inactive but don't disable GameObject
+                }
+                else
+                {
+                    switch (regionType)
+                    {
+                        case RegionType.Shop:
+                        case RegionType.Pond:
+                            SetPinActive(save.arrivedAtShop);
+                            break;
+                        case RegionType.River:
+                            SetPinActive(save.hasTurnedInScroll);
+                            break;
+                        case RegionType.Ocean:
+                            SetPinActive(save.hasTurnedInHair);
+                            break;
+                        default:
+                            SetPinActive(false);
+                            break;
+                    }
                 }
             }
         }
@@ -90,11 +120,26 @@ public class ShopPinManager : MonoBehaviour
 
     private void SetPinActive(bool unlocked)
     {
-        gameObject.SetActive(true);
         if (travelButton != null)
             travelButton.interactable = unlocked;
         if (pinImage != null)
             pinImage.color = unlocked ? Color.white : Color.gray;
+    }
+
+    private void SetPinDecorative()
+    {
+        // Make pin visible with white color but completely non-functional
+        if (travelButton != null)
+        {
+            travelButton.interactable = false;
+            // Remove all onClick listeners so button does nothing when clicked
+            travelButton.onClick.RemoveAllListeners();
+        }
+        if (pinImage != null)
+        {
+            pinImage.enabled = true; // Ensure image is visible
+            pinImage.color = Color.white; // Keep it looking active
+        }
     }
 
     public void ForceUnlock()

@@ -15,6 +15,7 @@ public class ShopInteractionManager : MonoBehaviour
     public UnityEngine.UI.Image rodImage;
     public Sprite upgradedRodSprite;
     public Sprite professionalRodSprite;
+    public Sprite horizonPiercerRodSprite;
     public Sprite defaultRodSprite;
 
     [Header("Dialogue Settings")]
@@ -51,6 +52,7 @@ public class ShopInteractionManager : MonoBehaviour
     public string[] afterOceanBossDialogue;
     public string[] afterDredgedHandDialogue;
     public string[] afterAllCollectedDialogue;
+    public string[] afterReadyForFightDialogue;
     public string[] finalStateDialogue;
 
     [Header("Special Dialogue Content")]
@@ -157,7 +159,12 @@ public class ShopInteractionManager : MonoBehaviour
 
         if (rodImage != null) rodImage.enabled = true;
 
-        if (saveData.hasTurnedInHair)
+        if (saveData.AllCollected)
+        {
+            rodNameText.text = "Horizon Piercer";
+            rodImage.sprite = horizonPiercerRodSprite;
+        }
+        else if (saveData.hasTurnedInHair)
         {
             rodNameText.text = "Professional Rod";
             rodImage.sprite = professionalRodSprite;
@@ -205,7 +212,7 @@ public class ShopInteractionManager : MonoBehaviour
             specialButton.SetActive(true);
             specialButtonText.text = "Show the hand to the shopkeeper.";
         }
-        else if (saveData.AllCollected && !saveData.BecameHorizonAngler)
+        else if (saveData.AllCollected && !saveData.readyForFight && !saveData.BecameHorizonAngler)
         {
             specialButton.SetActive(true);
             specialButtonText.text = "Prepare the vessel.";
@@ -245,9 +252,17 @@ public class ShopInteractionManager : MonoBehaviour
         {
             selectedDialogue = afterDredgedHandDialogue;
         }
-        else if (saveData.AllCollected && !saveData.dredgedHand)
+        else if (saveData.AllCollected && !saveData.readyForFight)
         {
             selectedDialogue = afterAllCollectedDialogue;
+        }
+        else if (saveData.readyForFight && !saveData.BecameHorizonAngler)
+        {
+            selectedDialogue = afterReadyForFightDialogue;
+        }
+        else if (saveData.BecameHorizonAngler)
+        {
+            selectedDialogue = finalStateDialogue;
         }
         else
         {
@@ -592,7 +607,12 @@ public class ShopInteractionManager : MonoBehaviour
 
         foreach (MapTravelPoint pin in FindObjectsOfType<MapTravelPoint>())
         {
-            pin.SetupButton();  // Now it's public, so this works
+            pin.SetupButton();  // Update pause menu map pins
+        }
+
+        foreach (ShopPinManager shopPin in FindObjectsOfType<ShopPinManager>())
+        {
+            shopPin.SetupPin();  // Update shop scene map pins
         }
     }
 
@@ -796,6 +816,8 @@ public class ShopInteractionManager : MonoBehaviour
                 rodNameText.text = "Enhanced Fishing Rod";
             else if (lastSpecialPlayed == "Hair")
                 rodNameText.text = "Professional Rod";
+            else if (lastSpecialPlayed == "Hand")
+                rodNameText.text = "Horizon Piercer";
         }
 
         if (rodImage != null)
@@ -804,6 +826,8 @@ public class ShopInteractionManager : MonoBehaviour
                 rodImage.sprite = upgradedRodSprite;
             else if (lastSpecialPlayed == "Hair" && professionalRodSprite != null)
                 rodImage.sprite = professionalRodSprite;
+            else if (lastSpecialPlayed == "Hand" && horizonPiercerRodSprite != null)
+                rodImage.sprite = horizonPiercerRodSprite;
         }
     }
 
