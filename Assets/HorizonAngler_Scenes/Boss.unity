@@ -52201,7 +52201,7 @@ PrefabInstance:
     - target: {fileID: 114669315090722434, guid: e1e9f48d71f586e48b0ab82651cd8eb4,
         type: 3}
       propertyPath: engine_max_rpm
-      value: 1400
+      value: 2800
       objectReference: {fileID: 0}
     - target: {fileID: 114669315090722434, guid: e1e9f48d71f586e48b0ab82651cd8eb4,
         type: 3}

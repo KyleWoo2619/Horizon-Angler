@@ -37,39 +37,47 @@ public class PropellerBoats : MonoBehaviour
 
     void Update()
     {
+        if (!controlsActive) return;
         
-        if (!controlsActive)return;
-        
+        // Visual propeller rotation only
         float frame_rpm = engine_rpm * Time.deltaTime;
-
         for (int i = 0; i < propellers.Length; i++)
         {
-            // Rotate the propellers visually
             propellers[i].localRotation = Quaternion.Euler(
                 propellers[i].localRotation.eulerAngles + new Vector3(0, 0, -frame_rpm)
             );
+        }
 
-            // Apply thrust (forward if throttle > 0, backward if throttle < 0)
+        // Visual rudder rotation
+        for (int i = 0; i < rudder.Length; i++)
+        {
+            rudder[i].localRotation = rudderBaseRotation[i] * Quaternion.Euler(0, angle, 0);
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (!controlsActive) return;
+
+        // Apply thrust forces (physics)
+        for (int i = 0; i < propellers.Length; i++)
+        {
             rb.AddForceAtPosition(
                 Quaternion.Euler(0, angle, 0) * -propellers[i].forward * propellers_constant * engine_rpm,
                 propellers[i].position
             );
         }
 
-        // Decay throttle slightly over time
+        // Decay throttle
         throttle *= (1.0F - drag * 0.001F);
         engine_rpm = throttle * engine_max_rpm;
 
         // Gradually straighten rudder
         angle = Mathf.Lerp(angle, 0.0F, 0.02F);
-        for (int i = 0; i < rudder.Length; i++)
-        {
-            rudder[i].localRotation = rudderBaseRotation[i] * Quaternion.Euler(0, angle, 0);
-        }
 
-        // --- Input Handling Example ---
-        float moveInput = Input.GetAxis("Vertical"); // W/S or Controller Stick Y
-        float steerInput = Input.GetAxis("Horizontal"); // A/D or Controller Stick X
+        // Input Handling
+        float moveInput = Input.GetAxis("Vertical");
+        float steerInput = Input.GetAxis("Horizontal");
 
         if (moveInput > 0.1f)
             ThrottleUp();
